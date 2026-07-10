@@ -1,0 +1,12 @@
+MULTI-PAGE SAFE VERSION
+
+This package is designed for iPhone Safari stability.
+
+Upload all generated .html files and style.css to the SAME GitHub repository root
+as your existing JPG, PNG and MP3 files.
+
+Replace the old index.html with this new index.html.
+Do not delete your existing media files.
+
+After commit and push, test:
+https://atc101833-cyber.github.io/italy-audio-guide-files/?v=3
