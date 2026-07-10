@@ -1,0 +1,2541 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>義大利有聲導覽書</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background-color: #d8cfbd;
+      font-family: "PingFang TC", "Noto Serif TC", serif;
+      overflow: hidden;
+    }
+
+    button {
+      font-family: inherit;
+    }
+
+    .book {
+      position: relative;
+      width: 100%;
+      max-width: 500px;
+      height: 100vh;
+      height: 100svh;
+      margin: 0 auto;
+      perspective: 1800px;
+      -webkit-perspective: 1800px;
+      background-color: #f3eee4;
+      overflow: hidden;
+    }
+
+    .contents-page {
+      position: absolute;
+      inset: 0;
+      padding: 42px 22px 40px;
+      background-color: #f3eee4;
+      color: #29251f;
+      overflow-y: auto;
+    }
+
+    .contents-small-title {
+      margin: 0 0 10px;
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: #92775e;
+    }
+
+    .contents-page h1 {
+      margin: 0 0 45px;
+      font-size: 38px;
+      font-weight: 500;
+      letter-spacing: 3px;
+    }
+
+    .city-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .city-card {
+      position: relative;
+      width: 100%;
+      height: 180px;
+      padding: 0;
+      border: none;
+      border-radius: 18px;
+      overflow: hidden;
+      background-color: #b9ad9d;
+      cursor: pointer;
+    }
+
+    .city-card img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.35s ease;
+    }
+
+    .milan-image {
+      object-position: center 60%;
+    }
+
+    .venice-image {
+      object-position: center 75%;
+    }
+
+    .florence-image {
+      object-position: center 52%;
+    }
+
+    .rome-image {
+      object-position: center 58%;
+    }
+
+    .city-card:active img {
+      transform: scale(1.03);
+    }
+
+    .city-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to right,
+        rgba(22, 18, 14, 0.72),
+        rgba(22, 18, 14, 0.1)
+      );
+    }
+
+    .city-card-text {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: 38px 1fr 24px;
+      align-items: center;
+      gap: 12px;
+      padding: 20px;
+      color: white;
+      text-align: left;
+    }
+
+    .city-number {
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      letter-spacing: 1px;
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    .city-name {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .city-name strong {
+      font-size: 27px;
+      font-weight: 500;
+    }
+
+    .city-name small {
+      font-family: Georgia, serif;
+      font-size: 14px;
+      font-style: italic;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .city-arrow {
+      font-size: 22px;
+      color: white;
+    }
+
+    .back-button {
+      margin-top: 38px;
+      padding: 10px 0;
+      border: none;
+      background: transparent;
+      color: #746555;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .top-back-button {
+      margin-top: 0;
+      margin-bottom: 24px;
+    }
+
+    .cover-page {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      background-color: #d8cfbd;
+      transform-origin: left center;
+      transform-style: preserve-3d;
+      -webkit-transform-style: preserve-3d;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      transition:
+        transform 1.15s cubic-bezier(0.65, 0, 0.25, 1),
+        box-shadow 1.15s ease;
+      cursor: pointer;
+      touch-action: manipulation;
+      box-shadow: 8px 0 20px rgba(45, 38, 28, 0.15);
+    }
+
+    .cover-page img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      background-color: #d8cfbd;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .cover-page::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 22px;
+      height: 100%;
+      background: linear-gradient(
+        to left,
+        rgba(40, 32, 22, 0.2),
+        rgba(40, 32, 22, 0)
+      );
+      pointer-events: none;
+    }
+
+    .cover-page.flipped {
+      transform: rotateY(-180deg);
+      box-shadow: 30px 4px 45px rgba(45, 38, 28, 0.28);
+      pointer-events: none;
+    }
+
+    .milan-page,
+    .venice-page,
+    .florence-page,
+    .rome-page {
+      position: absolute;
+      inset: 0;
+      z-index: 20;
+      padding: 26px 20px 40px;
+      background-color: #f3eee4;
+      color: #29251f;
+      overflow-y: auto;
+      transform: translateX(100%);
+      transition: transform 0.55s ease;
+    }
+
+    .milan-page.show,
+    .venice-page.show,
+    .florence-page.show,
+    .rome-page.show {
+      transform: translateX(0);
+    }
+
+    .milan-back-button,
+    .venice-back-button,
+    .florence-back-button,
+    .rome-back-button {
+      padding: 10px 2px;
+      border: none;
+      background: transparent;
+      color: #746555;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .milan-page-content,
+    .venice-page-content,
+    .florence-page-content,
+    .rome-page-content {
+      padding-top: 35px;
+    }
+
+    .milan-small-title,
+    .venice-small-title,
+    .florence-small-title,
+    .rome-small-title {
+      margin: 0 0 8px;
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: #92775e;
+    }
+
+    .milan-page h1,
+    .venice-page h1,
+    .florence-page h1,
+    .rome-page h1 {
+      margin: 0;
+      font-size: 42px;
+      font-weight: 500;
+      line-height: 1.25;
+      letter-spacing: 2px;
+    }
+
+    .milan-intro,
+    .venice-intro,
+    .florence-intro,
+    .rome-intro {
+      margin: 14px 0 0;
+      color: #766b5f;
+      font-size: 16px;
+    }
+
+    .series-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-top: 32px;
+    }
+
+    .series-card {
+      position: relative;
+      width: 100%;
+      height: 145px;
+      padding: 0;
+      border: none;
+      border-radius: 18px;
+      overflow: hidden;
+      background-color: #a99e8d;
+      cursor: pointer;
+    }
+
+    .series-card img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.35s ease;
+    }
+
+    .series-card:active img {
+      transform: scale(1.03);
+    }
+
+    .history-series-image {
+      object-position: center 60%;
+    }
+
+    .exterior-series-image {
+      object-position: center 48%;
+    }
+
+    .interior-series-image {
+      object-position: center 68%;
+      filter: brightness(0.78);
+    }
+
+    .rooftop-series-image {
+      object-position: center 28%;
+    }
+
+    .gallery-series-image {
+      object-position: center 72%;
+    }
+
+    .series-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to right,
+        rgba(25, 21, 16, 0.78),
+        rgba(25, 21, 16, 0.08)
+      );
+    }
+
+    .series-card-content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: 36px 1fr 24px;
+      align-items: center;
+      gap: 12px;
+      padding: 18px;
+      color: white;
+      text-align: left;
+    }
+
+    .series-number {
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      letter-spacing: 1px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .series-title {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .series-title strong {
+      font-size: 23px;
+      font-weight: 500;
+      line-height: 1.35;
+    }
+
+    .series-title small {
+      font-family: Georgia, serif;
+      font-size: 13px;
+      font-style: italic;
+      color: rgba(255, 255, 255, 0.82);
+    }
+
+    .series-arrow {
+      font-size: 21px;
+      color: white;
+    }
+
+    .detail-page {
+      position: absolute;
+      inset: 0;
+      z-index: 30;
+      background-color: #f3eee4;
+      color: #29251f;
+      overflow-y: auto;
+      transform: translateX(100%);
+      transition: transform 0.55s ease;
+    }
+
+    .detail-page.show {
+      transform: translateX(0);
+    }
+
+    .detail-back-button {
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      width: 100%;
+      padding: 18px 22px;
+      border: none;
+      background-color: rgba(243, 238, 228, 0.96);
+      color: #746555;
+      font-size: 15px;
+      text-align: left;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .detail-content {
+      padding: 32px 24px 52px;
+    }
+
+    .detail-small-title {
+      margin: 0 0 10px;
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: #92775e;
+    }
+
+    .detail-page h1 {
+      margin: 0;
+      font-size: 38px;
+      font-weight: 500;
+      line-height: 1.35;
+    }
+
+    .detail-english {
+      margin: 8px 0 28px;
+      font-family: Georgia, serif;
+      font-size: 15px;
+      font-style: italic;
+      color: #7d7468;
+    }
+
+    .history-audio {
+      width: 100%;
+      margin-bottom: 28px;
+    }
+
+    .history-image {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 16px;
+    }
+
+    .audio-block {
+      padding: 24px 0 27px;
+      border-top: 1px solid #c8bbaa;
+    }
+
+    .audio-number {
+      margin: 0 0 8px;
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      letter-spacing: 1px;
+      color: #9b7658;
+    }
+
+    .audio-block h2 {
+      margin: 0 0 18px;
+      font-size: 22px;
+      font-weight: 500;
+      line-height: 1.5;
+    }
+
+    .audio-block audio {
+      width: 100%;
+    }
+
+    .exterior-image {
+      width: 100%;
+      height: auto;
+      display: block;
+      margin: 4px 0 30px;
+      border-radius: 16px;
+    }
+
+    @media (min-width: 600px) {
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .book {
+        height: min(900px, calc(100vh - 40px));
+        box-shadow: 0 24px 70px rgba(44, 37, 28, 0.2);
+      }
+    }
+  
+    /* =========================
+       依照參考圖製作的石雕播放器
+       外觀直接使用 player-skin.jpg
+    ========================= */
+
+    audio {
+      display: none;
+    }
+
+    .reference-player {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1525 / 220;
+      margin: 12px 0 4px;
+
+      background-image: url("player-skin-clean.png");
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .reference-player button {
+      position: absolute;
+      top: 10%;
+      height: 80%;
+
+      padding: 0;
+      border: none;
+      background: transparent;
+
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* 左側羅馬士兵頭盔：按下即可播放／暫停 */
+    .reference-play-button {
+      left: 3.5%;
+      width: 14%;
+      border-radius: 18px;
+    }
+
+    .reference-play-button:active,
+    .reference-play-button.is-playing {
+      background: rgba(79, 55, 32, 0.12);
+    }
+
+    /* 動態時間：覆蓋原圖上的示意時間 */
+    .reference-time {
+      position: absolute;
+      left: 18.0%;
+      top: 29%;
+      width: 12.5%;
+      height: 42%;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: rgba(225, 210, 181, 0.98); border-radius: 5px;
+
+      color: #453121;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(11px, 2.4vw, 16px);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 1px;
+      white-space: nowrap;
+    }
+
+    /* 播放進度條：位置與參考圖一致 */
+    .reference-progress {
+      position: absolute;
+      left: 31.2%;
+      top: 42%;
+      width: 47.5%;
+      height: 18%;
+
+      margin: 0;
+      padding: 0;
+
+      appearance: none;
+      -webkit-appearance: none;
+
+      border-radius: 999px;
+      background: linear-gradient(
+        to right,
+        #493423 0%,
+        #493423 var(--progress, 0%),
+        rgba(109, 84, 54, 0.22) var(--progress, 0%),
+        rgba(109, 84, 54, 0.22) 100%
+      );
+
+      box-shadow:
+        inset 0 1px 3px rgba(68, 45, 26, 0.42),
+        0 1px 0 rgba(255, 255, 255, 0.35);
+
+      cursor: pointer;
+    }
+
+    .reference-progress::-webkit-slider-thumb {
+      appearance: none;
+      -webkit-appearance: none;
+
+      width: 18px;
+      height: 18px;
+
+      border: 2px solid #d8c49f;
+      border-radius: 50%;
+
+      background: #493423;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .reference-progress::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+
+      border: 2px solid #d8c49f;
+      border-radius: 50%;
+
+      background: #493423;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    /* 右側碎裂石柱音量鍵 */
+    .reference-volume-button {
+      left: 80%;
+      width: 10%;
+      border-radius: 18px;
+    }
+
+    .reference-volume-button.is-muted {
+      background: rgba(79, 55, 32, 0.16);
+    }
+
+    /* 最右側三點：切換播放速度 */
+    .reference-menu-button {
+      left: 91.2%;
+      width: 5.5%;
+      border-radius: 14px;
+    }
+
+    .reference-speed-label {
+      display: none;
+      margin: 5px 4px 0 0;
+
+      color: #79644d;
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      text-align: right;
+    }
+
+    .reference-speed-label.show {
+      display: block;
+    }
+
+    @media (max-width: 420px) {
+      .reference-time {
+        font-size: 12px;
+      }
+
+      .reference-progress::-webkit-slider-thumb {
+        width: 15px;
+        height: 15px;
+      }
+
+      .reference-progress::-moz-range-thumb {
+        width: 15px;
+        height: 15px;
+      }
+    }
+
+  
+
+    /* =========================
+       全站背景：固定大小重複排列
+       不放大、不拉伸
+    ========================= */
+
+    body {
+      background-color: #06452d;
+    }
+
+    .contents-page,
+    .milan-page,
+    .venice-page,
+    .florence-page,
+    .rome-page,
+    .detail-page {
+      background-color: #06452d;
+      background-image: url("italy-pattern-background.jpg");
+
+      /* 固定圖樣尺寸，避免在不同頁面突然變很大 */
+      background-size: 320px auto;
+      background-position: top left;
+      background-repeat: repeat;
+      background-attachment: local;
+
+      color: #f4ead5;
+    }
+
+    /* 手機與電腦都維持接近同一個圖樣比例 */
+    @media (min-width: 600px) {
+      .contents-page,
+      .milan-page,
+      .venice-page,
+      .florence-page,
+      .rome-page,
+      .detail-page {
+        background-size: 360px auto;
+      }
+    }
+
+    .contents-small-title,
+    .milan-small-title,
+    .venice-small-title,
+    .florence-small-title,
+    .rome-small-title,
+    .detail-small-title,
+    .detail-english,
+    .milan-intro,
+    .venice-intro,
+    .florence-intro,
+    .rome-intro {
+      color: rgba(248, 238, 219, 0.92);
+    }
+
+    .back-button,
+    .milan-back-button,
+    .venice-back-button,
+    .florence-back-button,
+    .rome-back-button,
+    .detail-back-button {
+      color: #f4ead5;
+    }
+
+    .detail-back-button {
+      background-color: rgba(4, 58, 37, 0.92);
+    }
+
+    .audio-block {
+      border-top-color: rgba(244, 234, 213, 0.42);
+    }
+
+    .audio-number {
+      color: #efb4a1;
+    }
+
+    /* 內容文字區保留淡淡底色，避免字和圖樣打架 */
+    .milan-page-content,
+    .venice-page-content,
+    .florence-page-content,
+    .rome-page-content,
+    .detail-content {
+      background: rgba(3, 48, 31, 0.54);
+      border: 1px solid rgba(244, 234, 213, 0.18);
+      border-radius: 22px;
+      padding-left: 24px;
+      padding-right: 24px;
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+    }
+
+    .contents-page .city-list {
+      padding: 14px;
+      border-radius: 22px;
+      background: rgba(3, 48, 31, 0.32);
+    }
+
+    /* =========================
+       目錄圖片：正常亮度、無陰影、無暗色遮罩
+    ========================= */
+
+    .city-card,
+    .series-card {
+      box-shadow: none !important;
+      filter: none !important;
+    }
+
+    .city-card img,
+    .series-card img,
+    .interior-series-image {
+      filter: none !important;
+      opacity: 1 !important;
+      box-shadow: none !important;
+    }
+
+    .city-overlay,
+    .series-overlay {
+      display: none !important;
+    }
+
+    /* 因為拿掉黑色遮罩，文字加非常輕微底色，只保證可讀 */
+    .city-card-text,
+    .series-card-content {
+      background: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.34),
+        rgba(0, 0, 0, 0.04)
+      );
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+    }
+
+    /* 封面保持原本背景，不套用圖樣 */
+    .cover-page {
+      background-image: none;
+      background-color: #d8cfbd;
+    }
+
+  </style>
+</head>
+
+<body>
+  <main class="book">
+
+    <section class="contents-page">
+
+      <button
+        class="back-button top-back-button"
+        type="button"
+        onclick="document.getElementById('coverPage').classList.remove('flipped')"
+      >
+        ← 回到封面
+      </button>
+      <p class="contents-small-title">CONTENTS</p>
+      <h1>目錄</h1>
+
+      <div class="city-list">
+        <button
+          class="city-card"
+          id="milanButton"
+          type="button"
+          onclick="openPage('milanPage')"
+        >
+          <img class="milan-image" src="milan.jpg" alt="米蘭">
+          <div class="city-overlay"></div>
+          <div class="city-card-text">
+            <span class="city-number">01</span>
+            <span class="city-name">
+              <strong>米蘭</strong>
+              <small>Milano</small>
+            </span>
+            <span class="city-arrow">→</span>
+          </div>
+        </button>
+
+        <button
+          class="city-card"
+          type="button"
+          onclick="openPage('venicePage')"
+        >
+          <img class="venice-image" src="venice.jpg" alt="威尼斯">
+          <div class="city-overlay"></div>
+          <div class="city-card-text">
+            <span class="city-number">02</span>
+            <span class="city-name">
+              <strong>威尼斯</strong>
+              <small>Venezia</small>
+            </span>
+            <span class="city-arrow">→</span>
+          </div>
+        </button>
+
+        <button
+          class="city-card"
+          type="button"
+          onclick="openPage('florencePage')"
+        >
+          <img class="florence-image" src="florence.jpg" alt="佛羅倫斯">
+          <div class="city-overlay"></div>
+          <div class="city-card-text">
+            <span class="city-number">03</span>
+            <span class="city-name">
+              <strong>佛羅倫斯</strong>
+              <small>Firenze</small>
+            </span>
+            <span class="city-arrow">→</span>
+          </div>
+        </button>
+
+        <button
+          class="city-card"
+          type="button"
+          onclick="openPage('romePage')"
+        >
+          <img class="rome-image" src="rome.jpg" alt="羅馬">
+          <div class="city-overlay"></div>
+          <div class="city-card-text">
+            <span class="city-number">04</span>
+            <span class="city-name">
+              <strong>羅馬</strong>
+              <small>Roma</small>
+            </span>
+            <span class="city-arrow">→</span>
+          </div>
+        </button>
+      </div>
+
+    </section>
+
+    <section
+      class="cover-page"
+      id="coverPage"
+      aria-label="點一下翻開封面"
+      onclick="this.classList.add('flipped')"
+    >
+      <img src="cover.jpg" alt="義大利有聲導覽書封面">
+    </section>
+
+    <section class="milan-page" id="milanPage">
+      <button
+        class="milan-back-button"
+        type="button"
+        onclick="closePage('milanPage')"
+      >
+        ← 返回城市目錄
+      </button>
+
+      <div class="milan-page-content">
+        <p class="milan-small-title">MILANO AUDIO GUIDE</p>
+        <h1>米蘭大教堂導覽</h1>
+        <p class="milan-intro">請依照所在位置選擇系列</p>
+
+        <div class="series-list">
+
+          <button
+            class="series-card"
+            type="button"
+            onclick="openPage('historyPage')"
+          >
+            <img class="history-series-image" src="milan-history.jpg" alt="米蘭歷史">
+            <div class="series-overlay"></div>
+            <div class="series-card-content">
+              <span class="series-number">01</span>
+              <span class="series-title">
+                <strong>米蘭歷史</strong>
+                <small>History of Milan</small>
+              </span>
+              <span class="series-arrow">→</span>
+            </div>
+          </button>
+
+          <button
+            class="series-card"
+            type="button"
+            onclick="openPage('exteriorPage')"
+          >
+            <img class="exterior-series-image" src="exterior-01.jpg" alt="教堂外觀">
+            <div class="series-overlay"></div>
+            <div class="series-card-content">
+              <span class="series-number">02</span>
+              <span class="series-title">
+                <strong>教堂外觀</strong>
+                <small>Cathedral Exterior</small>
+              </span>
+              <span class="series-arrow">→</span>
+            </div>
+          </button>
+
+          <button
+            class="series-card"
+            type="button"
+            onclick="openPage('interiorPage')"
+          >
+            <img class="interior-series-image" src="interior-01.jpg" alt="教堂內部">
+            <div class="series-overlay"></div>
+            <div class="series-card-content">
+              <span class="series-number">03</span>
+              <span class="series-title">
+                <strong>教堂內部</strong>
+                <small>Inside the Cathedral</small>
+              </span>
+              <span class="series-arrow">→</span>
+            </div>
+          </button>
+
+          <button
+            class="series-card"
+            type="button"
+            onclick="openPage('rooftopPage')"
+          >
+            <img class="rooftop-series-image" src="rooftop-01.jpg" alt="教堂屋頂">
+            <div class="series-overlay"></div>
+            <div class="series-card-content">
+              <span class="series-number">04</span>
+              <span class="series-title">
+                <strong>教堂屋頂</strong>
+                <small>Duomo Rooftop</small>
+              </span>
+              <span class="series-arrow">→</span>
+            </div>
+          </button>
+
+          <button
+            class="series-card"
+            type="button"
+            onclick="openPage('galleryPage')"
+          >
+            <img class="gallery-series-image" src="gallery-01.jpg" alt="艾曼紐二世迴廊">
+            <div class="series-overlay"></div>
+            <div class="series-card-content">
+              <span class="series-number">05</span>
+              <span class="series-title">
+                <strong>艾曼紐二世迴廊</strong>
+                <small>Galleria Vittorio Emanuele II</small>
+              </span>
+              <span class="series-arrow">→</span>
+            </div>
+          </button>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================
+         第二層：威尼斯四大系列
+    =================================== -->
+
+    <section class="venice-page" id="venicePage">
+      <button
+        class="venice-back-button"
+        type="button"
+        onclick="closePage('venicePage')"
+      >
+        ← 返回城市目錄
+      </button>
+
+      <div class="venice-page-content">
+        <p class="venice-small-title">VENEZIA AUDIO GUIDE</p>
+        <h1>威尼斯導覽</h1>
+        <p class="venice-intro">請依照主題選擇系列</p>
+
+        <div class="series-list">
+
+          <button
+            class="series-card"
+            type="button"
+            onclick="openPage('veniceHistoryPage')"
+          >
+            <img
+              class="history-series-image"
+              src="venice-history-01.jpg"
+              alt="威尼斯歷史"
+            >
+            <div class="series-overlay"></div>
+            <div class="series-card-content">
+              <span class="series-number">01</span>
+              <span class="series-title">
+                <strong>威尼斯歷史</strong>
+                <small>History of Venice</small>
+              </span>
+              <span class="series-arrow">→</span>
+            </div>
+          </button>
+
+          <button
+            class="series-card"
+            type="button"
+            onclick="openPage('veniceCulturePage')"
+          >
+            <img
+              class="interior-series-image"
+              src="venice-culture-04.jpg"
+              alt="威尼斯文化"
+            >
+            <div class="series-overlay"></div>
+            <div class="series-card-content">
+              <span class="series-number">02</span>
+              <span class="series-title">
+                <strong>威尼斯文化</strong>
+                <small>Venetian Culture</small>
+              </span>
+              <span class="series-arrow">→</span>
+            </div>
+          </button>
+
+          <button
+            class="series-card"
+            type="button"
+            onclick="openPage('stMarkPage')"
+          >
+            <img
+              class="rooftop-series-image"
+              src="stmark-01.jpg"
+              alt="聖馬可廣場"
+            >
+            <div class="series-overlay"></div>
+            <div class="series-card-content">
+              <span class="series-number">03</span>
+              <span class="series-title">
+                <strong>聖馬可廣場</strong>
+                <small>Piazza San Marco</small>
+              </span>
+              <span class="series-arrow">→</span>
+            </div>
+          </button>
+
+          <button
+            class="series-card"
+            type="button"
+            onclick="openPage('veniceLifePage')"
+          >
+            <img
+              class="gallery-series-image"
+              src="venice-life-09.jpg"
+              alt="威尼斯生活"
+            >
+            <div class="series-overlay"></div>
+            <div class="series-card-content">
+              <span class="series-number">04</span>
+              <span class="series-title">
+                <strong>威尼斯生活</strong>
+                <small>Life in Venice</small>
+              </span>
+              <span class="series-arrow">→</span>
+            </div>
+          </button>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================
+         第二層：佛羅倫斯五大系列
+    =================================== -->
+
+    <section class="florence-page" id="florencePage">
+      <button
+        class="florence-back-button"
+        type="button"
+        onclick="closePage('florencePage')"
+      >
+        ← 返回城市目錄
+      </button>
+
+      <div class="florence-page-content">
+        <p class="florence-small-title">FIRENZE AUDIO GUIDE</p>
+        <h1>佛羅倫斯導覽</h1>
+        <p class="florence-intro">請依照主題選擇系列</p>
+
+        <div class="series-list">
+          <button class="series-card" type="button" onclick="openPage('florenceHistoryPage')">
+            <img class="history-series-image" src="florence-history-01.jpg" alt="佛羅倫斯與美第奇">
+            <div class="series-overlay"></div>
+            <div class="series-card-content">
+              <span class="series-number">01</span>
+              <span class="series-title">
+                <strong>佛羅倫斯與美第奇</strong>
+                <small>Florence & the Medici</small>
+              </span>
+              <span class="series-arrow">→</span>
+            </div>
+          </button>
+
+          <button class="series-card" type="button" onclick="openPage('florenceCathedralPage')">
+            <img class="exterior-series-image" src="florence-cathedral-04.jpg" alt="大教堂建築群">
+            <div class="series-overlay"></div>
+            <div class="series-card-content">
+              <span class="series-number">02</span>
+              <span class="series-title">
+                <strong>大教堂建築群</strong>
+                <small>Cathedral Complex</small>
+              </span>
+              <span class="series-arrow">→</span>
+            </div>
+          </button>
+
+          <button class="series-card" type="button" onclick="openPage('florenceUffiziPage')">
+            <img class="interior-series-image" src="florence-uffizi-01.jpg" alt="領主廣場與烏菲茲">
+            <div class="series-overlay"></div>
+            <div class="series-card-content">
+              <span class="series-number">03</span>
+              <span class="series-title">
+                <strong>領主廣場與烏菲茲</strong>
+                <small>Signoria & Uffizi</small>
+              </span>
+              <span class="series-arrow">→</span>
+            </div>
+          </button>
+
+          <button class="series-card" type="button" onclick="openPage('florenceDavidPage')">
+            <img class="rooftop-series-image" src="florence-david-01.jpg" alt="米開朗基羅的大衛">
+            <div class="series-overlay"></div>
+            <div class="series-card-content">
+              <span class="series-number">04</span>
+              <span class="series-title">
+                <strong>米開朗基羅的大衛</strong>
+                <small>Michelangelo's David</small>
+              </span>
+              <span class="series-arrow">→</span>
+            </div>
+          </button>
+
+          <button class="series-card" type="button" onclick="openPage('florencePontePage')">
+            <img class="gallery-series-image" src="florence-ponte-dante-01.jpg" alt="老橋與但丁">
+            <div class="series-overlay"></div>
+            <div class="series-card-content">
+              <span class="series-number">05</span>
+              <span class="series-title">
+                <strong>老橋與但丁</strong>
+                <small>Ponte Vecchio & Dante</small>
+              </span>
+              <span class="series-arrow">→</span>
+            </div>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================
+         第二層：羅馬六大系列
+    =================================== -->
+
+    <section class="rome-page" id="romePage">
+      <button
+        class="rome-back-button"
+        type="button"
+        onclick="closePage('romePage')"
+      >
+        ← 返回城市目錄
+      </button>
+
+      <div class="rome-page-content">
+        <p class="rome-small-title">ROMA AUDIO GUIDE</p>
+        <h1>羅馬導覽</h1>
+        <p class="rome-intro">請依照主題選擇系列</p>
+
+        <div class="series-list">
+          <button class="series-card" type="button" onclick="openPage('romeHistoryPage')">
+            <img class="history-series-image" src="rome-history-01.jpg" alt="羅馬的誕生與共和國">
+            <div class="series-overlay"></div>
+            <div class="series-card-content">
+              <span class="series-number">01</span>
+              <span class="series-title">
+                <strong>羅馬的誕生與共和國</strong>
+                <small>Origins & Republic</small>
+              </span>
+              <span class="series-arrow">→</span>
+            </div>
+          </button>
+
+          <button class="series-card" type="button" onclick="openPage('romeEmpirePage')">
+            <img class="exterior-series-image" src="rome-empire-01.jpg" alt="羅馬帝國">
+            <div class="series-overlay"></div>
+            <div class="series-card-content">
+              <span class="series-number">02</span>
+              <span class="series-title">
+                <strong>羅馬帝國</strong>
+                <small>The Roman Empire</small>
+              </span>
+              <span class="series-arrow">→</span>
+            </div>
+          </button>
+
+          <button class="series-card" type="button" onclick="openPage('colosseumPage')">
+            <img class="interior-series-image" src="rome-colosseum-01.jpg" alt="競技場">
+            <div class="series-overlay"></div>
+            <div class="series-card-content">
+              <span class="series-number">03</span>
+              <span class="series-title">
+                <strong>競技場</strong>
+                <small>Colosseum</small>
+              </span>
+              <span class="series-arrow">→</span>
+            </div>
+          </button>
+
+          <button class="series-card" type="button" onclick="openPage('romanForumPage')">
+            <img class="rooftop-series-image" src="rome-forum-01.jpg" alt="帕拉提諾山與古羅馬廣場">
+            <div class="series-overlay"></div>
+            <div class="series-card-content">
+              <span class="series-number">04</span>
+              <span class="series-title">
+                <strong>帕拉提諾山與古羅馬廣場</strong>
+                <small>Palatine Hill & Roman Forum</small>
+              </span>
+              <span class="series-arrow">→</span>
+            </div>
+          </button>
+
+          <button class="series-card" type="button" onclick="openPage('baroqueRomePage')">
+            <img class="gallery-series-image" src="rome-pantheon-01.jpg" alt="萬神殿與巴洛克羅馬">
+            <div class="series-overlay"></div>
+            <div class="series-card-content">
+              <span class="series-number">05</span>
+              <span class="series-title">
+                <strong>萬神殿與巴洛克羅馬</strong>
+                <small>Pantheon & Baroque Rome</small>
+              </span>
+              <span class="series-arrow">→</span>
+            </div>
+          </button>
+
+          <button class="series-card" type="button" onclick="openPage('vaticanPage')">
+            <img class="history-series-image" src="rome-vatican-01.jpg" alt="梵蒂岡">
+            <div class="series-overlay"></div>
+            <div class="series-card-content">
+              <span class="series-number">06</span>
+              <span class="series-title">
+                <strong>梵蒂岡</strong>
+                <small>Vatican City</small>
+              </span>
+              <span class="series-arrow">→</span>
+            </div>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="detail-page" id="historyPage">
+      <button
+        class="detail-back-button"
+        type="button"
+        onclick="closePage('historyPage')"
+      >
+        ← 返回米蘭系列
+      </button>
+
+      <div class="detail-content">
+        <p class="detail-small-title">HISTORY OF MILAN</p>
+        <h1>米蘭歷史</h1>
+        <p class="detail-english">Milan Through Time</p>
+
+        <audio class="history-audio" controls>
+          <source src="milan-history.mp3" type="audio/mpeg">
+          你的瀏覽器不支援音檔播放。
+        </audio>
+
+        <img class="history-image" src="milan-history.jpg" alt="米蘭歷史">
+      </div>
+    </section>
+
+    <section class="detail-page" id="exteriorPage">
+      <button
+        class="detail-back-button"
+        type="button"
+        onclick="closePage('exteriorPage')"
+      >
+        ← 返回米蘭系列
+      </button>
+
+      <div class="detail-content">
+        <p class="detail-small-title">CATHEDRAL EXTERIOR</p>
+        <h1>教堂外觀</h1>
+        <p class="detail-english">Duomo di Milano</p>
+
+        <div class="audio-block">
+          <p class="audio-number">第 2 章</p>
+          <h2>大教堂正面：幾百年都沒能一次定案</h2>
+          <audio controls>
+            <source src="exterior-02.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+
+        <img class="exterior-image" src="exterior-01.jpg" alt="米蘭大教堂正面">
+
+        <div class="audio-block">
+          <p class="audio-number">第 3 章</p>
+          <h2>外牆尋寶：排水口也要雕成怪獸</h2>
+          <audio controls>
+            <source src="exterior-03.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+
+        <img class="exterior-image" src="exterior-02.jpg" alt="米蘭大教堂外牆細節">
+      </div>
+    </section>
+
+    <section class="detail-page" id="interiorPage">
+      <button
+        class="detail-back-button"
+        type="button"
+        onclick="closePage('interiorPage')"
+      >
+        ← 返回米蘭系列
+      </button>
+
+      <div class="detail-content">
+        <p class="detail-small-title">INSIDE THE CATHEDRAL</p>
+        <h1>教堂內部</h1>
+        <p class="detail-english">Interior of Duomo di Milano</p>
+
+        <div class="audio-block">
+          <p class="audio-number">第 4 章</p>
+          <h2>走進大教堂：瘟疫、加冕與空襲都曾來過</h2>
+          <audio controls>
+            <source src="interior-04.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+
+        <img class="exterior-image" src="interior-01.jpg" alt="米蘭大教堂內部">
+
+        <div class="audio-block">
+          <p class="audio-number">第 5 章</p>
+          <h2>五條走道，把人帶向不同地方</h2>
+          <audio controls>
+            <source src="interior-05.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+
+        <img class="exterior-image" src="interior-02.jpg" alt="米蘭大教堂中殿與側廊">
+
+        <div class="audio-block">
+          <p class="audio-number">第 6 章</p>
+          <h2>地板會報時，高空藏著聖釘</h2>
+          <audio controls>
+            <source src="interior-06.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+
+        <img class="exterior-image" src="interior-03.jpg" alt="米蘭大教堂地板與高處細節">
+      </div>
+    </section>
+
+    <section class="detail-page" id="rooftopPage">
+      <button
+        class="detail-back-button"
+        type="button"
+        onclick="closePage('rooftopPage')"
+      >
+        ← 返回米蘭系列
+      </button>
+
+      <div class="detail-content">
+        <p class="detail-small-title">DUOMO ROOFTOP</p>
+        <h1>教堂屋頂</h1>
+        <p class="detail-english">Rooftop of Duomo di Milano</p>
+
+        <div class="audio-block">
+          <p class="audio-number">第 7 章</p>
+          <h2>走上屋頂，才知道尖塔有多大</h2>
+          <audio controls>
+            <source src="rooftop-07.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+
+        <img class="exterior-image" src="rooftop-01.jpg" alt="米蘭大教堂屋頂與尖塔">
+
+        <div class="audio-block">
+          <p class="audio-number">第 8 章</p>
+          <h2>最高處的金色小聖母</h2>
+          <audio controls>
+            <source src="rooftop-08.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+
+        <img class="exterior-image" src="rooftop-02.jpg" alt="米蘭大教堂金色小聖母">
+
+        <div class="audio-block">
+          <p class="audio-number">第 9 章</p>
+          <h2>腳下這片屋頂，最重要的工作是排水</h2>
+          <audio controls>
+            <source src="rooftop-09.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+
+        <img class="exterior-image" src="rooftop-03.jpg" alt="米蘭大教堂屋頂排水與飛扶壁">
+
+        <div class="audio-block">
+          <p class="audio-number">第 10 章</p>
+          <h2>聖人旁邊，為什麼會站著拳擊手？</h2>
+          <audio controls>
+            <source src="rooftop-10.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+
+        <img class="exterior-image" src="rooftop-04.jpg" alt="米蘭大教堂屋頂雕像">
+
+        <div class="audio-block">
+          <p class="audio-number">第 11 章</p>
+          <h2>從大教堂屋頂看見幾個不同年代的米蘭</h2>
+          <audio controls>
+            <source src="rooftop-11.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+
+        <img class="exterior-image" src="rooftop-05.jpg" alt="從米蘭大教堂屋頂俯瞰城市">
+      </div>
+    </section>
+
+    <section class="detail-page" id="galleryPage">
+      <button
+        class="detail-back-button"
+        type="button"
+        onclick="closePage('galleryPage')"
+      >
+        ← 返回米蘭系列
+      </button>
+
+      <div class="detail-content">
+        <p class="detail-small-title">GALLERIA VITTORIO EMANUELE II</p>
+        <h1>艾曼紐二世迴廊</h1>
+        <p class="detail-english">Milan's Historic Shopping Gallery</p>
+
+        <div class="audio-block">
+          <p class="audio-number">第 12 章</p>
+          <h2>艾曼紐二世迴廊：米蘭最華麗的客廳</h2>
+          <audio controls>
+            <source src="gallery-12.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+
+        <img class="exterior-image" src="gallery-01.jpg" alt="艾曼紐二世迴廊">
+      </div>
+    </section>
+
+    <!-- ==================================
+         第三層：威尼斯歷史
+    =================================== -->
+
+    <section class="detail-page" id="veniceHistoryPage">
+      <button
+        class="detail-back-button"
+        type="button"
+        onclick="closePage('veniceHistoryPage')"
+      >
+        ← 返回威尼斯系列
+      </button>
+
+      <div class="detail-content">
+        <p class="detail-small-title">HISTORY OF VENICE</p>
+        <h1>威尼斯歷史</h1>
+        <p class="detail-english">The Story of the Lagoon City</p>
+
+        <div class="audio-block">
+          <p class="audio-number">第 1 章</p>
+          <h2>威尼斯：一座原本不太適合住人的城市</h2>
+          <audio controls>
+            <source src="venice-history-01.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+
+        <div class="audio-block">
+          <p class="audio-number">第 2 章</p>
+          <h2>房子為什麼還沒有沉下去？</h2>
+          <audio controls>
+            <source src="venice-history-02.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+
+        <div class="audio-block">
+          <p class="audio-number">第 3 章</p>
+          <h2>威尼斯共和國：一個靠船、信用和消息活下來的國家</h2>
+          <audio controls>
+            <source src="venice-history-03.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+
+        <img
+          class="exterior-image"
+          src="venice-history-01.jpg"
+          alt="威尼斯歷史"
+        >
+
+        <img
+          class="exterior-image"
+          src="venice-history-02.jpg"
+          alt="威尼斯潟湖與建築基礎"
+        >
+      </div>
+    </section>
+
+    <!-- ==================================
+         第三層：威尼斯文化
+    =================================== -->
+
+    <section class="detail-page" id="veniceCulturePage">
+      <button
+        class="detail-back-button"
+        type="button"
+        onclick="closePage('veniceCulturePage')"
+      >
+        ← 返回威尼斯系列
+      </button>
+
+      <div class="detail-content">
+        <p class="detail-small-title">VENETIAN CULTURE</p>
+        <h1>威尼斯文化</h1>
+        <p class="detail-english">Gondolas and Masks</p>
+
+        <div class="audio-block">
+          <p class="audio-number">第 4 章</p>
+          <h2>貢多拉：今天是浪漫，過去只是出門</h2>
+          <audio controls>
+            <source src="venice-culture-04.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+
+        <img
+          class="exterior-image"
+          src="venice-culture-04.jpg"
+          alt="威尼斯貢多拉"
+        >
+
+        <div class="audio-block">
+          <p class="audio-number">第 5 章</p>
+          <h2>面具：一座非常重視身分的城市，為什麼又喜歡把臉藏起來？</h2>
+          <audio controls>
+            <source src="venice-culture-05.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+
+        <img
+          class="exterior-image"
+          src="venice-culture-05.jpg"
+          alt="威尼斯面具"
+        >
+      </div>
+    </section>
+
+    <!-- ==================================
+         第三層：聖馬可廣場
+    =================================== -->
+
+    <section class="detail-page" id="stMarkPage">
+      <button
+        class="detail-back-button"
+        type="button"
+        onclick="closePage('stMarkPage')"
+      >
+        ← 返回威尼斯系列
+      </button>
+
+      <div class="detail-content">
+        <p class="detail-small-title">PIAZZA SAN MARCO</p>
+        <h1>聖馬可廣場</h1>
+        <p class="detail-english">The Heart of Venice</p>
+
+        <div class="audio-block">
+          <p class="audio-number">第 6 章</p>
+          <h2>聖馬可廣場：先別急著拍照，先聽一會兒</h2>
+          <audio controls>
+            <source src="stmark-06.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+
+        <div class="audio-block">
+          <p class="audio-number">第 7 章</p>
+          <h2>聖馬可大教堂：聖馬可是誰？</h2>
+          <audio controls>
+            <source src="stmark-07.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+
+        <div class="audio-block">
+          <p class="audio-number">第 8 章</p>
+          <h2>總督宮與嘆息橋：同一棟建築裡，有人掌權，也有人失去自由</h2>
+          <audio controls>
+            <source src="stmark-08.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+
+        <img
+          class="exterior-image"
+          src="stmark-01.jpg"
+          alt="聖馬可廣場與大教堂"
+        >
+
+        <img
+          class="exterior-image"
+          src="stmark-02.jpg"
+          alt="總督宮與嘆息橋"
+        >
+      </div>
+    </section>
+
+    <!-- ==================================
+         第三層：威尼斯生活
+    =================================== -->
+
+    <section class="detail-page" id="veniceLifePage">
+      <button
+        class="detail-back-button"
+        type="button"
+        onclick="closePage('veniceLifePage')"
+      >
+        ← 返回威尼斯系列
+      </button>
+
+      <div class="detail-content">
+        <p class="detail-small-title">LIFE IN VENICE</p>
+        <h1>威尼斯生活</h1>
+        <p class="detail-english">Markets, Bridges and Getting Lost</p>
+
+        <div class="audio-block">
+          <p class="audio-number">第 9 章</p>
+          <h2>里亞托：先有市場，後來才有名橋</h2>
+          <audio controls>
+            <source src="venice-life-09.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+
+        <img
+          class="exterior-image"
+          src="venice-life-09.jpg"
+          alt="里亞托橋與市場"
+        >
+
+        <div class="audio-block">
+          <p class="audio-number">第 10 章</p>
+          <h2>在威尼斯，迷路不一定是一件壞事</h2>
+          <audio controls>
+            <source src="venice-life-10.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+
+        <img
+          class="exterior-image"
+          src="venice-life-10.jpg"
+          alt="威尼斯巷弄與日常生活"
+        >
+      </div>
+    </section>
+
+    <!-- ==================================
+         第三層：佛羅倫斯內容頁
+    =================================== -->
+
+    <section class="detail-page" id="florenceHistoryPage">
+      <button class="detail-back-button" type="button" onclick="closePage('florenceHistoryPage')">
+        ← 返回佛羅倫斯系列
+      </button>
+      <div class="detail-content">
+        <p class="detail-small-title">FLORENCE & THE MEDICI</p>
+        <h1>佛羅倫斯與美第奇</h1>
+        <p class="detail-english">The City, the Family and the Artist</p>
+        <div class="audio-block">
+          <p class="audio-number">第 1 章</p>
+          <h2>佛羅倫斯：一座靠做生意，最後改變人類看世界方式的城市</h2>
+          <audio controls>
+            <source src="florence-01.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <div class="audio-block">
+          <p class="audio-number">第 2 章</p>
+          <h2>美第奇：有錢到能影響教宗，也有能力改變整座城市</h2>
+          <audio controls>
+            <source src="florence-02.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <div class="audio-block">
+          <p class="audio-number">第 3 章</p>
+          <h2>米開朗基羅：佛羅倫斯如何養出一位難以相處的天才</h2>
+          <audio controls>
+            <source src="florence-03.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <img
+          class="exterior-image"
+          src="florence-history-01.jpg"
+          alt="佛羅倫斯城市與美第奇"
+        >
+        <img
+          class="exterior-image"
+          src="florence-history-02.jpg"
+          alt="米開朗基羅與文藝復興"
+        >
+      </div>
+    </section>
+
+    <section class="detail-page" id="florenceCathedralPage">
+      <button class="detail-back-button" type="button" onclick="closePage('florenceCathedralPage')">
+        ← 返回佛羅倫斯系列
+      </button>
+      <div class="detail-content">
+        <p class="detail-small-title">CATHEDRAL COMPLEX</p>
+        <h1>大教堂建築群</h1>
+        <p class="detail-english">Baptistery, Cathedral, Dome and Bell Tower</p>
+        <div class="audio-block">
+          <p class="audio-number">第 4 章</p>
+          <h2>洗禮堂競賽：第一次交手，吉貝爾蒂贏了</h2>
+          <audio controls>
+            <source src="florence-04.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <img
+          class="exterior-image"
+          src="florence-cathedral-04.jpg"
+          alt="洗禮堂競賽：第一次交手，吉貝爾蒂贏了"
+        >
+        <div class="audio-block">
+          <p class="audio-number">第 5 章</p>
+          <h2>百花大教堂：教堂先蓋得很大，屋頂的問題留給後來的人</h2>
+          <audio controls>
+            <source src="florence-05.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <img
+          class="exterior-image"
+          src="florence-cathedral-05.jpg"
+          alt="百花大教堂：教堂先蓋得很大，屋頂的問題留給後來的人"
+        >
+        <div class="audio-block">
+          <p class="audio-number">第 6 章</p>
+          <h2>布魯內萊斯基圓頂：二十年後，兩個老對手又碰上了</h2>
+          <audio controls>
+            <source src="florence-06.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <img
+          class="exterior-image"
+          src="florence-cathedral-06.jpg"
+          alt="布魯內萊斯基圓頂：二十年後，兩個老對手又碰上了"
+        >
+        <div class="audio-block">
+          <p class="audio-number">第 7 章</p>
+          <h2>喬托鐘樓與大教堂內部：外面華麗，裡面反而比較安靜</h2>
+          <audio controls>
+            <source src="florence-07.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <img
+          class="exterior-image"
+          src="florence-cathedral-07.jpg"
+          alt="喬托鐘樓與大教堂內部：外面華麗，裡面反而比較安靜"
+        >
+      </div>
+    </section>
+
+    <section class="detail-page" id="florenceUffiziPage">
+      <button class="detail-back-button" type="button" onclick="closePage('florenceUffiziPage')">
+        ← 返回佛羅倫斯系列
+      </button>
+      <div class="detail-content">
+        <p class="detail-small-title">SIGNORIA & UFFIZI</p>
+        <h1>領主廣場與烏菲茲</h1>
+        <p class="detail-english">Politics and Art in the Heart of Florence</p>
+        <div class="audio-block">
+          <p class="audio-number">第 8 章</p>
+          <h2>領主廣場與舊宮：佛羅倫斯的政治一直發生在市民眼前</h2>
+          <audio controls>
+            <source src="florence-08.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <div class="audio-block">
+          <p class="audio-number">第 9 章</p>
+          <h2>烏菲茲：世界級美術館，原本只是政府辦公大樓</h2>
+          <audio controls>
+            <source src="florence-09.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <div class="audio-block">
+          <p class="audio-number">第 10 章</p>
+          <h2>烏菲茲必看之一：喬托與波提切利</h2>
+          <audio controls>
+            <source src="florence-10.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <div class="audio-block">
+          <p class="audio-number">第 11 章</p>
+          <h2>烏菲茲必看之二：人物開始有肌肉、有眼神，也有危險</h2>
+          <audio controls>
+            <source src="florence-11.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <img
+          class="exterior-image"
+          src="florence-uffizi-01.jpg"
+          alt="領主廣場與舊宮"
+        >
+        <img
+          class="exterior-image"
+          src="florence-uffizi-02.jpg"
+          alt="烏菲茲美術館與館藏"
+        >
+      </div>
+    </section>
+
+    <section class="detail-page" id="florenceDavidPage">
+      <button class="detail-back-button" type="button" onclick="closePage('florenceDavidPage')">
+        ← 返回佛羅倫斯系列
+      </button>
+      <div class="detail-content">
+        <p class="detail-small-title">MICHELANGELO'S DAVID</p>
+        <h1>米開朗基羅的大衛</h1>
+        <p class="detail-english">The Marble Giant of Florence</p>
+        <div class="audio-block">
+          <p class="audio-number">第 12 章</p>
+          <h2>《大衛》：一塊被放棄的石頭，最後成為佛羅倫斯最有名的人</h2>
+          <audio controls>
+            <source src="florence-12.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <img
+          class="exterior-image"
+          src="florence-david-01.jpg"
+          alt="米開朗基羅大衛像"
+        >
+      </div>
+    </section>
+
+    <section class="detail-page" id="florencePontePage">
+      <button class="detail-back-button" type="button" onclick="closePage('florencePontePage')">
+        ← 返回佛羅倫斯系列
+      </button>
+      <div class="detail-content">
+        <p class="detail-small-title">PONTE VECCHIO & DANTE</p>
+        <h1>老橋與但丁</h1>
+        <p class="detail-english">Two Stories from the Streets of Florence</p>
+        <div class="audio-block">
+          <p class="audio-number">第 13 章</p>
+          <h2>老橋與瓦薩里走廊：統治者連通勤都不必走普通人的路</h2>
+          <audio controls>
+            <source src="florence-13.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <div class="audio-block">
+          <p class="audio-number">第 14 章</p>
+          <h2>但丁與《神曲》：一個被家鄉放逐的人，替全世界畫出地獄與天堂</h2>
+          <audio controls>
+            <source src="florence-14.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <img
+          class="exterior-image"
+          src="florence-ponte-dante-01.jpg"
+          alt="老橋、瓦薩里走廊與但丁"
+        >
+      </div>
+    </section>
+
+    <!-- ==================================
+         第三層：羅馬內容頁
+    =================================== -->
+
+    <section class="detail-page" id="romeHistoryPage">
+      <button class="detail-back-button" type="button" onclick="closePage('romeHistoryPage')">
+        ← 返回羅馬系列
+      </button>
+      <div class="detail-content">
+        <p class="detail-small-title">ORIGINS & REPUBLIC</p>
+        <h1>羅馬的誕生與共和國</h1>
+        <p class="detail-english">From a Small Settlement to a Republic</p>
+        <div class="audio-block">
+          <p class="audio-number">第 1 章</p>
+          <h2>羅馬：一座從泥地旁長出來的世界中心</h2>
+          <audio controls>
+            <source src="rome-01.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <div class="audio-block">
+          <p class="audio-number">第 2 章</p>
+          <h2>共和國：推翻國王以後，權力真的屬於人民了嗎？</h2>
+          <audio controls>
+            <source src="rome-02.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <div class="audio-block">
+          <p class="audio-number">第 3 章</p>
+          <h2>凱撒：跨過一條小河，讓羅馬再也回不到從前</h2>
+          <audio controls>
+            <source src="rome-03.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <img
+          class="exterior-image"
+          src="rome-history-01.jpg"
+          alt="羅馬早期歷史與共和國"
+        >
+      </div>
+    </section>
+
+    <section class="detail-page" id="romeEmpirePage">
+      <button class="detail-back-button" type="button" onclick="closePage('romeEmpirePage')">
+        ← 返回羅馬系列
+      </button>
+      <div class="detail-content">
+        <p class="detail-small-title">THE ROMAN EMPIRE</p>
+        <h1>羅馬帝國</h1>
+        <p class="detail-english">Augustus, Expansion and the Empire's Afterlife</p>
+        <div class="audio-block">
+          <p class="audio-number">第 4 章</p>
+          <h2>屋大維：他沒有公開稱王，卻成了羅馬第一位皇帝</h2>
+          <audio controls>
+            <source src="rome-04.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <div class="audio-block">
+          <p class="audio-number">第 5 章</p>
+          <h2>當羅馬來到一個地方，它帶來了什麼？</h2>
+          <audio controls>
+            <source src="rome-05.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <div class="audio-block">
+          <p class="audio-number">第 6 章</p>
+          <h2>西羅馬帝國結束後，羅馬的故事並沒有停止</h2>
+          <audio controls>
+            <source src="rome-06.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <img
+          class="exterior-image"
+          src="rome-empire-01.jpg"
+          alt="奧古斯都與羅馬帝國"
+        >
+        <img
+          class="exterior-image"
+          src="rome-empire-02.jpg"
+          alt="羅馬道路、水道與帝國擴張"
+        >
+      </div>
+    </section>
+
+    <section class="detail-page" id="colosseumPage">
+      <button class="detail-back-button" type="button" onclick="closePage('colosseumPage')">
+        ← 返回羅馬系列
+      </button>
+      <div class="detail-content">
+        <p class="detail-small-title">COLOSSEUM</p>
+        <h1>競技場</h1>
+        <p class="detail-english">Architecture, Spectacle and Gladiators</p>
+        <div class="audio-block">
+          <p class="audio-number">第 7 章</p>
+          <h2>競技場：尼祿的私人湖，為什麼會變成公共娛樂場？</h2>
+          <audio controls>
+            <source src="rome-07.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <div class="audio-block">
+          <p class="audio-number">第 8 章</p>
+          <h2>競技場怎麼讓數萬人進出，又怎麼替觀眾遮太陽？</h2>
+          <audio controls>
+            <source src="rome-08.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <div class="audio-block">
+          <p class="audio-number">第 9 章</p>
+          <h2>競技場地下：上面看見奇蹟，下面的人正在拚命拉繩</h2>
+          <audio controls>
+            <source src="rome-09.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <div class="audio-block">
+          <p class="audio-number">第 10 章</p>
+          <h2>角鬥士：被社會看不起的人，為什麼又能成為全城明星？</h2>
+          <audio controls>
+            <source src="rome-10.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <img
+          class="exterior-image"
+          src="rome-colosseum-01.jpg"
+          alt="羅馬競技場內外與地下空間"
+        >
+      </div>
+    </section>
+
+    <section class="detail-page" id="romanForumPage">
+      <button class="detail-back-button" type="button" onclick="closePage('romanForumPage')">
+        ← 返回羅馬系列
+      </button>
+      <div class="detail-content">
+        <p class="detail-small-title">PALATINE HILL & ROMAN FORUM</p>
+        <h1>帕拉提諾山與古羅馬廣場</h1>
+        <p class="detail-english">Palaces, Temples and Political Memory</p>
+        <div class="audio-block">
+          <p class="audio-number">第 11 章</p>
+          <h2>帕拉提諾山：皇帝為什麼選擇住在這裡？</h2>
+          <audio controls>
+            <source src="rome-11.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <div class="audio-block">
+          <p class="audio-number">第 12 章</p>
+          <h2>古羅馬廣場：先別急著記名字，先把屋頂和人群補回來</h2>
+          <audio controls>
+            <source src="rome-12.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <div class="audio-block">
+          <p class="audio-number">第 13 章</p>
+          <h2>提圖斯凱旋門：勝利者看見榮耀，被征服者看見什麼？</h2>
+          <audio controls>
+            <source src="rome-13.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <div class="audio-block">
+          <p class="audio-number">第 14 章</p>
+          <h2>凱撒神廟與演說台：羅馬政治最光榮，也最殘酷的地方</h2>
+          <audio controls>
+            <source src="rome-14.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <div class="audio-block">
+          <p class="audio-number">第 15 章</p>
+          <h2>維斯塔貞女、被刪掉的名字與長進神廟裡的教堂</h2>
+          <audio controls>
+            <source src="rome-15.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <img
+          class="exterior-image"
+          src="rome-forum-01.jpg"
+          alt="帕拉提諾山與古羅馬廣場全景"
+        >
+        <img
+          class="exterior-image"
+          src="rome-forum-02.jpg"
+          alt="凱旋門、神廟與古羅馬廣場細節"
+        >
+      </div>
+    </section>
+
+    <section class="detail-page" id="baroqueRomePage">
+      <button class="detail-back-button" type="button" onclick="closePage('baroqueRomePage')">
+        ← 返回羅馬系列
+      </button>
+      <div class="detail-content">
+        <p class="detail-small-title">PANTHEON & BAROQUE ROME</p>
+        <h1>萬神殿與巴洛克羅馬</h1>
+        <p class="detail-english">Ancient Engineering and the Theatrical City</p>
+        <div class="audio-block">
+          <p class="audio-number">第 16 章</p>
+          <h2>萬神殿外面：巨柱、青銅與一棟故意讓人誤會的建築</h2>
+          <audio controls>
+            <source src="rome-16.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <div class="audio-block">
+          <p class="audio-number">第 17 章</p>
+          <h2>萬神殿裡面：羅馬人如何用混凝土撐起一片天空？</h2>
+          <audio controls>
+            <source src="rome-17.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <img
+          class="exterior-image"
+          src="rome-pantheon-01.jpg"
+          alt="萬神殿外觀、圓頂與天窗"
+        >
+        <div class="audio-block">
+          <p class="audio-number">第 18 章</p>
+          <h2>羅馬的水：古代水道、教宗噴泉與街角飲水機</h2>
+          <audio controls>
+            <source src="rome-18.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <img
+          class="exterior-image"
+          src="rome-water-01.jpg"
+          alt="羅馬水道、噴泉與街角飲水機"
+        >
+        <div class="audio-block">
+          <p class="audio-number">第 19 章</p>
+          <h2>西班牙廣場：一座樓梯如何把坡地變成城市舞台？</h2>
+          <audio controls>
+            <source src="rome-19.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <div class="audio-block">
+          <p class="audio-number">第 20 章</p>
+          <h2>特雷維噴泉：為什麼一整片海洋會藏在狹窄街道裡？</h2>
+          <audio controls>
+            <source src="rome-20.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <div class="audio-block">
+          <p class="audio-number">第 21 章</p>
+          <h2>納沃納廣場：今天的廣場，為什麼像一條古代跑道？</h2>
+          <audio controls>
+            <source src="rome-21.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <img
+          class="exterior-image"
+          src="rome-baroque-01.jpg"
+          alt="西班牙廣場、特雷維噴泉與納沃納廣場"
+        >
+      </div>
+    </section>
+
+    <section class="detail-page" id="vaticanPage">
+      <button class="detail-back-button" type="button" onclick="closePage('vaticanPage')">
+        ← 返回羅馬系列
+      </button>
+      <div class="detail-content">
+        <p class="detail-small-title">VATICAN CITY</p>
+        <h1>梵蒂岡</h1>
+        <p class="detail-english">The Square, the Museums and St. Peter's Basilica</p>
+        <div class="audio-block">
+          <p class="audio-number">第 22 章</p>
+          <h2>梵蒂岡：為什麼整個宗教中心會圍繞一座墓長出來？</h2>
+          <audio controls>
+            <source src="rome-22.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <div class="audio-block">
+          <p class="audio-number">第 23 章</p>
+          <h2>聖彼得廣場：站對位置，四排柱子會變成一排</h2>
+          <audio controls>
+            <source src="rome-23.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <div class="audio-block">
+          <p class="audio-number">第 24 章</p>
+          <h2>梵蒂岡博物館：教宗為什麼收藏古代雕塑？</h2>
+          <audio controls>
+            <source src="rome-24.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <div class="audio-block">
+          <p class="audio-number">第 25 章</p>
+          <h2>《雅典學院》：教宗宮殿裡為什麼站滿古代哲學家？</h2>
+          <audio controls>
+            <source src="rome-25.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <div class="audio-block">
+          <p class="audio-number">第 26 章</p>
+          <h2>西斯汀禮拜堂：米開朗基羅為什麼把自己畫在一張人皮上？</h2>
+          <audio controls>
+            <source src="rome-26.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <div class="audio-block">
+          <p class="audio-number">第 27 章</p>
+          <h2>聖彼得大教堂：尺度、材質與錯覺</h2>
+          <audio controls>
+            <source src="rome-27.mp3" type="audio/mpeg">
+            你的瀏覽器不支援音檔播放。
+          </audio>
+        </div>
+        <img
+          class="exterior-image"
+          src="rome-vatican-01.jpg"
+          alt="聖彼得廣場與大教堂"
+        >
+        <img
+          class="exterior-image"
+          src="rome-vatican-02.jpg"
+          alt="梵蒂岡博物館與雅典學院"
+        >
+        <img
+          class="exterior-image"
+          src="rome-vatican-03.jpg"
+          alt="西斯汀禮拜堂與聖彼得大教堂內部"
+        >
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    function openPage(pageId) {
+      const page = document.getElementById(pageId);
+
+      if (page) {
+        page.classList.add("show");
+        page.scrollTop = 0;
+      }
+    }
+
+    function closePage(pageId) {
+      const page = document.getElementById(pageId);
+
+      if (!page) {
+        return;
+      }
+
+      page.querySelectorAll("audio").forEach(function (audio) {
+        audio.pause();
+      });
+
+      page.classList.remove("show");
+    }
+  
+    function formatAudioTime(seconds) {
+      if (!Number.isFinite(seconds)) {
+        return "00:00";
+      }
+
+      const minutes = Math.floor(seconds / 60);
+      const remainingSeconds = Math.floor(seconds % 60);
+
+      return (
+        String(minutes).padStart(2, "0") +
+        ":" +
+        String(remainingSeconds).padStart(2, "0")
+      );
+    }
+
+    function buildReferencePlayers() {
+      document.querySelectorAll("audio").forEach(function (audio) {
+        if (audio.dataset.referencePlayer === "true") {
+          return;
+        }
+
+        audio.dataset.referencePlayer = "true";
+        audio.removeAttribute("controls");
+
+        const player = document.createElement("div");
+        player.className = "reference-player";
+
+        const playButton = document.createElement("button");
+        playButton.className = "reference-play-button";
+        playButton.type = "button";
+        playButton.setAttribute("aria-label", "播放或暫停");
+
+        const time = document.createElement("span");
+        time.className = "reference-time";
+        time.textContent = "00:00";
+
+        const progress = document.createElement("input");
+        progress.className = "reference-progress";
+        progress.type = "range";
+        progress.min = "0";
+        progress.max = "100";
+        progress.value = "0";
+        progress.setAttribute("aria-label", "播放進度");
+
+        const volumeButton = document.createElement("button");
+        volumeButton.className = "reference-volume-button";
+        volumeButton.type = "button";
+        volumeButton.setAttribute("aria-label", "靜音或恢復音量");
+
+        const menuButton = document.createElement("button");
+        menuButton.className = "reference-menu-button";
+        menuButton.type = "button";
+        menuButton.setAttribute("aria-label", "切換播放速度");
+
+        const speedLabel = document.createElement("div");
+        speedLabel.className = "reference-speed-label";
+        speedLabel.textContent = "播放速度：1×";
+
+        audio.insertAdjacentElement("afterend", player);
+        player.insertAdjacentElement("afterend", speedLabel);
+
+        player.appendChild(playButton);
+        player.appendChild(time);
+        player.appendChild(progress);
+        player.appendChild(volumeButton);
+        player.appendChild(menuButton);
+
+        playButton.addEventListener("click", function () {
+          if (audio.paused) {
+            document.querySelectorAll("audio").forEach(function (otherAudio) {
+              if (otherAudio !== audio) {
+                otherAudio.pause();
+              }
+            });
+
+            audio.play();
+          } else {
+            audio.pause();
+          }
+        });
+
+        audio.addEventListener("play", function () {
+          playButton.classList.add("is-playing");
+        });
+
+        audio.addEventListener("pause", function () {
+          playButton.classList.remove("is-playing");
+        });
+
+        audio.addEventListener("timeupdate", function () {
+          time.textContent = formatAudioTime(audio.currentTime);
+
+          const percentage = audio.duration
+            ? (audio.currentTime / audio.duration) * 100
+            : 0;
+
+          progress.value = String(percentage);
+          progress.style.setProperty(
+            "--progress",
+            percentage + "%"
+          );
+        });
+
+        progress.addEventListener("input", function () {
+          if (audio.duration) {
+            audio.currentTime =
+              (Number(progress.value) / 100) *
+              audio.duration;
+          }
+        });
+
+        volumeButton.addEventListener("click", function () {
+          audio.muted = !audio.muted;
+
+          volumeButton.classList.toggle(
+            "is-muted",
+            audio.muted
+          );
+        });
+
+        const speeds = [1, 1.25, 1.5, 0.75];
+        let speedIndex = 0;
+        let labelTimer;
+
+        menuButton.addEventListener("click", function () {
+          speedIndex = (speedIndex + 1) % speeds.length;
+          audio.playbackRate = speeds[speedIndex];
+
+          speedLabel.textContent =
+            "播放速度：" +
+            speeds[speedIndex] +
+            "×";
+
+          speedLabel.classList.add("show");
+
+          window.clearTimeout(labelTimer);
+          labelTimer = window.setTimeout(function () {
+            speedLabel.classList.remove("show");
+          }, 1800);
+        });
+      });
+    }
+
+    function setupContinuousAudio() {
+      document.querySelectorAll(".detail-page").forEach(function (page) {
+        const audios = Array.from(page.querySelectorAll("audio"));
+
+        audios.forEach(function (audio, index) {
+          audio.addEventListener("ended", function () {
+            const nextAudio = audios[index + 1];
+
+            if (!nextAudio) {
+              return;
+            }
+
+            nextAudio.play();
+
+            const nextPlayer = nextAudio.nextElementSibling;
+
+            if (nextPlayer) {
+              nextPlayer.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+              });
+            }
+          });
+        });
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      buildReferencePlayers();
+      setupContinuousAudio();
+    });
+
+  </script>
+</body>
+
+</html>
