@@ -835,6 +835,128 @@
       background-color: #d8cfbd;
     }
 
+  
+    /* =========================
+       iPhone Safari 穩定版
+       減少縮放時的記憶體與合成負擔
+    ========================= */
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      overflow: hidden;
+    }
+
+    .book {
+      background-color: #06452d;
+      background-image: url("italy-pattern-background.jpg");
+      background-size: 320px auto;
+      background-position: top left;
+      background-repeat: repeat;
+
+      perspective: none !important;
+      -webkit-perspective: none !important;
+    }
+
+    .contents-page,
+    .milan-page,
+    .venice-page,
+    .florence-page,
+    .rome-page,
+    .detail-page {
+      background-color: transparent !important;
+      background-image: none !important;
+      background-attachment: scroll !important;
+
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+    }
+
+    /* 只顯示目前正在使用的頁面，其他頁面完全不渲染 */
+    .milan-page,
+    .venice-page,
+    .florence-page,
+    .rome-page,
+    .detail-page {
+      display: none;
+      transform: none !important;
+      transition: none !important;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .milan-page.show,
+    .venice-page.show,
+    .florence-page.show,
+    .rome-page.show,
+    .detail-page.show {
+      display: block;
+      visibility: visible;
+      pointer-events: auto;
+      transform: none !important;
+    }
+
+    /* 封面改成穩定的直接切換，不再做 3D 翻頁 */
+    .cover-page {
+      transform: none !important;
+      transition: none !important;
+      transform-style: flat !important;
+      -webkit-transform-style: flat !important;
+      backface-visibility: visible !important;
+      -webkit-backface-visibility: visible !important;
+    }
+
+    .cover-page.flipped {
+      display: none;
+      transform: none !important;
+    }
+
+    .detail-back-button,
+    .milan-page-content,
+    .venice-page-content,
+    .florence-page-content,
+    .rome-page-content,
+    .detail-content,
+    .contents-page .city-list {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    .milan-page-content,
+    .venice-page-content,
+    .florence-page-content,
+    .rome-page-content,
+    .detail-content {
+      background: rgba(3, 48, 31, 0.82) !important;
+    }
+
+    .contents-page .city-list {
+      background: rgba(3, 48, 31, 0.58) !important;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .city-card img,
+    .series-card img {
+      height: 100%;
+      object-fit: cover;
+    }
+
+    @media (min-width: 600px) {
+      .book {
+        background-size: 360px auto;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -1992,6 +2114,8 @@
         loadAudioSource(audios[0]);
       }
 
+      buildReferencePlayers(page);
+
       audios.forEach(function (audio, index) {
         if (audio.dataset.smartPreloadAttached === "true") {
           return;
@@ -2022,7 +2146,7 @@
 
             if (nextPlayer) {
               nextPlayer.scrollIntoView({
-                behavior: "smooth",
+                behavior: "auto",
                 block: "center"
               });
             }
@@ -2083,8 +2207,10 @@
       );
     }
 
-    function buildReferencePlayers() {
-      document.querySelectorAll("audio").forEach(function (audio) {
+    function buildReferencePlayers(container) {
+      const scope = container || document;
+
+      scope.querySelectorAll("audio").forEach(function (audio) {
         if (audio.dataset.referencePlayer === "true") {
           return;
         }
@@ -2137,13 +2263,17 @@
 
         playButton.addEventListener("click", function () {
           if (audio.paused) {
+            loadAudioSource(audio);
+
             document.querySelectorAll("audio").forEach(function (otherAudio) {
               if (otherAudio !== audio) {
                 otherAudio.pause();
               }
             });
 
-            audio.play();
+            audio.play().catch(function () {
+              /* Safari 若尚未允許播放，使用者再按一次即可 */
+            });
           } else {
             audio.pause();
           }
@@ -2229,7 +2359,7 @@
 
             if (nextPlayer) {
               nextPlayer.scrollIntoView({
-                behavior: "smooth",
+                behavior: "auto",
                 block: "center"
               });
             }
