@@ -1,0 +1,8 @@
+1. 先備份目前正常的 repository 資料夾。
+2. 把本資料夾全部檔案放進 GitHub repository 根目錄。
+3. index.html 與 player-skin-clean.png 選擇取代。
+4. 原本所有 JPG、PNG、MP3 不要刪。
+5. GitHub Desktop：Commit to main → Push origin。
+6. 更新後在 iPhone Safari 開網站，到目錄下方按城市下載。
+7. 顯示「下載完成」後，再開飛航模式測試。
+8. Safari 分享按鈕 → 加入主畫面，可像 App 一樣開啟。

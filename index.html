@@ -957,7 +957,24 @@
       }
     }
 
-  </style>
+  
+.offline-panel{margin:24px 0 10px;padding:18px;border:1px solid rgba(244,234,213,.28);border-radius:18px;background:rgba(3,48,31,.72);color:#f4ead5}
+.offline-panel h2{margin:0 0 8px;font-size:20px}
+.offline-panel p{margin:0 0 14px;font-size:14px;line-height:1.55}
+.offline-buttons{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.offline-buttons button{min-height:44px;border:1px solid rgba(244,234,213,.34);border-radius:12px;background:rgba(244,234,213,.12);color:#f4ead5}
+.offline-buttons button:disabled{opacity:.6}
+.offline-status{margin-top:12px!important;margin-bottom:0!important;font-weight:600}
+
+</style>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#06452d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="義大利導覽">
+<link rel="apple-touch-icon" href="icon-192.png">
+
 </head>
 <body>
 <main class="book">
@@ -1017,6 +1034,19 @@
 </div>
 </button>
 </div>
+
+<section class="offline-panel">
+  <h2>離線使用</h2>
+  <p>先連上網路，選擇要下載的城市。顯示「下載完成」後，開飛航模式仍可使用。</p>
+  <div class="offline-buttons">
+    <button type="button" data-offline-city="milan">下載米蘭</button>
+    <button type="button" data-offline-city="venice">下載威尼斯</button>
+    <button type="button" data-offline-city="florence">下載佛羅倫斯</button>
+    <button type="button" data-offline-city="rome">下載羅馬</button>
+  </div>
+  <p id="offlineStatus" class="offline-status">尚未下載</p>
+</section>
+
 </section>
 <section aria-label="點一下翻開封面" class="cover-page" id="coverPage" onclick="this.classList.add('flipped')">
 <img alt="義大利有聲導覽書封面" decoding="async" fetchpriority="high" loading="eager" src="cover.jpg"/>
@@ -2374,5 +2404,48 @@
     });
 
   </script>
+
+<script>
+(function(){
+  const status=document.getElementById("offlineStatus");
+  const buttons=document.querySelectorAll("[data-offline-city]");
+  if(!("serviceWorker" in navigator)){
+    if(status)status.textContent="此瀏覽器不支援離線功能";
+    buttons.forEach(b=>b.disabled=true); return;
+  }
+  navigator.serviceWorker.register("./service-worker.js")
+  .then(()=>navigator.serviceWorker.ready)
+  .then(reg=>{
+    if(status)status.textContent="可選擇城市下載";
+    buttons.forEach(button=>{
+      button.addEventListener("click",()=>{
+        const city=button.dataset.offlineCity;
+        const old=button.textContent;
+        buttons.forEach(b=>b.disabled=true);
+        button.textContent="下載中…";
+        if(status)status.textContent="正在下載，請不要關閉此頁面";
+        const worker=reg.active||reg.waiting||reg.installing;
+        const channel=new MessageChannel();
+        channel.port1.onmessage=e=>{
+          const d=e.data||{};
+          if(d.type==="CACHE_PROGRESS"&&status)status.textContent=`正在下載 ${d.done} / ${d.total}`;
+          if(d.type==="CACHE_COMPLETE"){
+            button.textContent="已下載";
+            if(status)status.textContent="下載完成，可離線使用";
+            buttons.forEach(b=>b.disabled=false);
+          }
+          if(d.type==="CACHE_ERROR"){
+            button.textContent=old;
+            if(status)status.textContent="下載失敗，請確認網路後重試";
+            buttons.forEach(b=>b.disabled=false);
+          }
+        };
+        worker.postMessage({type:"CACHE_CITY",city},[channel.port2]);
+      });
+    });
+  }).catch(()=>{if(status)status.textContent="離線功能啟動失敗，請重新整理";});
+})();
+</script>
+
 </body>
 </html>
