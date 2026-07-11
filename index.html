@@ -1149,440 +1149,173 @@
   }
 }
 
+
 /* =========================
-   V8：手機圖片取景與播放器修正
+   V8：參考圖離線使用介面
+   圖像外觀 + 真實可點擊功能
 ========================= */
-.contents-page {
-  padding-top: calc(12px + env(safe-area-inset-top)) !important;
-}
 
-/* 封面滿版，不再留上下空白 */
-.cover-page img {
-  object-fit: cover !important;
-}
-
-.top-back-button {
-  margin-bottom: 12px !important;
-}
-
-.contents-small-title {
-  margin-bottom: 5px !important;
-}
-
-.contents-page h1 {
-  margin-bottom: 22px !important;
-}
-
-.city-card,
-.series-card {
-  height: auto !important;
-  aspect-ratio: 1 / 1;
-  background: #d8cfbd;
-}
-
-.city-list,
-.series-list {
-  display: grid !important;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px !important;
-}
-
-.city-card-text,
-.series-card-content {
-  position: absolute !important;
-  inset: 0 !important;
-  display: block !important;
-  padding: 12px !important;
-  background: transparent !important;
-  text-shadow:
-    0 1px 1px rgba(28, 18, 10, 0.98),
-    0 2px 5px rgba(28, 18, 10, 0.88),
-    0 0 10px rgba(28, 18, 10, 0.48) !important;
-}
-
-.city-name,
-.series-title {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  right: 8px;
-  align-items: flex-start;
-  gap: 2px !important;
-}
-
-.city-name strong {
-  font-family: "Songti TC", "Noto Serif TC", "PMingLiU", serif !important;
-  font-size: clamp(18px, 5vw, 22px) !important;
-  font-weight: 600 !important;
-  line-height: 1.12 !important;
-  letter-spacing: 0.06em !important;
-  white-space: nowrap;
-}
-
-.series-title strong {
-  font-family: "Songti TC", "Noto Serif TC", "PMingLiU", serif !important;
-  font-size: clamp(12px, 3.45vw, 16px) !important;
-  font-weight: 600 !important;
-  line-height: 1.16 !important;
-  letter-spacing: 0.035em !important;
-  white-space: nowrap;
-}
-
-.series-title strong.two-line-title {
-  font-size: clamp(16px, 4.3vw, 19px) !important;
-  line-height: 1.14 !important;
-  white-space: normal;
-}
-
-.city-name small,
-.series-title small {
-  font-family: Georgia, "Times New Roman", serif !important;
-  font-size: clamp(11px, 3.15vw, 14px) !important;
-  font-style: italic !important;
-  font-weight: 400 !important;
-  line-height: 1.16 !important;
-  letter-spacing: 0.015em !important;
-  color: #fff8e8 !important;
-}
-
-.city-number,
-.series-number {
-  display: none !important;
-}
-
-.city-arrow,
-.series-arrow {
-  display: none !important;
-}
-
-.city-card img,
-.series-card img {
-  object-fit: cover !important;
-}
-
-/* 較高的卡片能看到更完整的建築主體 */
-.milan-image { object-position: center 54% !important; }
-.venice-image { object-position: center 68% !important; }
-.florence-image { object-position: center 48% !important; }
-.rome-image { object-position: center 52% !important; }
-
-.history-series-image { object-position: center 48% !important; }
-.exterior-series-image { object-position: center 42% !important; }
-.interior-series-image { object-position: center 56% !important; }
-.rooftop-series-image { object-position: center 32% !important; }
-.gallery-series-image { object-position: center 58% !important; }
-
-/* 大衛像卡片以頭部與上半身為主，避免焦點落在裸體細節 */
-.florence-david-card-image {
-  object-position: center 12% !important;
-}
-
-.reference-player {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  overflow: visible;
-  margin-bottom: 24px !important;
-}
-
-.reference-progress {
-  height: 12% !important;
-  background: linear-gradient(
-    to right,
-    #493423 0%,
-    #493423 var(--progress, 0%),
-    #b8a787 var(--progress, 0%),
-    #b8a787 100%
-  ) !important;
-  box-shadow: inset 0 1px 2px rgba(68, 45, 26, 0.24) !important;
-}
-
-.reference-progress::-webkit-slider-thumb {
-  width: 15px !important;
-  height: 15px !important;
-  border: 2px solid #493423 !important;
-  background: #d8c49f !important;
-}
-
-.reference-progress::-moz-range-thumb {
-  width: 15px !important;
-  height: 15px !important;
-  border: 2px solid #493423 !important;
-  background: #d8c49f !important;
-}
-
-.reference-progress.is-empty::-webkit-slider-thumb {
-  border-color: transparent !important;
-  background: transparent !important;
+.offline-panel.offline-poster {
+  position: relative;
+  width: calc(100% + 10px);
+  max-width: none;
+  aspect-ratio: 941 / 1672;
+  margin: 32px -5px 18px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: #063521 !important;
   box-shadow: none !important;
+  isolation: isolate;
 }
 
-.reference-progress.is-empty::-moz-range-thumb {
-  border-color: transparent !important;
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-.reference-volume-button::before,
-.reference-volume-button::after {
-  position: absolute;
-  pointer-events: none;
-  opacity: 0;
-}
-
-.reference-volume-button.is-muted::before {
-  content: "";
-  left: 46%;
-  top: 14%;
-  width: 3px;
-  height: 72%;
-  border-radius: 3px;
-  background: #5b2f25;
-  transform: rotate(38deg);
-  opacity: 1;
-}
-
-.reference-volume-button.is-muted::after {
+.offline-panel.offline-poster::before,
+.offline-panel.offline-poster::after {
   content: none !important;
   display: none !important;
 }
 
-.reference-volume-panel {
+.offline-poster-image {
   position: absolute;
-  z-index: 5;
-  right: 5.5%;
-  bottom: calc(100% + 8px);
-  width: 44px;
-  height: 132px;
-  display: none;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: fill;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.offline-hotspot,
+.offline-clear-all-hotspot {
+  position: absolute;
+  z-index: 3;
+  display: block;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: transparent;
+  font-size: 0;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  cursor: pointer;
+}
+
+.offline-hotspot {
+  width: 12.8%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+}
+
+.offline-hotspot:active {
+  background: rgba(244, 234, 213, 0.12);
+  box-shadow: inset 0 0 0 2px rgba(244, 234, 213, 0.72);
+}
+
+.offline-hotspot:disabled,
+.offline-clear-all-hotspot:disabled {
+  opacity: 0.58;
+}
+
+/* 已下載時，在下載圖示右下角顯示小勾勾。 */
+.offline-download.is-downloaded::after {
+  content: "✓";
+  position: absolute;
+  right: -3%;
+  bottom: -3%;
+  width: 34%;
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #eadfbe;
+  color: #063521;
+  font-family: Arial, sans-serif;
+  font-size: clamp(11px, 3.4vw, 17px);
+  font-weight: 800;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.32);
+}
+
+/* 四列下載／清除按鈕位置，依照參考圖對齊。 */
+.download-milan    { left: 66.6%; top: 37.75%; }
+.clear-milan       { left: 79.5%; top: 37.75%; }
+
+.download-venice   { left: 66.6%; top: 48.72%; }
+.clear-venice      { left: 79.5%; top: 48.72%; }
+
+.download-florence { left: 66.6%; top: 59.60%; }
+.clear-florence    { left: 79.5%; top: 59.60%; }
+
+.download-rome     { left: 66.6%; top: 70.55%; }
+.clear-rome        { left: 79.5%; top: 70.55%; }
+
+.offline-clear-all-hotspot {
+  left: 5.0%;
+  top: 79.15%;
+  width: 90%;
+  height: 9.6%;
+  border-radius: 18px;
+}
+
+.offline-clear-all-hotspot:active {
+  background: rgba(114, 31, 26, 0.10);
+  box-shadow: inset 0 0 0 3px rgba(117, 28, 22, 0.36);
+}
+
+/* 覆蓋參考圖原本的靜態狀態文字，改顯示真正的下載狀態。 */
+.offline-live-status {
+  position: absolute;
+  z-index: 2;
+  left: 8%;
+  right: 8%;
+  bottom: 3.6%;
+  min-height: 7.2%;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(73, 52, 35, 0.38);
-  border-radius: 18px;
-  background: rgba(225, 210, 181, 0.98);
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.24);
-}
-
-.reference-volume-panel.show {
-  display: flex;
-}
-
-.reference-volume-slider {
-  width: 98px;
-  height: 28px;
-  margin: 0;
-  accent-color: #493423;
-  transform: rotate(-90deg);
-}
-
-/* 解說頁讓後方義大利花紋透出，但仍保留文字對比 */
-.detail-content {
-  background: rgba(3, 48, 31, 0.72) !important;
-}
-
-@media (max-width: 390px) {
-  .contents-page h1 { font-size: 34px; }
-  .contents-page .city-list { padding: 10px; gap: 10px !important; }
-  .series-list { gap: 10px !important; }
-  .reference-time { left: 17%; width: 14%; }
-  .reference-progress { left: 31.5%; width: 46%; }
-}
-
-/* =========================
-   V13：復古義大利離線使用區
-========================= */
-.offline-panel {
-  position: relative;
-  isolation: isolate;
-  margin-top: 26px !important;
-  padding: 28px 18px 24px !important;
-  overflow: hidden !important;
-  border: 1px solid rgba(174, 41, 32, 0.72) !important;
-  border-radius: 24px !important;
+  padding: 5px 8px;
   background:
-    radial-gradient(circle at 68% 8%, rgba(174, 41, 32, 0.90) 0 18px, transparent 19px),
-    linear-gradient(rgba(0, 39, 25, 0.94), rgba(0, 39, 25, 0.94)),
-    url("italy-pattern-background.jpg") !important;
-  background-size: auto, auto, 300px auto !important;
-  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.22) !important;
-}
-
-.offline-panel::before {
-  content: "" !important;
-  display: block !important;
-  position: absolute;
-  z-index: -1;
-  top: 22px;
-  left: -8px;
-  width: 47%;
-  height: 230px;
-  background-image: url("florence-david-01.jpg");
-  background-position: center 9%;
-  background-size: 210% auto;
-  background-repeat: no-repeat;
-  filter: sepia(0.72) saturate(0.72) brightness(1.18);
-  mix-blend-mode: screen;
-  opacity: 0.70;
-  clip-path: polygon(7% 0, 100% 0, 94% 100%, 0 100%);
-}
-
-.offline-panel::after {
-  content: "" !important;
-  display: block !important;
-  position: absolute;
-  z-index: -1;
-  inset: 0;
-  background: linear-gradient(90deg, transparent 0 41%, rgba(0, 39, 25, 0.30) 50%, transparent 72%);
+    linear-gradient(
+      to bottom,
+      rgba(3, 47, 30, 0.98),
+      rgba(3, 47, 30, 0.98)
+    );
+  color: #eadfbe;
+  text-align: center;
   pointer-events: none;
 }
 
-.offline-panel h2,
-.offline-panel > p:first-of-type {
-  width: 53%;
-  margin-left: 47% !important;
-  color: #ead8b3;
-  font-family: "Songti TC", "Noto Serif TC", "PMingLiU", serif;
-}
-
-.offline-panel h2 {
-  margin-top: 34px !important;
-  margin-bottom: 18px !important;
-  font-size: clamp(32px, 9vw, 42px) !important;
+.offline-live-status .offline-status {
+  margin: 0 0 5px !important;
+  color: #eadfbe;
+  font-family: "PingFang TC", "Noto Serif TC", serif;
+  font-size: clamp(12px, 3.2vw, 17px);
   font-weight: 500;
-  letter-spacing: 0.08em;
-  white-space: nowrap;
-}
-
-.offline-panel > p:first-of-type {
-  min-height: 148px;
-  margin-bottom: 26px !important;
-  font-size: 15px !important;
-  line-height: 1.85 !important;
+  line-height: 1.35;
   letter-spacing: 0.06em;
 }
 
-.offline-city-row {
-  min-height: 92px;
-  grid-template-columns: minmax(0, 1fr) 52px 52px !important;
-  gap: 10px !important;
-  margin-top: 12px !important;
-  padding: 10px 12px;
-  border: 1px solid rgba(174, 41, 32, 0.78);
-  border-radius: 20px;
-  background: rgba(0, 48, 31, 0.78);
+.offline-live-status .offline-storage {
+  margin: 0 !important;
+  color: rgba(234, 223, 190, 0.92);
+  font-family: "PingFang TC", "Noto Serif TC", serif;
+  font-size: clamp(10px, 2.65vw, 14px) !important;
+  line-height: 1.4;
+  letter-spacing: 0.035em;
+  opacity: 1 !important;
 }
 
-.offline-city-row span {
-  min-width: 0;
-  display: grid;
-  grid-template-columns: 76px minmax(0, 1fr);
-  align-items: center;
-  column-gap: 10px;
-  color: transparent;
-  font-size: 0 !important;
-}
-
-.offline-city-row span::before {
-  content: "";
-  width: 76px;
-  height: 64px;
-  border-radius: 8px;
-  background: var(--city-image) center / cover no-repeat;
-  filter: sepia(1) saturate(5) hue-rotate(320deg) contrast(1.18);
-  opacity: 0.88;
-}
-
-.offline-city-row span::after {
-  content: var(--city-name);
-  color: #ead8b3;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(24px, 7vw, 33px);
-  font-style: italic;
-  line-height: 1;
-  white-space: nowrap;
-}
-
-.offline-city-row:nth-of-type(1) { --city-image: url("milan.jpg"); --city-name: "Milano"; }
-.offline-city-row:nth-of-type(2) { --city-image: url("venice.jpg"); --city-name: "Venezia"; }
-.offline-city-row:nth-of-type(3) { --city-image: url("florence.jpg"); --city-name: "Firenze"; }
-.offline-city-row:nth-of-type(4) { --city-image: url("rome.jpg"); --city-name: "Roma"; }
-
-.offline-city-row button {
-  position: relative;
-  width: 52px;
-  height: 52px;
-  min-height: 52px !important;
-  padding: 0;
-  border: 1px solid rgba(174, 41, 32, 0.82) !important;
-  border-radius: 50% !important;
-  background: rgba(0, 48, 31, 0.90) !important;
-  color: transparent !important;
-  font-size: 0 !important;
-}
-
-.offline-city-row button::before {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  color: #ead8b3;
-  font-family: Arial, sans-serif;
-  font-size: 29px;
-  line-height: 1;
-}
-
-.offline-city-row button[data-offline-download]::before { content: "⇩"; }
-.offline-city-row button[data-offline-clear]::before { content: "⌫"; font-size: 25px; }
-.offline-city-row button[data-offline-download].is-downloaded::before { content: "✓"; }
-
-.offline-city-row button:disabled {
-  opacity: 0.48 !important;
-}
-
-.offline-clear-all {
-  min-height: 62px !important;
-  margin-top: 18px !important;
-  border: 0 !important;
-  border-radius: 14px !important;
-  background:
-    linear-gradient(rgba(229, 211, 174, 0.90), rgba(205, 183, 139, 0.90)),
-    url("italy-pattern-background.jpg") center / 280px auto !important;
-  color: #7f241e !important;
-  font-family: "Songti TC", "Noto Serif TC", "PMingLiU", serif;
-  font-size: clamp(17px, 5vw, 22px) !important;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  box-shadow: inset 0 0 0 2px rgba(94, 58, 34, 0.18), 0 8px 18px rgba(0, 0, 0, 0.20);
-}
-
-.offline-status,
-.offline-storage {
-  width: 100% !important;
-  margin-left: 0 !important;
-  color: #ead8b3 !important;
-  font-family: "Songti TC", "Noto Serif TC", "PMingLiU", serif;
-  text-align: center;
-  letter-spacing: 0.06em;
-}
-
-.offline-status {
-  margin-top: 20px !important;
-  font-size: 13px !important;
-}
-
-.offline-storage {
-  margin-top: 6px !important;
-  font-size: 11px !important;
-  line-height: 1.6 !important;
-}
-
-@media (max-width: 370px) {
-  .offline-panel { padding-left: 14px !important; padding-right: 14px !important; }
-  .offline-city-row { grid-template-columns: minmax(0, 1fr) 46px 46px !important; gap: 7px !important; }
-  .offline-city-row span { grid-template-columns: 62px minmax(0, 1fr); gap: 7px; }
-  .offline-city-row span::before { width: 62px; }
-  .offline-city-row button { width: 46px; height: 46px; min-height: 46px !important; }
-  .offline-city-row span::after { font-size: 22px; }
+@media (max-width: 390px) {
+  .offline-panel.offline-poster {
+    width: calc(100% + 6px);
+    margin-left: -3px !important;
+    margin-right: -3px !important;
+  }
 }
 
 </style>
@@ -1655,45 +1388,86 @@
 </div>
 
 
-<section class="offline-panel">
-  <h2>離線使用</h2>
-  <p>先下載要使用的城市。聽完後可以只清除該城市，釋放手機空間。</p>
 
-  <div class="offline-city-row">
-    <span>米蘭</span>
-    <button type="button" data-offline-download="milan">下載</button>
-    <button type="button" data-offline-clear="milan">清除</button>
+<section class="offline-panel offline-poster" aria-label="離線使用">
+  <img
+    class="offline-poster-image"
+    src="offline-use-design.webp"
+    alt=""
+    aria-hidden="true"
+    decoding="async"
+    loading="lazy"
+  />
+
+  <button
+    class="offline-hotspot offline-download download-milan"
+    type="button"
+    data-offline-download="milan"
+    aria-label="下載米蘭離線內容"
+  ></button>
+  <button
+    class="offline-hotspot offline-clear clear-milan"
+    type="button"
+    data-offline-clear="milan"
+    aria-label="清除米蘭離線內容"
+  ></button>
+
+  <button
+    class="offline-hotspot offline-download download-venice"
+    type="button"
+    data-offline-download="venice"
+    aria-label="下載威尼斯離線內容"
+  ></button>
+  <button
+    class="offline-hotspot offline-clear clear-venice"
+    type="button"
+    data-offline-clear="venice"
+    aria-label="清除威尼斯離線內容"
+  ></button>
+
+  <button
+    class="offline-hotspot offline-download download-florence"
+    type="button"
+    data-offline-download="florence"
+    aria-label="下載佛羅倫斯離線內容"
+  ></button>
+  <button
+    class="offline-hotspot offline-clear clear-florence"
+    type="button"
+    data-offline-clear="florence"
+    aria-label="清除佛羅倫斯離線內容"
+  ></button>
+
+  <button
+    class="offline-hotspot offline-download download-rome"
+    type="button"
+    data-offline-download="rome"
+    aria-label="下載羅馬離線內容"
+  ></button>
+  <button
+    class="offline-hotspot offline-clear clear-rome"
+    type="button"
+    data-offline-clear="rome"
+    aria-label="清除羅馬離線內容"
+  ></button>
+
+  <button
+    class="offline-clear-all-hotspot"
+    type="button"
+    id="clearAllOffline"
+    aria-label="清除全部離線城市"
+  ></button>
+
+  <div class="offline-live-status" aria-live="polite">
+    <p id="offlineStatus" class="offline-status">正在檢查離線內容…</p>
+    <p id="offlineStorage" class="offline-storage">正在計算離線城市容量…</p>
   </div>
-
-  <div class="offline-city-row">
-    <span>威尼斯</span>
-    <button type="button" data-offline-download="venice">下載</button>
-    <button type="button" data-offline-clear="venice">清除</button>
-  </div>
-
-  <div class="offline-city-row">
-    <span>佛羅倫斯</span>
-    <button type="button" data-offline-download="florence">下載</button>
-    <button type="button" data-offline-clear="florence">清除</button>
-  </div>
-
-  <div class="offline-city-row">
-    <span>羅馬</span>
-    <button type="button" data-offline-download="rome">下載</button>
-    <button type="button" data-offline-clear="rome">清除</button>
-  </div>
-
-  <button class="offline-clear-all" type="button" id="clearAllOffline">
-    清除全部離線城市
-  </button>
-
-  <p id="offlineStatus" class="offline-status">正在檢查離線內容…</p>
-  <p id="offlineStorage" class="offline-storage">正在計算離線城市容量…</p>
 </section>
 
 
+
 </section>
-<section aria-label="點一下翻開封面" class="cover-page" id="coverPage" onclick="this.classList.add('flipped')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.classList.add('flipped')}" role="button" tabindex="0">
+<section aria-label="點一下翻開封面" class="cover-page" id="coverPage" onclick="this.classList.add('flipped')">
 <img alt="義大利有聲導覽書封面" decoding="async" fetchpriority="high" loading="eager" src="cover.jpg"/>
 </section>
 <section class="milan-page" id="milanPage">
@@ -1759,7 +1533,7 @@
 <div class="series-card-content">
 <span class="series-number">05</span>
 <span class="series-title">
-<strong class="two-line-title">艾曼紐二世<br/>迴廊</strong>
+<strong>艾曼紐二世迴廊</strong>
 <small>Galleria Vittorio Emanuele II</small>
 </span>
 <span class="series-arrow">→</span>
@@ -1880,7 +1654,7 @@
 </div>
 </button>
 <button class="series-card" onclick="openPage('florenceDavidPage')" type="button">
-<img alt="米開朗基羅的大衛" class="florence-david-card-image" data-src="florence-david-01.jpg" decoding="async" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="/>
+<img alt="米開朗基羅的大衛" class="rooftop-series-image" data-src="florence-david-01.jpg" decoding="async" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="/>
 <div class="series-overlay"></div>
 <div class="series-card-content">
 <span class="series-number">04</span>
@@ -2866,68 +2640,6 @@
 
       page.classList.remove("show");
     }
-
-    function setupSwipeBack() {
-      const swipeTargets = document.querySelectorAll(
-        ".contents-page, .milan-page, .venice-page, .florence-page, .rome-page, .detail-page"
-      );
-
-      swipeTargets.forEach(function (page) {
-        let startX = 0;
-        let startY = 0;
-        let canSwipe = false;
-
-        page.addEventListener("touchstart", function (event) {
-          const target = event.target;
-          canSwipe = !target.closest("input, button, audio");
-          if (!canSwipe || !event.touches[0]) return;
-          startX = event.touches[0].clientX;
-          startY = event.touches[0].clientY;
-        }, { passive: true });
-
-        page.addEventListener("touchend", function (event) {
-          if (!canSwipe || !event.changedTouches[0]) return;
-
-          const deltaX = event.changedTouches[0].clientX - startX;
-          const deltaY = event.changedTouches[0].clientY - startY;
-          canSwipe = false;
-
-          /* 其他頁面：向右滑回到上一頁 */
-          if (deltaX < 70 || Math.abs(deltaY) > 55) return;
-
-          if (page.classList.contains("contents-page")) {
-            document.getElementById("coverPage").classList.remove("flipped");
-          } else if (page.id) {
-            closePage(page.id);
-          }
-        }, { passive: true });
-      });
-    }
-
-    function setupCoverSwipeOpen() {
-      const cover = document.getElementById("coverPage");
-      if (!cover) return;
-
-      let startX = 0;
-      let startY = 0;
-
-      cover.addEventListener("touchstart", function (event) {
-        if (!event.touches[0]) return;
-        startX = event.touches[0].clientX;
-        startY = event.touches[0].clientY;
-      }, { passive: true });
-
-      cover.addEventListener("touchend", function (event) {
-        if (!event.changedTouches[0]) return;
-        const deltaX = event.changedTouches[0].clientX - startX;
-        const deltaY = event.changedTouches[0].clientY - startY;
-
-        /* 封面：向左滑才翻開 */
-        if (deltaX <= -70 && Math.abs(deltaY) <= 55) {
-          cover.classList.add("flipped");
-        }
-      }, { passive: true });
-    }
   
     function formatAudioTime(seconds) {
       if (!Number.isFinite(seconds)) {
@@ -2968,7 +2680,7 @@
         time.textContent = "00:00";
 
         const progress = document.createElement("input");
-        progress.className = "reference-progress is-empty";
+        progress.className = "reference-progress";
         progress.type = "range";
         progress.min = "0";
         progress.max = "100";
@@ -2978,19 +2690,7 @@
         const volumeButton = document.createElement("button");
         volumeButton.className = "reference-volume-button";
         volumeButton.type = "button";
-        volumeButton.setAttribute("aria-label", "調整音量");
-        volumeButton.setAttribute("aria-expanded", "false");
-
-        const volumePanel = document.createElement("div");
-        volumePanel.className = "reference-volume-panel";
-
-        const volumeSlider = document.createElement("input");
-        volumeSlider.className = "reference-volume-slider";
-        volumeSlider.type = "range";
-        volumeSlider.min = "0";
-        volumeSlider.max = "100";
-        volumeSlider.value = "100";
-        volumeSlider.setAttribute("aria-label", "音量大小");
+        volumeButton.setAttribute("aria-label", "靜音或恢復音量");
 
         const menuButton = document.createElement("button");
         menuButton.className = "reference-menu-button";
@@ -3009,8 +2709,6 @@
         player.appendChild(progress);
         player.appendChild(volumeButton);
         player.appendChild(menuButton);
-        player.appendChild(volumePanel);
-        volumePanel.appendChild(volumeSlider);
 
         playButton.addEventListener("click", function () {
           if (audio.paused) {
@@ -3046,7 +2744,6 @@
             : 0;
 
           progress.value = String(percentage);
-          progress.classList.toggle("is-empty", percentage <= 0.01);
           progress.style.setProperty(
             "--progress",
             percentage + "%"
@@ -3054,7 +2751,6 @@
         });
 
         progress.addEventListener("input", function () {
-          progress.classList.toggle("is-empty", Number(progress.value) <= 0.01);
           if (audio.duration) {
             audio.currentTime =
               (Number(progress.value) / 100) *
@@ -3063,22 +2759,11 @@
         });
 
         volumeButton.addEventListener("click", function () {
-          const willShow = !volumePanel.classList.contains("show");
-          document.querySelectorAll(".reference-volume-panel.show").forEach(function (panel) {
-            if (panel !== volumePanel) panel.classList.remove("show");
-          });
-          volumePanel.classList.toggle("show", willShow);
-          volumeButton.setAttribute("aria-expanded", String(willShow));
-        });
+          audio.muted = !audio.muted;
 
-        volumeSlider.addEventListener("input", function () {
-          const value = Number(volumeSlider.value) / 100;
-          audio.volume = value;
-          audio.muted = value === 0;
-          volumeButton.classList.toggle("is-muted", audio.muted);
-          volumeButton.setAttribute(
-            "aria-label",
-            audio.muted ? "已靜音，調整音量" : "調整音量，目前 " + volumeSlider.value + "%"
+          volumeButton.classList.toggle(
+            "is-muted",
+            audio.muted
           );
         });
 
@@ -3134,8 +2819,7 @@
 
     document.addEventListener("DOMContentLoaded", function () {
       buildReferencePlayers();
-      setupSwipeBack();
-      setupCoverSwipeOpen();
+      
     });
 
   </script>

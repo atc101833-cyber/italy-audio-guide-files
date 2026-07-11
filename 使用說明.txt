@@ -1,18 +1,31 @@
-義大利導覽 V7｜乾淨版
+義大利有聲導覽書｜V8 參考圖離線介面
 
-這版已修正：
-1. 月桂葉全部移除。
-2. 離線區改成簡潔的深綠底＋米白單線圓角框。
-3. 保留之前的標題大小、閱讀性、安全距離與圖片底部間距。
-4. Service Worker 更新為 V7，避免手機繼續顯示月桂舊版。
+這版包含：
+1. 離線使用區改成你提供的完整設計。
+2. 四個雲朵圖示都是真實的下載按鈕。
+3. 四個垃圾桶圖示都是真實的單一城市清除按鈕。
+4. 石板「清除全部離線城市」是真實按鈕。
+5. 下載完成後，下載圖示右下角會出現勾勾。
+6. 最下方會顯示真正的已下載城市與實際離線容量。
+7. 原本 Service Worker 的下載、清除、容量計算功能全部保留。
+8. 快取版本升級為 V8。
 
 更新方式：
 1. GitHub Desktop 按 Show in Finder。
-2. 將 index.html 與 service-worker.js 拖進 repository 根目錄。
-3. 選擇取代。
-4. 原本所有圖片、MP3 都不要刪除。
+2. 把以下三個檔案放進 repository 根目錄：
+   index.html
+   service-worker.js
+   offline-use-design.webp
+3. index.html 與 service-worker.js 選擇取代。
+4. 原本的圖片與 MP3 不要刪除。
 5. Summary 輸入：
-   Remove laurel decorations
+   Redesign offline download interface
 6. Commit to main → Push origin。
-7. 等網站更新後，完全關閉 Safari 或桌面導覽 App，再重新打開。
-8. repository 裡原本的 laurel-frame.svg 可刪除，也可以保留；新版不會再使用它。
+7. 等 GitHub Pages 更新後，完全關閉 Safari 或桌面導覽 App，再連網重新開啟。
+
+測試：
+1. 點米蘭雲朵圖示。
+2. 等最下方顯示「已下載：米蘭」。
+3. 關閉 App，再重新開啟，勾勾與狀態應保留。
+4. 開飛航模式，測試米蘭圖片與音檔。
+5. 點米蘭垃圾桶並確認，狀態應恢復未下載。
