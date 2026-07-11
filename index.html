@@ -1626,6 +1626,44 @@
   display: none !important;
 }
 
+
+/* =========================
+   V20：封面比例、城市間距、全黃框線
+========================= */
+
+/* 封面恢復正常比例，四周保留 App 綠色邊。 */
+.cover-page {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding:
+    calc(22px + env(safe-area-inset-top))
+    18px
+    calc(22px + env(safe-area-inset-bottom)) !important;
+  background-color: #06452d !important;
+}
+
+.cover-page img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  background-color: transparent !important;
+}
+
+/* 城市列縮小後，重新對準透明按鈕。 */
+.download-milan    { top: 29.0% !important; }
+.clear-milan       { top: 29.0% !important; }
+
+.download-venice   { top: 41.2% !important; }
+.clear-venice      { top: 41.2% !important; }
+
+.download-florence { top: 53.4% !important; }
+.clear-florence    { top: 53.4% !important; }
+
+.download-rome     { top: 65.6% !important; }
+.clear-rome        { top: 65.6% !important; }
+
 </style>
 
 <link rel="manifest" href="manifest.json">
@@ -1700,7 +1738,7 @@
 <section class="offline-panel offline-approved-panel" aria-label="離線使用">
   <img
     class="offline-approved-image"
-    src="offline-final-panel-v19.png"
+    src="offline-final-panel-v20.png"
     alt="離線使用：米蘭、威尼斯、佛羅倫斯、羅馬的下載與清除功能"
     decoding="async"
     loading="lazy"

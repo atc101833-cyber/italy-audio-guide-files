@@ -1,21 +1,20 @@
-gogo 離線介面 V19
+gogo 離線介面 V20
 
 已修改：
-1. 紅色邊框與圓圈改成亮黃色。
-2. 下載狀態區縮小，移到石板按鈕下方，不再重疊。
-3. 新增「取消」按鈕，可以在下載途中停止下載。
-4. 取消後會刪除尚未完成的城市快取，不留下不完整資料。
-5. 原本下載、單一城市清除、清除全部、容量顯示均保留。
+1. 封面恢復正常比例，四周保留綠色邊。
+2. 四個城市列縮小，城市之間增加間隙。
+3. 漏掉的紅色線條也改成亮黃色。
+4. 取消下載、下載、清除、清除全部與容量功能全部保留。
 
 請放進 GitHub repository 根目錄：
 - index.html
 - service-worker.js
-- offline-final-panel-v19.png
+- offline-final-panel-v20.png
 
 原本圖片與 MP3 不要刪除。
 
 Summary：
-Add yellow borders and cancel download
+Fix cover ratio and offline spacing
 
 Commit to main → Push origin。
 更新後完全關閉 Safari／桌面 App，再連網重新開啟。
