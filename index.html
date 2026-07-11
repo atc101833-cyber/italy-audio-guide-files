@@ -1912,6 +1912,30 @@
   display: none !important;
 }
 
+/* =========================
+   V30：補齊離線區塊的雙層框線
+========================= */
+
+/* 圖檔原本的細框在縮放時容易出現斷點，改用一層完整的 CSS 外框覆蓋。 */
+.offline-panel.offline-approved-panel::after {
+  content: "" !important;
+  position: absolute;
+  z-index: 2;
+  inset: 1.35% 1.45%;
+  display: block !important;
+  border: 1.5px solid rgba(248, 214, 82, 0.92);
+  border-radius: 22px;
+  pointer-events: none;
+}
+
+/* 保留足夠底部空間，讓資訊小框四邊都落在外框裡。 */
+.offline-approved-status {
+  top: 79.2% !important;
+  min-height: 13.2% !important;
+  max-height: 17.5%;
+  overflow: visible;
+}
+
 </style>
 
 <link rel="manifest" href="manifest.json">
