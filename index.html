@@ -1176,8 +1176,50 @@
 .city-card,
 .series-card {
   height: auto !important;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 1 / 1;
   background: #d8cfbd;
+}
+
+.city-list,
+.series-list {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px !important;
+}
+
+.city-card-text,
+.series-card-content {
+  grid-template-columns: 24px minmax(0, 1fr) 18px !important;
+  gap: 6px !important;
+  padding: 12px !important;
+  align-items: end !important;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.60),
+    rgba(0, 0, 0, 0.04) 68%
+  ) !important;
+}
+
+.city-name strong,
+.series-title strong {
+  font-size: clamp(16px, 4.5vw, 21px) !important;
+  line-height: 1.18 !important;
+}
+
+.city-name small,
+.series-title small {
+  font-size: clamp(10px, 3vw, 13px) !important;
+  line-height: 1.2 !important;
+}
+
+.city-number,
+.series-number {
+  font-size: 10px !important;
+}
+
+.city-arrow,
+.series-arrow {
+  font-size: 18px !important;
 }
 
 .city-card img,
@@ -1190,6 +1232,12 @@
 .venice-image { object-position: center 68% !important; }
 .florence-image { object-position: center 48% !important; }
 .rome-image { object-position: center 52% !important; }
+
+.history-series-image { object-position: center 48% !important; }
+.exterior-series-image { object-position: center 42% !important; }
+.interior-series-image { object-position: center 56% !important; }
+.rooftop-series-image { object-position: center 32% !important; }
+.gallery-series-image { object-position: center 58% !important; }
 
 /* 大衛像卡片以頭部與上半身為主，避免焦點落在裸體細節 */
 .florence-david-card-image {
@@ -1262,15 +1310,8 @@
 }
 
 .reference-volume-button.is-muted::after {
-  content: "🔇";
-  right: -2px;
-  bottom: -5px;
-  padding: 1px 3px;
-  border-radius: 8px;
-  background: rgba(225, 210, 181, 0.96);
-  font-size: 14px;
-  line-height: 1.2;
-  opacity: 1;
+  content: none !important;
+  display: none !important;
 }
 
 .reference-volume-panel {
@@ -1308,9 +1349,8 @@
 
 @media (max-width: 390px) {
   .contents-page h1 { font-size: 34px; }
-  .contents-page .city-list { padding: 10px; gap: 12px; }
-  .city-card-text,
-  .series-card-content { padding: 16px; }
+  .contents-page .city-list { padding: 10px; gap: 10px !important; }
+  .series-list { gap: 10px !important; }
   .reference-time { left: 17%; width: 14%; }
   .reference-progress { left: 31.5%; width: 46%; }
 }
@@ -2622,7 +2662,8 @@
           const deltaY = event.changedTouches[0].clientY - startY;
           canSwipe = false;
 
-          if (deltaX > -70 || Math.abs(deltaY) > 55) return;
+          /* 其他頁面：向右滑回到上一頁 */
+          if (deltaX < 70 || Math.abs(deltaY) > 55) return;
 
           if (page.classList.contains("contents-page")) {
             document.getElementById("coverPage").classList.remove("flipped");
@@ -2631,6 +2672,31 @@
           }
         }, { passive: true });
       });
+    }
+
+    function setupCoverSwipeOpen() {
+      const cover = document.getElementById("coverPage");
+      if (!cover) return;
+
+      let startX = 0;
+      let startY = 0;
+
+      cover.addEventListener("touchstart", function (event) {
+        if (!event.touches[0]) return;
+        startX = event.touches[0].clientX;
+        startY = event.touches[0].clientY;
+      }, { passive: true });
+
+      cover.addEventListener("touchend", function (event) {
+        if (!event.changedTouches[0]) return;
+        const deltaX = event.changedTouches[0].clientX - startX;
+        const deltaY = event.changedTouches[0].clientY - startY;
+
+        /* 封面：向左滑才翻開 */
+        if (deltaX <= -70 && Math.abs(deltaY) <= 55) {
+          cover.classList.add("flipped");
+        }
+      }, { passive: true });
     }
   
     function formatAudioTime(seconds) {
@@ -2839,6 +2905,7 @@
     document.addEventListener("DOMContentLoaded", function () {
       buildReferencePlayers();
       setupSwipeBack();
+      setupCoverSwipeOpen();
     });
 
   </script>
