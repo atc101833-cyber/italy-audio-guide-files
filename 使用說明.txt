@@ -1,9 +1,8 @@
-V22 修正版
+V26
+- 「清除全部離線城市」石板按鈕再縮小
+- 底部狀態列放大、字更清楚
+- 取消鍵保留
+- Service Worker 版本已更新
 
-修正：
-- 羅馬頁「帕拉提諾山與古羅馬廣場」不再被切掉。
-- 同步優化「萬神殿與巴洛克羅馬」長標題。
-- 已更新快取版本，覆蓋後重新整理即可生效。
-
-Summary：
-Fix long Rome card titles
+Summary:
+Make clear-all button smaller and bottom status larger/clearer
