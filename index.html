@@ -50,7 +50,7 @@
     .contents-small-title {
       margin: 0 0 10px;
       font-family: Arial, sans-serif;
-      font-size: 11px;
+      font-size: 10px;
       letter-spacing: 3px;
       color: #92775e;
     }
@@ -275,7 +275,7 @@
     .rome-small-title {
       margin: 0 0 8px;
       font-family: Arial, sans-serif;
-      font-size: 11px;
+      font-size: 10px;
       letter-spacing: 3px;
       color: #92775e;
     }
@@ -446,7 +446,7 @@
     .detail-small-title {
       margin: 0 0 10px;
       font-family: Arial, sans-serif;
-      font-size: 11px;
+      font-size: 10px;
       letter-spacing: 3px;
       color: #92775e;
     }
@@ -1420,6 +1420,8 @@
   display: none !important;
 }
 
+
+
 .offline-approved-image {
   position: absolute;
   inset: 0;
@@ -1499,10 +1501,10 @@
 .clear-rome        { left: 80.5%; top: 68.6%; }
 
 .offline-approved-clear-all {
-  left: 19.0%;
-  top:   80.4%;
-  width:   60.5%;
-  height:   8.2%;
+  left: 18.0%;
+  top:   74.8%;
+  width:   64.0%;
+  height:   14.0%;
   border-radius: 16px;
 }
 
@@ -1511,75 +1513,25 @@
   box-shadow: inset 0 0 0 2px rgba(117, 28, 22, 0.20);
 }
 
-/* 初始狀態沿用圖片內文字；有下載或操作時才顯示真實狀態 */
+/* 底部狀態：整合到噴水池下方，不做跳出視窗 */
 .offline-approved-status {
   position: absolute;
-  z-index: 2;
-  left: 15%;
-  right: 15%;
-  bottom: 1.8%;
-  min-height: 6.8%;
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 4px 6px;
-  background: #003521;
-  color: #e8d9af;
-  text-align: center;
-  pointer-events: none;
-}
-
-.offline-approved-status.show {
-  display: flex;
-}
-
-.offline-approved-status .offline-status {
-  margin: 0 0 3px !important;
-  color: #e8d9af;
-  font-size: clamp(10px, 2.8vw, 14px);
-  font-weight: 500;
-  line-height: 1.3;
-}
-
-.offline-approved-status .offline-storage {
-  margin: 0 !important;
-  color: rgba(232, 217, 175, 0.90);
-  font-size: clamp(8px, 2.3vw, 12px) !important;
-  line-height: 1.3;
-  opacity: 1 !important;
-}
-
-
-/* =========================
-   V19：黃色框線、整合式底部狀態列、取消下載
-========================= */
-
-.offline-approved-hotspot:active {
-  background: rgba(248, 214, 82, 0.10) !important;
-  box-shadow: inset 0 0 0 2px rgba(248, 214, 82, 0.78) !important;
-}
-
-.offline-approved-clear-all:active {
-  background: rgba(248, 214, 82, 0.07) !important;
-  box-shadow: inset 0 0 0 2px rgba(248, 214, 82, 0.46) !important;
-}
-
-/* 整合底部文字與提示窗：固定在框內、不超出邊框 */
-.offline-approved-status {
-  left: 12% !important;
-  right: 12% !important;
-  bottom: 2.2% !important;
-  min-height: 6.4% !important;
-  padding: 5px 10px 6px !important;
+  z-index: 3;
+  left: 13%;
+  right: 13%;
+  bottom: 2.8%;
+  min-height: auto;
   display: flex !important;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(248, 214, 82, 0.70);
-  border-radius: 14px;
-  background: rgba(14, 88, 58, 0.985) !important;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.16);
+  padding: 0;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  color: #e8d9af;
+  text-align: center;
   pointer-events: auto !important;
 }
 
@@ -1600,37 +1552,95 @@
 .offline-approved-status .offline-status {
   min-width: 0;
   margin: 0 !important;
-  color: #f7e7b6;
-  font-size: clamp(11px, 2.8vw, 15px) !important;
+  color: #e8d9af;
+  font-size: clamp(11px, 2.45vw, 14px) !important;
   font-weight: 700;
-  line-height: 1.28 !important;
+  line-height: 1.2 !important;
   text-align: center;
   white-space: normal;
-  overflow: visible;
-  text-overflow: clip;
   word-break: break-word;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.25);
 }
 
 .offline-approved-status .offline-storage {
-  margin: 3px 0 0 !important;
-  color: rgba(247, 231, 182, 0.95);
-  font-size: clamp(9px, 2.15vw, 12px) !important;
-  line-height: 1.28 !important;
+  margin: 2px 0 0 !important;
+  color: rgba(232, 217, 175, 0.95);
+  font-size: clamp(9px, 2.0vw, 12px) !important;
+  line-height: 1.18 !important;
   text-align: center;
   white-space: normal;
   word-break: break-word;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.22);
+}
+
+/* =========================
+   V19：黃色框線、整合式底部狀態列、取消下載
+========================= */
+
+.offline-approved-hotspot:active {
+  background: rgba(248, 214, 82, 0.10) !important;
+  box-shadow: inset 0 0 0 2px rgba(248, 214, 82, 0.78) !important;
+}
+
+.offline-approved-clear-all:active {
+  background: rgba(248, 214, 82, 0.07) !important;
+  box-shadow: inset 0 0 0 2px rgba(248, 214, 82, 0.46) !important;
+}
+
+/* 整合底部文字：固定在框內、不超出邊框 */
+.offline-approved-status {
+  left: 13% !important;
+  right: 13% !important;
+  bottom: 2.8% !important;
+  min-height: auto !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.offline-approved-status.show {
+  display: flex !important;
+}
+
+.offline-status-row {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.offline-approved-status .offline-status {
+  min-width: 0;
+  margin: 0 !important;
+  color: #f7e7b6;
+  font-size: clamp(11px, 2.45vw, 14px) !important;
+  font-weight: 700;
+  line-height: 1.2 !important;
+  text-align: center;
+}
+
+.offline-approved-status .offline-storage {
+  margin: 2px 0 0 !important;
+  color: rgba(247, 231, 182, 0.95);
+  font-size: clamp(9px, 2.0vw, 12px) !important;
+  line-height: 1.18 !important;
+  text-align: center;
 }
 
 .offline-cancel-download {
   flex: 0 0 auto;
-  min-width: 42px;
-  min-height: 24px;
-  padding: 3px 10px;
+  min-width: 40px;
+  min-height: 22px;
+  padding: 2px 8px;
   border: 1px solid rgba(248, 214, 82, 0.88);
   border-radius: 999px;
   background: rgba(248, 214, 82, 0.10);
   color: #f8d652;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   line-height: 1;
   cursor: pointer;
@@ -1697,6 +1707,115 @@
 .contents-page {
   display: block !important;
   visibility: visible !important;
+}
+
+
+/* =========================
+   V28：乾淨置中底部區塊
+========================= */
+
+/* 不再使用噴水池、石板或任何額外色塊。 */
+.offline-approved-footer-mask,
+.offline-approved-footer-art {
+  display: none !important;
+}
+
+/* 清除全部改成小型置中按鈕，不再佔滿整個底部。 */
+.offline-approved-clear-all {
+  left: 30% !important;
+  top: 76.2% !important;
+  width: 40% !important;
+  height: 4.8% !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px !important;
+  border: 1px solid rgba(248, 214, 82, 0.72) !important;
+  border-radius: 999px !important;
+  background: transparent !important;
+  color: #f7e7b6 !important;
+  font-family: "PingFang TC", "Noto Serif TC", serif !important;
+  font-size: clamp(9px, 2.15vw, 12px) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.05em;
+  line-height: 1 !important;
+  white-space: nowrap;
+}
+
+.offline-approved-clear-all:active {
+  background: rgba(248, 214, 82, 0.12) !important;
+  box-shadow: none !important;
+}
+
+/* 狀態框放在正中央，直接使用面板本身的綠色，不再有色差。 */
+.offline-approved-status {
+  left: 18% !important;
+  right: 18% !important;
+  top: 82.1% !important;
+  bottom: auto !important;
+  min-height: 10.5% !important;
+  padding: 8px 12px !important;
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid rgba(248, 214, 82, 0.72) !important;
+  border-radius: 24px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #f7e7b6;
+  text-align: center;
+  pointer-events: auto !important;
+}
+
+.offline-approved-status.show {
+  display: flex !important;
+}
+
+.offline-status-row {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.offline-approved-status .offline-status {
+  min-width: 0;
+  margin: 0 !important;
+  color: #f7e7b6 !important;
+  font-size: clamp(12px, 3vw, 16px) !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  text-align: center;
+  white-space: normal;
+  word-break: break-word;
+  text-shadow: none !important;
+}
+
+.offline-approved-status .offline-storage {
+  margin: 4px 0 0 !important;
+  color: rgba(247, 231, 182, 0.96) !important;
+  font-size: clamp(9px, 2.2vw, 12px) !important;
+  line-height: 1.2 !important;
+  text-align: center;
+  white-space: normal;
+  word-break: break-word;
+  text-shadow: none !important;
+}
+
+.offline-cancel-download {
+  min-width: 42px !important;
+  min-height: 24px !important;
+  padding: 3px 10px !important;
+  border: 1px solid rgba(248, 214, 82, 0.88) !important;
+  border-radius: 999px !important;
+  background: rgba(248, 214, 82, 0.10) !important;
+  color: #f8d652 !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
 }
 
 </style>
@@ -1818,7 +1937,7 @@
   <button class="offline-approved-clear-all"
           type="button"
           id="clearAllOffline"
-          aria-label="清除全部離線城市"></button>
+          aria-label="清除全部離線城市">清除全部離線城市</button>
 
   <div class="offline-approved-status" aria-live="polite">
     <div class="offline-status-row">

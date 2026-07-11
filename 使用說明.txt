@@ -1,8 +1,9 @@
-V26
-- 「清除全部離線城市」石板按鈕再縮小
-- 底部狀態列放大、字更清楚
-- 取消鍵保留
-- Service Worker 版本已更新
+V28｜乾淨置中底部區塊
 
-Summary:
-Make clear-all button smaller and bottom status larger/clearer
+修正：
+1. 移除噴水池、石板與後方所有色塊。
+2. 清除全部按鈕改成小型置中按鈕。
+3. 狀態框置中，直接使用面板原本綠底，不再有色差。
+4. 取消下載、各城市下載/清除、全部清除功能全部保留。
+
+Summary：Center and clean offline footer
