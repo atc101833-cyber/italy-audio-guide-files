@@ -1,18 +1,24 @@
-義大利導覽 V7｜乾淨版
+gogo 最終定案 V15
 
-這版已修正：
-1. 月桂葉全部移除。
-2. 離線區改成簡潔的深綠底＋米白單線圓角框。
-3. 保留之前的標題大小、閱讀性、安全距離與圖片底部間距。
-4. Service Worker 更新為 V7，避免手機繼續顯示月桂舊版。
+這版採用「整張原始定案圖片」：
+- 不拆圖
+- 不重新排版
+- 不重畫文字
+- 不重新壓縮圖片
+- 不改顏色、比例、字體或間距
 
-更新方式：
-1. GitHub Desktop 按 Show in Finder。
-2. 將 index.html 與 service-worker.js 拖進 repository 根目錄。
-3. 選擇取代。
-4. 原本所有圖片、MP3 都不要刪除。
-5. Summary 輸入：
-   Remove laurel decorations
-6. Commit to main → Push origin。
-7. 等網站更新後，完全關閉 Safari 或桌面導覽 App，再重新打開。
-8. repository 裡原本的 laurel-frame.svg 可刪除，也可以保留；新版不會再使用它。
+透明按鈕覆蓋在原圖的雲朵、垃圾桶和石板位置上，
+因此外觀保持原圖，功能仍可使用。
+
+放進 GitHub repository 根目錄：
+1. index.html
+2. service-worker.js
+3. offline-final-design.jpg
+
+原本圖片與 MP3 不要刪除。
+
+Summary：
+Lock final offline design exactly
+
+Commit to main → Push origin。
+更新後完全關閉 Safari／桌面 App，再連網重新開啟。

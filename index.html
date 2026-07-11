@@ -1388,6 +1388,169 @@
   .reference-progress { left: 31.5%; width: 46%; }
 }
 
+
+/* =========================
+   V15：最終定案離線介面
+   視覺完全使用原始定案圖片
+========================= */
+
+.offline-panel.offline-final-panel {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1015 / 1164;
+  margin: 26px 0 14px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  isolation: isolate;
+}
+
+.offline-panel.offline-final-panel::before,
+.offline-panel.offline-final-panel::after {
+  content: none !important;
+  display: none !important;
+}
+
+.offline-final-image {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  object-position: center;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* 透明功能區，只負責點擊，不重畫設計。 */
+.offline-hotspot,
+.offline-clear-all-hotspot {
+  position: absolute;
+  z-index: 3;
+  display: block;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: transparent;
+  font-size: 0;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  cursor: pointer;
+}
+
+.offline-hotspot {
+  width: 10.5%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+}
+
+.offline-hotspot:active {
+  background: rgba(232, 217, 175, 0.12);
+  box-shadow: inset 0 0 0 2px rgba(232, 217, 175, 0.62);
+}
+
+.offline-hotspot:disabled,
+.offline-clear-all-hotspot:disabled {
+  opacity: 0.55;
+}
+
+/* 下載完成後才顯示小勾勾，平常完全不改變原圖。 */
+.offline-hotspot.is-downloaded::after {
+  content: "✓";
+  position: absolute;
+  right: -4%;
+  bottom: -4%;
+  width: 30%;
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #eadfbe;
+  color: #063521;
+  font-family: Arial, sans-serif;
+  font-size: clamp(10px, 3vw, 15px);
+  font-weight: 800;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.30);
+}
+
+/* 按鈕位置依原始 1015 × 1164 圖片校準。 */
+.download-milan    { left: 68.3%; top: 38.2%; }
+.clear-milan       { left: 80.4%; top: 38.2%; }
+
+.download-venice   { left: 68.3%; top: 49.9%; }
+.clear-venice      { left: 80.4%; top: 49.9%; }
+
+.download-florence { left: 68.3%; top: 61.5%; }
+.clear-florence    { left: 80.4%; top: 61.5%; }
+
+.download-rome     { left: 68.3%; top: 72.7%; }
+.clear-rome        { left: 80.4%; top: 72.7%; }
+
+.offline-clear-all-hotspot {
+  left: 10.1%;
+  top: 81.9%;
+  width: 79.6%;
+  height: 10.8%;
+  border-radius: 15px;
+}
+
+.offline-clear-all-hotspot:active {
+  background: rgba(118, 31, 27, 0.08);
+  box-shadow: inset 0 0 0 2px rgba(118, 31, 27, 0.22);
+}
+
+/*
+  初始狀態直接顯示圖片內原本的文字，因此外觀完全一致。
+  只有下載中、已下載或錯誤時，才顯示真實狀態覆蓋層。
+*/
+.offline-live-status {
+  position: absolute;
+  z-index: 2;
+  left: 15%;
+  right: 15%;
+  bottom: 1.7%;
+  min-height: 7.3%;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 6px;
+  background: #003521;
+  color: #e8d9af;
+  text-align: center;
+  pointer-events: none;
+}
+
+.offline-live-status.show {
+  display: flex;
+}
+
+.offline-live-status .offline-status {
+  margin: 0 0 4px !important;
+  color: #e8d9af;
+  font-family: "PingFang TC", "Noto Serif TC", serif;
+  font-size: clamp(11px, 3vw, 15px);
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: 0.05em;
+}
+
+.offline-live-status .offline-storage {
+  margin: 0 !important;
+  color: rgba(232, 217, 175, 0.90);
+  font-family: "PingFang TC", "Noto Serif TC", serif;
+  font-size: clamp(9px, 2.5vw, 13px) !important;
+  line-height: 1.35;
+  opacity: 1 !important;
+}
+
 </style>
 
 <link rel="manifest" href="manifest.json">
@@ -1458,41 +1621,63 @@
 </div>
 
 
-<section class="offline-panel">
-  <h2>離線使用</h2>
-  <p>先下載要使用的城市。聽完後可以只清除該城市，釋放手機空間。</p>
 
-  <div class="offline-city-row">
-    <span>米蘭</span>
-    <button type="button" data-offline-download="milan">下載</button>
-    <button type="button" data-offline-clear="milan">清除</button>
+<section class="offline-panel offline-final-panel" aria-label="離線使用">
+  <img
+    class="offline-final-image"
+    src="offline-final-design.jpg"
+    alt="離線使用：米蘭、威尼斯、佛羅倫斯、羅馬的下載與清除功能"
+    decoding="async"
+    loading="lazy"
+  >
+
+  <button class="offline-hotspot download-milan"
+          type="button"
+          data-offline-download="milan"
+          aria-label="下載米蘭離線內容"></button>
+  <button class="offline-hotspot clear-milan"
+          type="button"
+          data-offline-clear="milan"
+          aria-label="清除米蘭離線內容"></button>
+
+  <button class="offline-hotspot download-venice"
+          type="button"
+          data-offline-download="venice"
+          aria-label="下載威尼斯離線內容"></button>
+  <button class="offline-hotspot clear-venice"
+          type="button"
+          data-offline-clear="venice"
+          aria-label="清除威尼斯離線內容"></button>
+
+  <button class="offline-hotspot download-florence"
+          type="button"
+          data-offline-download="florence"
+          aria-label="下載佛羅倫斯離線內容"></button>
+  <button class="offline-hotspot clear-florence"
+          type="button"
+          data-offline-clear="florence"
+          aria-label="清除佛羅倫斯離線內容"></button>
+
+  <button class="offline-hotspot download-rome"
+          type="button"
+          data-offline-download="rome"
+          aria-label="下載羅馬離線內容"></button>
+  <button class="offline-hotspot clear-rome"
+          type="button"
+          data-offline-clear="rome"
+          aria-label="清除羅馬離線內容"></button>
+
+  <button class="offline-clear-all-hotspot"
+          type="button"
+          id="clearAllOffline"
+          aria-label="清除全部離線城市"></button>
+
+  <div class="offline-live-status" aria-live="polite">
+    <p id="offlineStatus" class="offline-status">正在檢查離線內容…</p>
+    <p id="offlineStorage" class="offline-storage">正在計算離線城市容量…</p>
   </div>
-
-  <div class="offline-city-row">
-    <span>威尼斯</span>
-    <button type="button" data-offline-download="venice">下載</button>
-    <button type="button" data-offline-clear="venice">清除</button>
-  </div>
-
-  <div class="offline-city-row">
-    <span>佛羅倫斯</span>
-    <button type="button" data-offline-download="florence">下載</button>
-    <button type="button" data-offline-clear="florence">清除</button>
-  </div>
-
-  <div class="offline-city-row">
-    <span>羅馬</span>
-    <button type="button" data-offline-download="rome">下載</button>
-    <button type="button" data-offline-clear="rome">清除</button>
-  </div>
-
-  <button class="offline-clear-all" type="button" id="clearAllOffline">
-    清除全部離線城市
-  </button>
-
-  <p id="offlineStatus" class="offline-status">正在檢查離線內容…</p>
-  <p id="offlineStorage" class="offline-storage">正在計算離線城市容量…</p>
 </section>
+
 
 
 </section>
@@ -2951,6 +3136,7 @@
   const downloadButtons = document.querySelectorAll("[data-offline-download]");
   const clearButtons = document.querySelectorAll("[data-offline-clear]");
   const clearAllButton = document.getElementById("clearAllOffline");
+  const statusOverlay = document.querySelector(".offline-live-status");
 
   const cityNames = {
     milan: "米蘭",
@@ -2958,6 +3144,10 @@
     florence: "佛羅倫斯",
     rome: "羅馬"
   };
+
+  function showStatusOverlay(show) {
+    if (statusOverlay) statusOverlay.classList.toggle("show", Boolean(show));
+  }
 
   function setBusy(isBusy) {
     downloadButtons.forEach(button => button.disabled = isBusy);
@@ -2987,6 +3177,7 @@
       channel.port1.onmessage = event => {
         const data = event.data || {};
         if (data.type === "CACHE_PROGRESS") {
+          showStatusOverlay(true);
           if (status) status.textContent = "正在下載 " + data.done + " / " + data.total;
           return;
         }
@@ -3001,6 +3192,7 @@
   }
 
   if (!("serviceWorker" in navigator)) {
+    showStatusOverlay(true);
     if (status) status.textContent = "此瀏覽器不支援離線功能";
     setBusy(true);
     return;
@@ -3027,6 +3219,8 @@
             "離線城市目前使用 " + formatMB(result.bytes || 0) +
             "（基本網站檔案會保留）";
         }
+
+        showStatusOverlay(downloaded.length > 0 || (result.bytes || 0) > 0);
       }
 
       downloadButtons.forEach(button => {
@@ -3034,6 +3228,7 @@
           const city = button.dataset.offlineDownload;
           setBusy(true);
           button.textContent = "下載中…";
+          showStatusOverlay(true);
           if (status) status.textContent = "正在下載" + cityNames[city] + "，請保持畫面開啟";
           try {
             await sendMessage(worker, { type: "CACHE_CITY", city });
@@ -3041,6 +3236,7 @@
             await refreshStatus();
           } catch (error) {
             button.textContent = "下載";
+            showStatusOverlay(true);
             if (status) status.textContent = "下載失敗，請確認網路後重試";
           } finally {
             setBusy(false);
@@ -3054,12 +3250,14 @@
           const confirmed = window.confirm("要清除「" + cityNames[city] + "」的離線圖片和音檔嗎？\n\n線上使用不受影響。");
           if (!confirmed) return;
           setBusy(true);
+          showStatusOverlay(true);
           if (status) status.textContent = "正在清除" + cityNames[city] + "…";
           try {
             await sendMessage(worker, { type: "DELETE_CITY", city });
             if (status) status.textContent = cityNames[city] + "離線內容已清除";
             await refreshStatus();
           } catch (error) {
+            showStatusOverlay(true);
             if (status) status.textContent = "清除失敗，請稍後再試";
           } finally {
             setBusy(false);
@@ -3072,12 +3270,14 @@
           const confirmed = window.confirm("要清除四個城市的全部離線圖片和音檔嗎？\n\nApp 與線上網站仍會保留。");
           if (!confirmed) return;
           setBusy(true);
+          showStatusOverlay(true);
           if (status) status.textContent = "正在清除全部離線城市…";
           try {
             await sendMessage(worker, { type: "DELETE_ALL_CITIES" });
             if (status) status.textContent = "全部離線城市已清除";
             await refreshStatus();
           } catch (error) {
+            showStatusOverlay(true);
             if (status) status.textContent = "清除失敗，請稍後再試";
           } finally {
             setBusy(false);
@@ -3088,6 +3288,7 @@
       await refreshStatus();
     })
     .catch(() => {
+      showStatusOverlay(true);
       if (status) status.textContent = "離線功能啟動失敗，請重新整理";
     });
 })();
