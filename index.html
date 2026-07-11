@@ -1545,6 +1545,87 @@
   opacity: 1 !important;
 }
 
+
+/* =========================
+   V19：黃色框線、緊湊狀態列、取消下載
+========================= */
+
+.offline-approved-hotspot:active {
+  background: rgba(248, 214, 82, 0.10) !important;
+  box-shadow: inset 0 0 0 2px rgba(248, 214, 82, 0.78) !important;
+}
+
+.offline-approved-clear-all:active {
+  background: rgba(248, 214, 82, 0.07) !important;
+  box-shadow: inset 0 0 0 2px rgba(248, 214, 82, 0.46) !important;
+}
+
+.offline-approved-status {
+  left: 20% !important;
+  right: 20% !important;
+  bottom: 0.35% !important;
+  min-height: 4.25% !important;
+  padding: 2px 5px !important;
+  border: 1px solid rgba(248, 214, 82, 0.52);
+  border-radius: 7px;
+  background: rgba(5, 68, 44, 0.98) !important;
+  pointer-events: auto !important;
+}
+
+.offline-status-row {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.offline-approved-status .offline-status {
+  min-width: 0;
+  margin: 0 !important;
+  font-size: clamp(9px, 2.4vw, 12px) !important;
+  line-height: 1.12 !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.offline-approved-status .offline-storage {
+  margin: 1px 0 0 !important;
+  font-size: clamp(7px, 1.9vw, 10px) !important;
+  line-height: 1.1 !important;
+  white-space: nowrap;
+}
+
+.offline-cancel-download {
+  flex: 0 0 auto;
+  min-width: 38px;
+  min-height: 21px;
+  padding: 2px 8px;
+  border: 1px solid rgba(248, 214, 82, 0.82);
+  border-radius: 999px;
+  background: rgba(248, 214, 82, 0.10);
+  color: #f8d652;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.offline-cancel-download:active {
+  background: rgba(248, 214, 82, 0.23);
+}
+
+.offline-cancel-download:disabled {
+  opacity: 0.55;
+}
+
+.offline-cancel-download[hidden] {
+  display: none !important;
+}
+
 </style>
 
 <link rel="manifest" href="manifest.json">
@@ -1619,7 +1700,7 @@
 <section class="offline-panel offline-approved-panel" aria-label="離線使用">
   <img
     class="offline-approved-image"
-    src="offline-final-panel.png"
+    src="offline-final-panel-v19.png"
     alt="離線使用：米蘭、威尼斯、佛羅倫斯、羅馬的下載與清除功能"
     decoding="async"
     loading="lazy"
@@ -1667,7 +1748,15 @@
           aria-label="清除全部離線城市"></button>
 
   <div class="offline-approved-status" aria-live="polite">
-    <p id="offlineStatus" class="offline-status">正在檢查離線內容…</p>
+    <div class="offline-status-row">
+      <p id="offlineStatus" class="offline-status">正在檢查離線內容…</p>
+      <button
+        type="button"
+        id="cancelOfflineDownload"
+        class="offline-cancel-download"
+        hidden
+      >取消</button>
+    </div>
     <p id="offlineStorage" class="offline-storage">正在計算離線城市容量…</p>
   </div>
 </section>
@@ -3123,6 +3212,7 @@
   </script>
 
 
+
 <script>
 (function () {
   const status = document.getElementById("offlineStatus");
@@ -3130,6 +3220,7 @@
   const downloadButtons = document.querySelectorAll("[data-offline-download]");
   const clearButtons = document.querySelectorAll("[data-offline-clear]");
   const clearAllButton = document.getElementById("clearAllOffline");
+  const cancelButton = document.getElementById("cancelOfflineDownload");
   const statusOverlay = document.querySelector(".offline-approved-status");
 
   const cityNames = {
@@ -3139,14 +3230,31 @@
     rome: "羅馬"
   };
 
+  let currentDownloadCity = null;
+  let currentWorker = null;
+
   function showStatusOverlay(show) {
-    if (statusOverlay) statusOverlay.classList.toggle("show", Boolean(show));
+    if (statusOverlay) {
+      statusOverlay.classList.toggle("show", Boolean(show));
+    }
+  }
+
+  function showCancelButton(show) {
+    if (!cancelButton) return;
+    cancelButton.hidden = !show;
+    cancelButton.disabled = false;
   }
 
   function setBusy(isBusy) {
-    downloadButtons.forEach(button => button.disabled = isBusy);
-    clearButtons.forEach(button => button.disabled = isBusy);
-    if (clearAllButton) clearAllButton.disabled = isBusy;
+    downloadButtons.forEach(button => {
+      button.disabled = isBusy;
+    });
+    clearButtons.forEach(button => {
+      button.disabled = isBusy;
+    });
+    if (clearAllButton) {
+      clearAllButton.disabled = isBusy;
+    }
   }
 
   function formatMB(bytes) {
@@ -3168,26 +3276,43 @@
   function sendMessage(worker, message) {
     return new Promise((resolve, reject) => {
       const channel = new MessageChannel();
+
       channel.port1.onmessage = event => {
         const data = event.data || {};
+
         if (data.type === "CACHE_PROGRESS") {
           showStatusOverlay(true);
-          if (status) status.textContent = "正在下載 " + data.done + " / " + data.total;
+          if (status) {
+            status.textContent =
+              "正在下載 " + data.done + " / " + data.total;
+          }
           return;
         }
+
+        if (data.type === "CACHE_CANCELLED") {
+          const error = new Error("下載已取消");
+          error.name = "AbortError";
+          reject(error);
+          return;
+        }
+
         if (data.type === "CACHE_ERROR") {
           reject(new Error(data.message || "操作失敗"));
           return;
         }
+
         resolve(data);
       };
+
       worker.postMessage(message, [channel.port2]);
     });
   }
 
   if (!("serviceWorker" in navigator)) {
     showStatusOverlay(true);
-    if (status) status.textContent = "此瀏覽器不支援離線功能";
+    if (status) {
+      status.textContent = "此瀏覽器不支援離線功能";
+    }
     setBusy(true);
     return;
   }
@@ -3195,45 +3320,116 @@
   navigator.serviceWorker.register("./service-worker.js")
     .then(() => navigator.serviceWorker.ready)
     .then(async registration => {
-      const worker = registration.active || registration.waiting || registration.installing;
-      if (!worker) throw new Error("Service Worker 尚未啟動");
+      const worker =
+        registration.active ||
+        registration.waiting ||
+        registration.installing;
+
+      if (!worker) {
+        throw new Error("Service Worker 尚未啟動");
+      }
+
+      currentWorker = worker;
 
       async function refreshStatus() {
-        const result = await sendMessage(worker, { type: "GET_CACHE_STATUS" });
+        const result = await sendMessage(worker, {
+          type: "GET_CACHE_STATUS"
+        });
+
         const downloaded = result.cities || [];
         markDownloaded(downloaded);
+
         if (status) {
           status.textContent = downloaded.length
-            ? "已下載：" + downloaded.map(city => cityNames[city]).join("、")
+            ? "已下載：" +
+              downloaded.map(city => cityNames[city]).join("、")
             : "尚未下載任何城市";
         }
 
         if (storageText) {
           storageText.textContent =
-            "離線城市目前使用 " + formatMB(result.bytes || 0) +
-            "（基本網站檔案會保留）";
+            "目前使用 " +
+            formatMB(result.bytes || 0) +
+            "（基本檔案保留）";
         }
 
-        showStatusOverlay(downloaded.length > 0 || (result.bytes || 0) > 0);
+        showStatusOverlay(
+          downloaded.length > 0 || (result.bytes || 0) > 0
+        );
+      }
+
+      if (cancelButton) {
+        cancelButton.addEventListener("click", async () => {
+          if (!currentDownloadCity || !currentWorker) return;
+
+          cancelButton.disabled = true;
+          showStatusOverlay(true);
+
+          if (status) {
+            status.textContent = "正在取消下載…";
+          }
+
+          try {
+            await sendMessage(currentWorker, {
+              type: "CANCEL_CITY_DOWNLOAD",
+              city: currentDownloadCity
+            });
+          } catch (error) {
+            cancelButton.disabled = false;
+            if (status) {
+              status.textContent = "取消失敗，請稍後再試";
+            }
+          }
+        });
       }
 
       downloadButtons.forEach(button => {
         button.addEventListener("click", async () => {
           const city = button.dataset.offlineDownload;
+
+          currentDownloadCity = city;
           setBusy(true);
-          button.textContent = "下載中…";
+          showCancelButton(true);
           showStatusOverlay(true);
-          if (status) status.textContent = "正在下載" + cityNames[city] + "，請保持畫面開啟";
+          button.textContent = "下載中…";
+
+          if (status) {
+            status.textContent =
+              "正在下載" + cityNames[city] + "…";
+          }
+
           try {
-            await sendMessage(worker, { type: "CACHE_CITY", city });
-            if (status) status.textContent = cityNames[city] + "下載完成，可離線使用";
-            await refreshStatus();
+            await sendMessage(worker, {
+              type: "CACHE_CITY",
+              city
+            });
+
+            if (status) {
+              status.textContent =
+                cityNames[city] + "下載完成";
+            }
           } catch (error) {
             button.textContent = "下載";
             showStatusOverlay(true);
-            if (status) status.textContent = "下載失敗，請確認網路後重試";
+
+            if (error.name === "AbortError") {
+              if (status) {
+                status.textContent =
+                  cityNames[city] + "下載已取消";
+              }
+              await new Promise(resolve => setTimeout(resolve, 600));
+            } else if (status) {
+              status.textContent =
+                "下載失敗，請確認網路後重試";
+            }
           } finally {
+            currentDownloadCity = null;
+            showCancelButton(false);
             setBusy(false);
+
+            try {
+              await refreshStatus();
+            } catch (error) {}
           }
         });
       });
@@ -3241,18 +3437,42 @@
       clearButtons.forEach(button => {
         button.addEventListener("click", async () => {
           const city = button.dataset.offlineClear;
-          const confirmed = window.confirm("要清除「" + cityNames[city] + "」的離線圖片和音檔嗎？\n\n線上使用不受影響。");
+
+          const confirmed = window.confirm(
+            "要清除「" +
+            cityNames[city] +
+            "」的離線圖片和音檔嗎？\n\n" +
+            "線上使用不受影響。"
+          );
+
           if (!confirmed) return;
+
           setBusy(true);
           showStatusOverlay(true);
-          if (status) status.textContent = "正在清除" + cityNames[city] + "…";
+
+          if (status) {
+            status.textContent =
+              "正在清除" + cityNames[city] + "…";
+          }
+
           try {
-            await sendMessage(worker, { type: "DELETE_CITY", city });
-            if (status) status.textContent = cityNames[city] + "離線內容已清除";
+            await sendMessage(worker, {
+              type: "DELETE_CITY",
+              city
+            });
+
+            if (status) {
+              status.textContent =
+                cityNames[city] + "離線內容已清除";
+            }
+
             await refreshStatus();
           } catch (error) {
             showStatusOverlay(true);
-            if (status) status.textContent = "清除失敗，請稍後再試";
+            if (status) {
+              status.textContent =
+                "清除失敗，請稍後再試";
+            }
           } finally {
             setBusy(false);
           }
@@ -3261,18 +3481,38 @@
 
       if (clearAllButton) {
         clearAllButton.addEventListener("click", async () => {
-          const confirmed = window.confirm("要清除四個城市的全部離線圖片和音檔嗎？\n\nApp 與線上網站仍會保留。");
+          const confirmed = window.confirm(
+            "要清除四個城市的全部離線圖片和音檔嗎？\n\n" +
+            "App 與線上網站仍會保留。"
+          );
+
           if (!confirmed) return;
+
           setBusy(true);
           showStatusOverlay(true);
-          if (status) status.textContent = "正在清除全部離線城市…";
+
+          if (status) {
+            status.textContent =
+              "正在清除全部離線城市…";
+          }
+
           try {
-            await sendMessage(worker, { type: "DELETE_ALL_CITIES" });
-            if (status) status.textContent = "全部離線城市已清除";
+            await sendMessage(worker, {
+              type: "DELETE_ALL_CITIES"
+            });
+
+            if (status) {
+              status.textContent =
+                "全部離線城市已清除";
+            }
+
             await refreshStatus();
           } catch (error) {
             showStatusOverlay(true);
-            if (status) status.textContent = "清除失敗，請稍後再試";
+            if (status) {
+              status.textContent =
+                "清除失敗，請稍後再試";
+            }
           } finally {
             setBusy(false);
           }
@@ -3283,10 +3523,14 @@
     })
     .catch(() => {
       showStatusOverlay(true);
-      if (status) status.textContent = "離線功能啟動失敗，請重新整理";
+      if (status) {
+        status.textContent =
+          "離線功能啟動失敗，請重新整理";
+      }
     });
 })();
 </script>
+
 
 
 </body>
