@@ -1,0 +1,4 @@
+只需替換 index.html 與 service-worker.js。
+原本圖片與音檔都不要刪。
+替換後 Commit to main → Push origin。
+網站更新後，完全關閉桌面導覽 App，再重新開啟一次。
