@@ -1003,6 +1003,171 @@
   }
 }
 
+
+/* =========================
+   V5：月桂葉邊框 + 閱讀性微調
+========================= */
+:root{
+  --panel-strong: rgba(3, 48, 31, 0.92);
+  --panel-soft: rgba(3, 48, 31, 0.88);
+  --panel-line: rgba(244, 234, 213, 0.22);
+  --panel-line-inner: rgba(244, 234, 213, 0.10);
+  --laurel-wreath: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 70'%3E%3Cg fill='%23e7dcc0' fill-opacity='0.35' stroke='%23e7dcc0' stroke-opacity='0.55' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M28 56 C 46 44, 62 28, 82 12' fill='none'/%3E%3Cpath d='M192 56 C 174 44, 158 28, 138 12' fill='none'/%3E%3Cellipse cx='45' cy='44' rx='9' ry='5.3' transform='rotate(-28 45 44)'/%3E%3Cellipse cx='60' cy='33' rx='9' ry='5.3' transform='rotate(-24 60 33)'/%3E%3Cellipse cx='74' cy='22' rx='9' ry='5.3' transform='rotate(-20 74 22)'/%3E%3Cellipse cx='88' cy='14' rx='8.2' ry='4.8' transform='rotate(-10 88 14)'/%3E%3Cellipse cx='175' cy='44' rx='9' ry='5.3' transform='rotate(28 175 44)'/%3E%3Cellipse cx='160' cy='33' rx='9' ry='5.3' transform='rotate(24 160 33)'/%3E%3Cellipse cx='146' cy='22' rx='9' ry='5.3' transform='rotate(20 146 22)'/%3E%3Cellipse cx='132' cy='14' rx='8.2' ry='4.8' transform='rotate(10 132 14)'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.contents-page,
+.milan-page,
+.venice-page,
+.florence-page,
+.rome-page {
+  padding-top: calc(22px + env(safe-area-inset-top));
+  padding-bottom: calc(84px + env(safe-area-inset-bottom));
+}
+
+.detail-page {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.detail-back-button {
+  top: 0;
+  padding-top: calc(18px + env(safe-area-inset-top));
+  background-color: rgba(4, 58, 37, 0.96) !important;
+}
+
+.milan-page-content,
+.venice-page-content,
+.florence-page-content,
+.rome-page-content,
+.detail-content,
+.offline-panel {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--panel-line) !important;
+  box-shadow:
+    0 14px 32px rgba(0, 0, 0, 0.14),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+}
+
+.milan-page-content,
+.venice-page-content,
+.florence-page-content,
+.rome-page-content,
+.detail-content {
+  background: var(--panel-strong) !important;
+  padding-top: 44px;
+}
+
+.offline-panel {
+  margin-top: 28px;
+  background: var(--panel-soft) !important;
+  padding-top: 30px;
+  padding-bottom: 24px;
+}
+
+.milan-page-content::before,
+.venice-page-content::before,
+.florence-page-content::before,
+.rome-page-content::before,
+.detail-content::before,
+.offline-panel::before,
+.milan-page-content::after,
+.venice-page-content::after,
+.florence-page-content::after,
+.rome-page-content::after,
+.detail-content::after,
+.offline-panel::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  width: 132px;
+  height: 42px;
+  background-image: var(--laurel-wreath);
+  background-repeat: no-repeat;
+  background-size: contain;
+  transform: translateX(-50%);
+  opacity: 0.80;
+  pointer-events: none;
+}
+
+.milan-page-content::before,
+.venice-page-content::before,
+.florence-page-content::before,
+.rome-page-content::before,
+.detail-content::before,
+.offline-panel::before {
+  top: 10px;
+}
+
+.milan-page-content::after,
+.venice-page-content::after,
+.florence-page-content::after,
+.rome-page-content::after,
+.detail-content::after,
+.offline-panel::after {
+  bottom: 10px;
+  transform: translateX(-50%) rotate(180deg);
+}
+
+.milan-page-content > *,
+.venice-page-content > *,
+.florence-page-content > *,
+.rome-page-content > *,
+.detail-content > *,
+.offline-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+.milan-page-content::selection,
+.venice-page-content::selection,
+.florence-page-content::selection,
+.rome-page-content::selection,
+.detail-content::selection,
+.offline-panel::selection {
+  background: rgba(244, 234, 213, 0.18);
+}
+
+.milan-page h1,
+.venice-page h1,
+.florence-page h1,
+.rome-page h1 {
+  font-size: 38px;
+  line-height: 1.22;
+}
+
+.detail-page h1 {
+  font-size: 34px;
+  line-height: 1.28;
+}
+
+.audio-block h2 {
+  line-height: 1.48;
+}
+
+.offline-panel h2 {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.offline-city-row {
+  grid-template-columns: minmax(0,1fr) 78px 78px;
+}
+
+.offline-city-row span {
+  line-height: 1.35;
+}
+
+.offline-city-row button,
+.offline-clear-all,
+.detail-back-button,
+.back-button,
+.milan-back-button,
+.venice-back-button,
+.florence-back-button,
+.rome-back-button {
+  border-radius: 12px;
+}
+
 </style>
 
 <link rel="manifest" href="manifest.json">
