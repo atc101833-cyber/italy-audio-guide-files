@@ -966,6 +966,16 @@
 .offline-buttons button:disabled{opacity:.6}
 .offline-status{margin-top:12px!important;margin-bottom:0!important;font-weight:600}
 
+
+.offline-city-row{display:grid;grid-template-columns:1fr 78px 78px;gap:8px;align-items:center;margin-top:10px}
+.offline-city-row span{font-size:15px;font-weight:600}
+.offline-city-row button,.offline-clear-all{min-height:42px;border:1px solid rgba(244,234,213,.34);border-radius:11px;background:rgba(244,234,213,.12);color:#f4ead5;font-size:14px}
+.offline-city-row button[data-offline-clear]{background:rgba(190,74,56,.22)}
+.offline-city-row button:disabled,.offline-clear-all:disabled{opacity:.55}
+.offline-city-row button.is-downloaded{background:rgba(88,154,112,.30)}
+.offline-clear-all{width:100%;margin-top:14px}
+.offline-storage{margin-top:8px!important;margin-bottom:0!important;font-size:12px!important;opacity:.78}
+
 </style>
 
 <link rel="manifest" href="manifest.json">
@@ -1035,17 +1045,43 @@
 </button>
 </div>
 
+
 <section class="offline-panel">
   <h2>離線使用</h2>
-  <p>先連上網路，選擇要下載的城市。顯示「下載完成」後，開飛航模式仍可使用。</p>
-  <div class="offline-buttons">
-    <button type="button" data-offline-city="milan">下載米蘭</button>
-    <button type="button" data-offline-city="venice">下載威尼斯</button>
-    <button type="button" data-offline-city="florence">下載佛羅倫斯</button>
-    <button type="button" data-offline-city="rome">下載羅馬</button>
+  <p>先下載要使用的城市。聽完後可以只清除該城市，釋放手機空間。</p>
+
+  <div class="offline-city-row">
+    <span>米蘭</span>
+    <button type="button" data-offline-download="milan">下載</button>
+    <button type="button" data-offline-clear="milan">清除</button>
   </div>
-  <p id="offlineStatus" class="offline-status">尚未下載</p>
+
+  <div class="offline-city-row">
+    <span>威尼斯</span>
+    <button type="button" data-offline-download="venice">下載</button>
+    <button type="button" data-offline-clear="venice">清除</button>
+  </div>
+
+  <div class="offline-city-row">
+    <span>佛羅倫斯</span>
+    <button type="button" data-offline-download="florence">下載</button>
+    <button type="button" data-offline-clear="florence">清除</button>
+  </div>
+
+  <div class="offline-city-row">
+    <span>羅馬</span>
+    <button type="button" data-offline-download="rome">下載</button>
+    <button type="button" data-offline-clear="rome">清除</button>
+  </div>
+
+  <button class="offline-clear-all" type="button" id="clearAllOffline">
+    清除全部離線城市
+  </button>
+
+  <p id="offlineStatus" class="offline-status">正在檢查離線內容…</p>
+  <p id="offlineStorage" class="offline-storage"></p>
 </section>
+
 
 </section>
 <section aria-label="點一下翻開封面" class="cover-page" id="coverPage" onclick="this.classList.add('flipped')">
@@ -2405,47 +2441,155 @@
 
   </script>
 
+
 <script>
-(function(){
-  const status=document.getElementById("offlineStatus");
-  const buttons=document.querySelectorAll("[data-offline-city]");
-  if(!("serviceWorker" in navigator)){
-    if(status)status.textContent="此瀏覽器不支援離線功能";
-    buttons.forEach(b=>b.disabled=true); return;
+(function () {
+  const status = document.getElementById("offlineStatus");
+  const storageText = document.getElementById("offlineStorage");
+  const downloadButtons = document.querySelectorAll("[data-offline-download]");
+  const clearButtons = document.querySelectorAll("[data-offline-clear]");
+  const clearAllButton = document.getElementById("clearAllOffline");
+
+  const cityNames = {
+    milan: "米蘭",
+    venice: "威尼斯",
+    florence: "佛羅倫斯",
+    rome: "羅馬"
+  };
+
+  function setBusy(isBusy) {
+    downloadButtons.forEach(button => button.disabled = isBusy);
+    clearButtons.forEach(button => button.disabled = isBusy);
+    if (clearAllButton) clearAllButton.disabled = isBusy;
   }
-  navigator.serviceWorker.register("./service-worker.js")
-  .then(()=>navigator.serviceWorker.ready)
-  .then(reg=>{
-    if(status)status.textContent="可選擇城市下載";
-    buttons.forEach(button=>{
-      button.addEventListener("click",()=>{
-        const city=button.dataset.offlineCity;
-        const old=button.textContent;
-        buttons.forEach(b=>b.disabled=true);
-        button.textContent="下載中…";
-        if(status)status.textContent="正在下載，請不要關閉此頁面";
-        const worker=reg.active||reg.waiting||reg.installing;
-        const channel=new MessageChannel();
-        channel.port1.onmessage=e=>{
-          const d=e.data||{};
-          if(d.type==="CACHE_PROGRESS"&&status)status.textContent=`正在下載 ${d.done} / ${d.total}`;
-          if(d.type==="CACHE_COMPLETE"){
-            button.textContent="已下載";
-            if(status)status.textContent="下載完成，可離線使用";
-            buttons.forEach(b=>b.disabled=false);
-          }
-          if(d.type==="CACHE_ERROR"){
-            button.textContent=old;
-            if(status)status.textContent="下載失敗，請確認網路後重試";
-            buttons.forEach(b=>b.disabled=false);
-          }
-        };
-        worker.postMessage({type:"CACHE_CITY",city},[channel.port2]);
-      });
+
+  async function updateStorageEstimate() {
+    if (!storageText || !navigator.storage || !navigator.storage.estimate) return;
+    try {
+      const estimate = await navigator.storage.estimate();
+      const usedMB = estimate.usage ? (estimate.usage / 1024 / 1024).toFixed(1) : "0";
+      storageText.textContent = "此網站目前約使用 " + usedMB + " MB";
+    } catch (error) {
+      storageText.textContent = "";
+    }
+  }
+
+  function markDownloaded(cities) {
+    downloadButtons.forEach(button => {
+      const city = button.dataset.offlineDownload;
+      const downloaded = cities.includes(city);
+      button.textContent = downloaded ? "已下載" : "下載";
+      button.classList.toggle("is-downloaded", downloaded);
     });
-  }).catch(()=>{if(status)status.textContent="離線功能啟動失敗，請重新整理";});
+  }
+
+  function sendMessage(worker, message) {
+    return new Promise((resolve, reject) => {
+      const channel = new MessageChannel();
+      channel.port1.onmessage = event => {
+        const data = event.data || {};
+        if (data.type === "CACHE_PROGRESS") {
+          if (status) status.textContent = "正在下載 " + data.done + " / " + data.total;
+          return;
+        }
+        if (data.type === "CACHE_ERROR") {
+          reject(new Error(data.message || "操作失敗"));
+          return;
+        }
+        resolve(data);
+      };
+      worker.postMessage(message, [channel.port2]);
+    });
+  }
+
+  if (!("serviceWorker" in navigator)) {
+    if (status) status.textContent = "此瀏覽器不支援離線功能";
+    setBusy(true);
+    return;
+  }
+
+  navigator.serviceWorker.register("./service-worker.js")
+    .then(() => navigator.serviceWorker.ready)
+    .then(async registration => {
+      const worker = registration.active || registration.waiting || registration.installing;
+      if (!worker) throw new Error("Service Worker 尚未啟動");
+
+      async function refreshStatus() {
+        const result = await sendMessage(worker, { type: "GET_CACHE_STATUS" });
+        const downloaded = result.cities || [];
+        markDownloaded(downloaded);
+        if (status) {
+          status.textContent = downloaded.length
+            ? "已下載：" + downloaded.map(city => cityNames[city]).join("、")
+            : "尚未下載任何城市";
+        }
+        await updateStorageEstimate();
+      }
+
+      downloadButtons.forEach(button => {
+        button.addEventListener("click", async () => {
+          const city = button.dataset.offlineDownload;
+          setBusy(true);
+          button.textContent = "下載中…";
+          if (status) status.textContent = "正在下載" + cityNames[city] + "，請保持畫面開啟";
+          try {
+            await sendMessage(worker, { type: "CACHE_CITY", city });
+            if (status) status.textContent = cityNames[city] + "下載完成，可離線使用";
+            await refreshStatus();
+          } catch (error) {
+            button.textContent = "下載";
+            if (status) status.textContent = "下載失敗，請確認網路後重試";
+          } finally {
+            setBusy(false);
+          }
+        });
+      });
+
+      clearButtons.forEach(button => {
+        button.addEventListener("click", async () => {
+          const city = button.dataset.offlineClear;
+          const confirmed = window.confirm("要清除「" + cityNames[city] + "」的離線圖片和音檔嗎？\n\n線上使用不受影響。");
+          if (!confirmed) return;
+          setBusy(true);
+          if (status) status.textContent = "正在清除" + cityNames[city] + "…";
+          try {
+            await sendMessage(worker, { type: "DELETE_CITY", city });
+            if (status) status.textContent = cityNames[city] + "離線內容已清除";
+            await refreshStatus();
+          } catch (error) {
+            if (status) status.textContent = "清除失敗，請稍後再試";
+          } finally {
+            setBusy(false);
+          }
+        });
+      });
+
+      if (clearAllButton) {
+        clearAllButton.addEventListener("click", async () => {
+          const confirmed = window.confirm("要清除四個城市的全部離線圖片和音檔嗎？\n\nApp 與線上網站仍會保留。");
+          if (!confirmed) return;
+          setBusy(true);
+          if (status) status.textContent = "正在清除全部離線城市…";
+          try {
+            await sendMessage(worker, { type: "DELETE_ALL_CITIES" });
+            if (status) status.textContent = "全部離線城市已清除";
+            await refreshStatus();
+          } catch (error) {
+            if (status) status.textContent = "清除失敗，請稍後再試";
+          } finally {
+            setBusy(false);
+          }
+        });
+      }
+
+      await refreshStatus();
+    })
+    .catch(() => {
+      if (status) status.textContent = "離線功能啟動失敗，請重新整理";
+    });
 })();
 </script>
+
 
 </body>
 </html>
