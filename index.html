@@ -1930,10 +1930,127 @@
 
 /* 保留足夠底部空間，讓資訊小框四邊都落在外框裡。 */
 .offline-approved-status {
-  top: 79.2% !important;
-  min-height: 13.2% !important;
-  max-height: 17.5%;
-  overflow: visible;
+  top: 75.3% !important;
+  height: 18.7% !important;
+  min-height: 0 !important;
+  max-height: none;
+  padding: 4px 14px 6px !important;
+  overflow: hidden;
+}
+
+.offline-approved-status .offline-status {
+  font-size: clamp(12px, 3vw, 15px) !important;
+  line-height: 1.15 !important;
+}
+
+.offline-approved-status .offline-storage {
+  margin-top: 2px !important;
+  font-size: clamp(9px, 2.25vw, 11px) !important;
+  line-height: 1.12 !important;
+}
+
+.offline-status-actions {
+  margin-top: 3px;
+}
+
+.offline-clear-all-inline,
+.offline-cancel-download {
+  min-height: 20px !important;
+  padding: 2px 9px !important;
+  font-size: 9.5px !important;
+}
+
+/* =========================
+   V31：全站文字節奏與換行整理
+========================= */
+
+/* 各層主標題採平衡換行，避免最後只掉一個字到下一行。 */
+.contents-page h1,
+.milan-page h1,
+.venice-page h1,
+.florence-page h1,
+.rome-page h1,
+.detail-page h1 {
+  max-width: 100%;
+  line-height: 1.22 !important;
+  letter-spacing: 0.035em;
+  text-wrap: balance;
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
+.detail-page h1 {
+  font-size: clamp(30px, 8.7vw, 38px) !important;
+}
+
+/* 長英文眉題與副標題可整齊換行，不超出內容框。 */
+.contents-small-title,
+.milan-small-title,
+.venice-small-title,
+.florence-small-title,
+.rome-small-title,
+.detail-small-title {
+  line-height: 1.45;
+  letter-spacing: 0.18em !important;
+  overflow-wrap: anywhere;
+}
+
+.detail-english {
+  line-height: 1.4;
+  text-wrap: balance;
+}
+
+/* 系列卡片不再強制全部單行；長名稱最多自然排成兩行。 */
+.series-title {
+  top: 11px;
+  left: 11px;
+  right: 7px;
+}
+
+.series-title strong,
+.series-title strong.two-line-title {
+  display: -webkit-box !important;
+  max-width: 100% !important;
+  overflow: hidden;
+  font-size: clamp(13px, 3.55vw, 16px) !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0.025em !important;
+  white-space: normal !important;
+  text-wrap: balance;
+  word-break: normal;
+  overflow-wrap: normal;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.series-title small {
+  margin-top: 2px;
+  line-height: 1.18 !important;
+  text-wrap: balance;
+}
+
+/* 導覽章節標題以均衡行寬呈現，避免孤字與忽長忽短的行尾。 */
+.audio-block {
+  padding-top: 26px;
+  padding-bottom: 30px;
+}
+
+.audio-block h2 {
+  max-width: 100%;
+  margin-bottom: 20px;
+  font-size: clamp(20px, 5.55vw, 24px) !important;
+  font-weight: 500;
+  line-height: 1.42 !important;
+  letter-spacing: 0.015em;
+  text-wrap: balance;
+  word-break: normal;
+  overflow-wrap: normal;
+  line-break: strict;
+}
+
+.audio-number {
+  margin-bottom: 10px;
+  line-height: 1.3;
 }
 
 </style>
@@ -2142,7 +2259,7 @@
 <div class="series-card-content">
 <span class="series-number">05</span>
 <span class="series-title">
-<strong class="two-line-title">艾曼紐二世<br/>迴廊</strong>
+<strong class="two-line-title">艾曼紐二世迴廊</strong>
 <small>Galleria Vittorio Emanuele II</small>
 </span>
 <span class="series-arrow">→</span>
