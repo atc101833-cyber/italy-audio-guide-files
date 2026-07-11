@@ -976,6 +976,33 @@
 .offline-clear-all{width:100%;margin-top:14px}
 .offline-storage{margin-top:8px!important;margin-bottom:0!important;font-size:12px!important;opacity:.78}
 
+
+/* =========================
+   V4：修正頁面文字重疊
+   顯示中的頁面使用完整不透明背景
+========================= */
+.milan-page.show,
+.venice-page.show,
+.florence-page.show,
+.rome-page.show,
+.detail-page.show {
+  background-color: #06452d !important;
+  background-image: url("italy-pattern-background.jpg") !important;
+  background-size: 320px auto !important;
+  background-position: top left !important;
+  background-repeat: repeat !important;
+}
+
+@media (min-width: 600px) {
+  .milan-page.show,
+  .venice-page.show,
+  .florence-page.show,
+  .rome-page.show,
+  .detail-page.show {
+    background-size: 360px auto !important;
+  }
+}
+
 </style>
 
 <link rel="manifest" href="manifest.json">

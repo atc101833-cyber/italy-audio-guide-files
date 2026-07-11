@@ -1,4 +1,15 @@
-只需替換 index.html 與 service-worker.js。
-原本圖片與音檔都不要刪。
-替換後 Commit to main → Push origin。
-網站更新後，完全關閉桌面導覽 App，再重新開啟一次。
+V4 修正：返回按鈕與下層目錄文字重疊
+
+只需要替換：
+1. index.html
+2. service-worker.js
+
+操作：
+1. GitHub Desktop 按 Show in Finder。
+2. 把以上兩個檔案拖進 repository 根目錄並選擇取代。
+3. Summary 輸入：Fix overlapping navigation text
+4. 按 Commit to main。
+5. 按 Push origin。
+6. 等網站更新後，將桌面上的導覽 App 完全關閉，再連網重新開啟一次。
+
+原本所有圖片與 MP3 都不要刪除。
