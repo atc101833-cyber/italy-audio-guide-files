@@ -1149,6 +1149,172 @@
   }
 }
 
+/* =========================
+   V8：手機圖片取景與播放器修正
+========================= */
+.contents-page {
+  padding-top: calc(12px + env(safe-area-inset-top)) !important;
+}
+
+/* 封面滿版，不再留上下空白 */
+.cover-page img {
+  object-fit: cover !important;
+}
+
+.top-back-button {
+  margin-bottom: 12px !important;
+}
+
+.contents-small-title {
+  margin-bottom: 5px !important;
+}
+
+.contents-page h1 {
+  margin-bottom: 22px !important;
+}
+
+.city-card,
+.series-card {
+  height: auto !important;
+  aspect-ratio: 4 / 3;
+  background: #d8cfbd;
+}
+
+.city-card img,
+.series-card img {
+  object-fit: cover !important;
+}
+
+/* 較高的卡片能看到更完整的建築主體 */
+.milan-image { object-position: center 54% !important; }
+.venice-image { object-position: center 68% !important; }
+.florence-image { object-position: center 48% !important; }
+.rome-image { object-position: center 52% !important; }
+
+/* 大衛像卡片以頭部與上半身為主，避免焦點落在裸體細節 */
+.florence-david-card-image {
+  object-position: center 12% !important;
+}
+
+.reference-player {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: visible;
+  margin-bottom: 24px !important;
+}
+
+.reference-progress {
+  height: 12% !important;
+  background: linear-gradient(
+    to right,
+    #493423 0%,
+    #493423 var(--progress, 0%),
+    #b8a787 var(--progress, 0%),
+    #b8a787 100%
+  ) !important;
+  box-shadow: inset 0 1px 2px rgba(68, 45, 26, 0.24) !important;
+}
+
+.reference-progress::-webkit-slider-thumb {
+  width: 15px !important;
+  height: 15px !important;
+  border: 2px solid #493423 !important;
+  background: #d8c49f !important;
+}
+
+.reference-progress::-moz-range-thumb {
+  width: 15px !important;
+  height: 15px !important;
+  border: 2px solid #493423 !important;
+  background: #d8c49f !important;
+}
+
+.reference-progress.is-empty::-webkit-slider-thumb {
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.reference-progress.is-empty::-moz-range-thumb {
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.reference-volume-button::before,
+.reference-volume-button::after {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.reference-volume-button.is-muted::before {
+  content: "";
+  left: 46%;
+  top: 14%;
+  width: 3px;
+  height: 72%;
+  border-radius: 3px;
+  background: #5b2f25;
+  transform: rotate(38deg);
+  opacity: 1;
+}
+
+.reference-volume-button.is-muted::after {
+  content: "🔇";
+  right: -2px;
+  bottom: -5px;
+  padding: 1px 3px;
+  border-radius: 8px;
+  background: rgba(225, 210, 181, 0.96);
+  font-size: 14px;
+  line-height: 1.2;
+  opacity: 1;
+}
+
+.reference-volume-panel {
+  position: absolute;
+  z-index: 5;
+  right: 5.5%;
+  bottom: calc(100% + 8px);
+  width: 44px;
+  height: 132px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(73, 52, 35, 0.38);
+  border-radius: 18px;
+  background: rgba(225, 210, 181, 0.98);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.24);
+}
+
+.reference-volume-panel.show {
+  display: flex;
+}
+
+.reference-volume-slider {
+  width: 98px;
+  height: 28px;
+  margin: 0;
+  accent-color: #493423;
+  transform: rotate(-90deg);
+}
+
+/* 解說頁讓後方義大利花紋透出，但仍保留文字對比 */
+.detail-content {
+  background: rgba(3, 48, 31, 0.72) !important;
+}
+
+@media (max-width: 390px) {
+  .contents-page h1 { font-size: 34px; }
+  .contents-page .city-list { padding: 10px; gap: 12px; }
+  .city-card-text,
+  .series-card-content { padding: 16px; }
+  .reference-time { left: 17%; width: 14%; }
+  .reference-progress { left: 31.5%; width: 46%; }
+}
+
 </style>
 
 <link rel="manifest" href="manifest.json">
@@ -1257,7 +1423,7 @@
 
 
 </section>
-<section aria-label="點一下翻開封面" class="cover-page" id="coverPage" onclick="this.classList.add('flipped')">
+<section aria-label="點一下翻開封面" class="cover-page" id="coverPage" onclick="this.classList.add('flipped')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.classList.add('flipped')}" role="button" tabindex="0">
 <img alt="義大利有聲導覽書封面" decoding="async" fetchpriority="high" loading="eager" src="cover.jpg"/>
 </section>
 <section class="milan-page" id="milanPage">
@@ -1444,7 +1610,7 @@
 </div>
 </button>
 <button class="series-card" onclick="openPage('florenceDavidPage')" type="button">
-<img alt="米開朗基羅的大衛" class="rooftop-series-image" data-src="florence-david-01.jpg" decoding="async" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="/>
+<img alt="米開朗基羅的大衛" class="florence-david-card-image" data-src="florence-david-01.jpg" decoding="async" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="/>
 <div class="series-overlay"></div>
 <div class="series-card-content">
 <span class="series-number">04</span>
@@ -2430,6 +2596,42 @@
 
       page.classList.remove("show");
     }
+
+    function setupSwipeBack() {
+      const swipeTargets = document.querySelectorAll(
+        ".contents-page, .milan-page, .venice-page, .florence-page, .rome-page, .detail-page"
+      );
+
+      swipeTargets.forEach(function (page) {
+        let startX = 0;
+        let startY = 0;
+        let canSwipe = false;
+
+        page.addEventListener("touchstart", function (event) {
+          const target = event.target;
+          canSwipe = !target.closest("input, button, audio");
+          if (!canSwipe || !event.touches[0]) return;
+          startX = event.touches[0].clientX;
+          startY = event.touches[0].clientY;
+        }, { passive: true });
+
+        page.addEventListener("touchend", function (event) {
+          if (!canSwipe || !event.changedTouches[0]) return;
+
+          const deltaX = event.changedTouches[0].clientX - startX;
+          const deltaY = event.changedTouches[0].clientY - startY;
+          canSwipe = false;
+
+          if (deltaX > -70 || Math.abs(deltaY) > 55) return;
+
+          if (page.classList.contains("contents-page")) {
+            document.getElementById("coverPage").classList.remove("flipped");
+          } else if (page.id) {
+            closePage(page.id);
+          }
+        }, { passive: true });
+      });
+    }
   
     function formatAudioTime(seconds) {
       if (!Number.isFinite(seconds)) {
@@ -2470,7 +2672,7 @@
         time.textContent = "00:00";
 
         const progress = document.createElement("input");
-        progress.className = "reference-progress";
+        progress.className = "reference-progress is-empty";
         progress.type = "range";
         progress.min = "0";
         progress.max = "100";
@@ -2480,7 +2682,19 @@
         const volumeButton = document.createElement("button");
         volumeButton.className = "reference-volume-button";
         volumeButton.type = "button";
-        volumeButton.setAttribute("aria-label", "靜音或恢復音量");
+        volumeButton.setAttribute("aria-label", "調整音量");
+        volumeButton.setAttribute("aria-expanded", "false");
+
+        const volumePanel = document.createElement("div");
+        volumePanel.className = "reference-volume-panel";
+
+        const volumeSlider = document.createElement("input");
+        volumeSlider.className = "reference-volume-slider";
+        volumeSlider.type = "range";
+        volumeSlider.min = "0";
+        volumeSlider.max = "100";
+        volumeSlider.value = "100";
+        volumeSlider.setAttribute("aria-label", "音量大小");
 
         const menuButton = document.createElement("button");
         menuButton.className = "reference-menu-button";
@@ -2499,6 +2713,8 @@
         player.appendChild(progress);
         player.appendChild(volumeButton);
         player.appendChild(menuButton);
+        player.appendChild(volumePanel);
+        volumePanel.appendChild(volumeSlider);
 
         playButton.addEventListener("click", function () {
           if (audio.paused) {
@@ -2534,6 +2750,7 @@
             : 0;
 
           progress.value = String(percentage);
+          progress.classList.toggle("is-empty", percentage <= 0.01);
           progress.style.setProperty(
             "--progress",
             percentage + "%"
@@ -2541,6 +2758,7 @@
         });
 
         progress.addEventListener("input", function () {
+          progress.classList.toggle("is-empty", Number(progress.value) <= 0.01);
           if (audio.duration) {
             audio.currentTime =
               (Number(progress.value) / 100) *
@@ -2549,11 +2767,22 @@
         });
 
         volumeButton.addEventListener("click", function () {
-          audio.muted = !audio.muted;
+          const willShow = !volumePanel.classList.contains("show");
+          document.querySelectorAll(".reference-volume-panel.show").forEach(function (panel) {
+            if (panel !== volumePanel) panel.classList.remove("show");
+          });
+          volumePanel.classList.toggle("show", willShow);
+          volumeButton.setAttribute("aria-expanded", String(willShow));
+        });
 
-          volumeButton.classList.toggle(
-            "is-muted",
-            audio.muted
+        volumeSlider.addEventListener("input", function () {
+          const value = Number(volumeSlider.value) / 100;
+          audio.volume = value;
+          audio.muted = value === 0;
+          volumeButton.classList.toggle("is-muted", audio.muted);
+          volumeButton.setAttribute(
+            "aria-label",
+            audio.muted ? "已靜音，調整音量" : "調整音量，目前 " + volumeSlider.value + "%"
           );
         });
 
@@ -2609,7 +2838,7 @@
 
     document.addEventListener("DOMContentLoaded", function () {
       buildReferencePlayers();
-      
+      setupSwipeBack();
     });
 
   </script>
