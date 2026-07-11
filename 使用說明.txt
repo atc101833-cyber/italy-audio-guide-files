@@ -1,20 +1,18 @@
-義大利導覽 V6
+義大利導覽 V7｜乾淨版
 
-修正內容：
-1. 只有「離線使用」保留完整月桂葉邊框。
-2. 城市系列頁與章節頁的月桂葉全部移除。
-3. 增加頁面內容底部距離，最後一張圖片不再貼住或被邊框裁掉。
-4. Service Worker 更新為 V6，避免手機繼續顯示舊版。
+這版已修正：
+1. 月桂葉全部移除。
+2. 離線區改成簡潔的深綠底＋米白單線圓角框。
+3. 保留之前的標題大小、閱讀性、安全距離與圖片底部間距。
+4. Service Worker 更新為 V7，避免手機繼續顯示月桂舊版。
 
 更新方式：
 1. GitHub Desktop 按 Show in Finder。
-2. 將以下三個檔案拖進 repository 根目錄：
-   index.html
-   service-worker.js
-   laurel-frame.svg
-3. index.html 與 service-worker.js 選擇取代。
-4. 原本圖片與 MP3 不要刪除。
+2. 將 index.html 與 service-worker.js 拖進 repository 根目錄。
+3. 選擇取代。
+4. 原本所有圖片、MP3 都不要刪除。
 5. Summary 輸入：
-   Fix laurel frame and card spacing
+   Remove laurel decorations
 6. Commit to main → Push origin。
 7. 等網站更新後，完全關閉 Safari 或桌面導覽 App，再重新打開。
+8. repository 裡原本的 laurel-frame.svg 可刪除，也可以保留；新版不會再使用它。
