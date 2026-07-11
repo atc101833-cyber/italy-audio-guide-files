@@ -1,29 +1,17 @@
-gogo 最終核准版 V18｜背景顏色微調
+gogo 最終核准版 V17
 
-這版只修改：
-- 離線使用面板的深綠底，調整為更接近 App 背景的綠色。
-- 參考背景主色約為 RGB (25, 61, 37)。
-
-完全保留：
-- 面板尺寸與排版
-- 文字與字體
-- 紅色邊框
-- 城市圖案
-- 4 個下載功能
-- 4 個清除功能
-- 清除全部
-- 下載狀態與容量顯示
-- 其他頁面與播放器
+這版使用你剛才確認的預覽圖，並把整個離線區再縮小一點。
+只修改離線使用區的外觀，下載與清除功能不變。
 
 請放進 GitHub repository 根目錄：
-1. index.html
-2. service-worker.js
-3. offline-final-panel-v18.png
+- index.html
+- service-worker.js
+- offline-final-panel.png
 
 原本圖片與 MP3 不要刪除。
 
 Summary：
-Match offline panel background to app
+Apply approved compact offline design
 
 Commit to main → Push origin。
 更新後完全關閉 Safari／桌面 App，再連網重新開啟。
