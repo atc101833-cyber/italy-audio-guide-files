@@ -1818,6 +1818,100 @@
   font-weight: 700 !important;
 }
 
+
+/* =========================
+   V29：底部只留黃色狀態框
+========================= */
+
+.offline-approved-footer-mask,
+.offline-approved-footer-art,
+.offline-approved-clear-all {
+  display: none !important;
+}
+
+.offline-approved-status {
+  left: 14% !important;
+  right: 14% !important;
+  top: 80.2% !important;
+  bottom: auto !important;
+  min-height: 13.2% !important;
+  padding: 10px 14px 9px !important;
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid rgba(248, 214, 82, 0.82) !important;
+  border-radius: 24px !important;
+  background: rgb(24, 60, 36) !important;
+  box-shadow: none !important;
+  color: #f7e7b6 !important;
+  text-align: center;
+  pointer-events: auto !important;
+}
+
+.offline-approved-status.show {
+  display: flex !important;
+}
+
+.offline-status-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.offline-approved-status .offline-status {
+  margin: 0 !important;
+  color: #f7e7b6 !important;
+  font-size: clamp(13px, 3.2vw, 17px) !important;
+  font-weight: 700 !important;
+  line-height: 1.22 !important;
+  text-align: center;
+  text-shadow: none !important;
+}
+
+.offline-approved-status .offline-storage {
+  margin: 4px 0 0 !important;
+  color: rgba(247, 231, 182, 0.96) !important;
+  font-size: clamp(10px, 2.4vw, 13px) !important;
+  line-height: 1.2 !important;
+  text-align: center;
+  text-shadow: none !important;
+}
+
+.offline-status-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 7px;
+}
+
+.offline-clear-all-inline,
+.offline-cancel-download {
+  min-width: 54px !important;
+  min-height: 25px !important;
+  padding: 3px 10px !important;
+  border: 1px solid rgba(248, 214, 82, 0.82) !important;
+  border-radius: 999px !important;
+  background: rgba(248, 214, 82, 0.08) !important;
+  color: #f8d652 !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.offline-clear-all-inline:active,
+.offline-cancel-download:active {
+  background: rgba(248, 214, 82, 0.20) !important;
+}
+
+.offline-cancel-download[hidden] {
+  display: none !important;
+}
+
 </style>
 
 <link rel="manifest" href="manifest.json">
@@ -1892,7 +1986,7 @@
 <section class="offline-panel offline-approved-panel" aria-label="離線使用">
   <img
     class="offline-approved-image"
-    src="offline-final-panel-v26.png"
+    src="offline-final-panel-v29.png"
     alt="離線使用：米蘭、威尼斯、佛羅倫斯、羅馬的下載與清除功能"
     decoding="async"
     loading="lazy"
@@ -1934,14 +2028,17 @@
           data-offline-clear="rome"
           aria-label="清除羅馬離線內容"></button>
 
-  <button class="offline-approved-clear-all"
-          type="button"
-          id="clearAllOffline"
-          aria-label="清除全部離線城市">清除全部離線城市</button>
-
   <div class="offline-approved-status" aria-live="polite">
     <div class="offline-status-row">
       <p id="offlineStatus" class="offline-status">正在檢查離線內容…</p>
+    </div>
+    <p id="offlineStorage" class="offline-storage">正在計算離線城市容量…</p>
+    <div class="offline-status-actions">
+      <button
+        type="button"
+        id="clearAllOffline"
+        class="offline-clear-all-inline"
+      >清除全部</button>
       <button
         type="button"
         id="cancelOfflineDownload"
@@ -1949,7 +2046,6 @@
         hidden
       >取消</button>
     </div>
-    <p id="offlineStorage" class="offline-storage">正在計算離線城市容量…</p>
   </div>
 </section>
 

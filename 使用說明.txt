@@ -1,9 +1,16 @@
-V28｜乾淨置中底部區塊
+V29｜乾淨底部狀態版
 
-修正：
-1. 移除噴水池、石板與後方所有色塊。
-2. 清除全部按鈕改成小型置中按鈕。
-3. 狀態框置中，直接使用面板原本綠底，不再有色差。
-4. 取消下載、各城市下載/清除、全部清除功能全部保留。
+修正內容：
+1. 底部舊石板、噴水池、舊文字與多餘色塊全部移除。
+2. 底色使用面板原本的 RGB(24,60,36)，不再有色差。
+3. 只保留黃色狀態框。
+4. 清除全部與取消下載功能改放在黃色框內。
+5. 各城市下載、清除、容量顯示功能不變。
 
-Summary：Center and clean offline footer
+請覆蓋：
+- index.html
+- service-worker.js
+- offline-final-panel-v29.png
+
+Summary：
+Remove old footer and keep clean status box
