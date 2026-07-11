@@ -1,20 +1,16 @@
-gogo 離線介面 V20
+V21 修正版
 
-已修改：
-1. 封面恢復正常比例，四周保留綠色邊。
-2. 四個城市列縮小，城市之間增加間隙。
-3. 漏掉的紅色線條也改成亮黃色。
-4. 取消下載、下載、清除、清除全部與容量功能全部保留。
+修正：
+- 封面翻開後會真正隱藏。
+- 城市總目錄會重新顯示。
+- 離線功能仍位於城市總目錄下方。
+- 其他頁面、下載、清除、取消下載功能不變。
 
-請放進 GitHub repository 根目錄：
-- index.html
-- service-worker.js
-- offline-final-panel-v20.png
-
-原本圖片與 MP3 不要刪除。
+只需替換：
+1. index.html
+2. service-worker.js
 
 Summary：
-Fix cover ratio and offline spacing
+Restore city directory page
 
 Commit to main → Push origin。
-更新後完全關閉 Safari／桌面 App，再連網重新開啟。
