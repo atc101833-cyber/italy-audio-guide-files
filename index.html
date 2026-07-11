@@ -1168,6 +1168,107 @@
   border-radius: 12px;
 }
 
+
+/* =========================
+   V6：只保留離線區月桂框
+========================= */
+
+/* 城市頁與章節頁完全移除月桂裝飾 */
+.milan-page-content::before,
+.venice-page-content::before,
+.florence-page-content::before,
+.rome-page-content::before,
+.detail-content::before,
+.milan-page-content::after,
+.venice-page-content::after,
+.florence-page-content::after,
+.rome-page-content::after,
+.detail-content::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* 恢復正常內距，最後一張圖片不再貼住或被邊框裁掉 */
+.milan-page-content,
+.venice-page-content,
+.florence-page-content,
+.rome-page-content {
+  padding: 34px 24px 34px !important;
+  overflow: visible !important;
+}
+
+.detail-content {
+  padding: 32px 24px calc(54px + env(safe-area-inset-bottom)) !important;
+  overflow: visible !important;
+}
+
+.series-list {
+  margin-bottom: 0 !important;
+}
+
+.series-card:last-child,
+.exterior-image:last-child,
+.history-image:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* 離線面板：完整月桂葉包覆框 */
+.offline-panel {
+  position: relative;
+  margin: 30px 0 18px !important;
+  padding: 62px 34px 58px !important;
+  overflow: hidden !important;
+  border: none !important;
+  border-radius: 31px !important;
+  background: rgba(3, 48, 31, 0.92) !important;
+  box-shadow:
+    0 16px 34px rgba(0, 0, 0, 0.16),
+    inset 0 0 0 1px rgba(244, 234, 213, 0.05) !important;
+}
+
+.offline-panel::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  transform: none !important;
+  opacity: 1 !important;
+  background-image: url("laurel-frame.svg") !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: 100% 100% !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+}
+
+.offline-panel::after {
+  content: none !important;
+  display: none !important;
+}
+
+.offline-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+.offline-panel h2 {
+  margin-top: 0 !important;
+}
+
+@media (max-width: 390px) {
+  .offline-panel {
+    padding-left: 28px !important;
+    padding-right: 28px !important;
+  }
+
+  .offline-city-row {
+    grid-template-columns: minmax(0, 1fr) 72px 72px !important;
+    gap: 7px !important;
+  }
+}
+
 </style>
 
 <link rel="manifest" href="manifest.json">
