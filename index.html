@@ -1189,37 +1189,70 @@
 
 .city-card-text,
 .series-card-content {
-  grid-template-columns: 24px minmax(0, 1fr) 18px !important;
-  gap: 6px !important;
+  position: absolute !important;
+  inset: 0 !important;
+  display: block !important;
   padding: 12px !important;
-  align-items: end !important;
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.60),
-    rgba(0, 0, 0, 0.04) 68%
-  ) !important;
+  background: transparent !important;
+  text-shadow:
+    0 1px 1px rgba(28, 18, 10, 0.98),
+    0 2px 5px rgba(28, 18, 10, 0.88),
+    0 0 10px rgba(28, 18, 10, 0.48) !important;
 }
 
-.city-name strong,
+.city-name,
+.series-title {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 8px;
+  align-items: flex-start;
+  gap: 2px !important;
+}
+
+.city-name strong {
+  font-family: "Songti TC", "Noto Serif TC", "PMingLiU", serif !important;
+  font-size: clamp(18px, 5vw, 22px) !important;
+  font-weight: 600 !important;
+  line-height: 1.12 !important;
+  letter-spacing: 0.06em !important;
+  white-space: nowrap;
+}
+
 .series-title strong {
-  font-size: clamp(16px, 4.5vw, 21px) !important;
-  line-height: 1.18 !important;
+  font-family: "Songti TC", "Noto Serif TC", "PMingLiU", serif !important;
+  font-size: clamp(12px, 3.45vw, 16px) !important;
+  font-weight: 600 !important;
+  line-height: 1.16 !important;
+  letter-spacing: 0.035em !important;
+  white-space: nowrap;
+}
+
+.series-title strong.two-line-title {
+  font-size: clamp(16px, 4.3vw, 19px) !important;
+  line-height: 1.14 !important;
+  white-space: normal;
 }
 
 .city-name small,
 .series-title small {
-  font-size: clamp(10px, 3vw, 13px) !important;
-  line-height: 1.2 !important;
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: clamp(11px, 3.15vw, 14px) !important;
+  font-style: italic !important;
+  font-weight: 400 !important;
+  line-height: 1.16 !important;
+  letter-spacing: 0.015em !important;
+  color: #fff8e8 !important;
 }
 
 .city-number,
 .series-number {
-  font-size: 10px !important;
+  display: none !important;
 }
 
 .city-arrow,
 .series-arrow {
-  font-size: 18px !important;
+  display: none !important;
 }
 
 .city-card img,
@@ -1529,7 +1562,7 @@
 <div class="series-card-content">
 <span class="series-number">05</span>
 <span class="series-title">
-<strong>艾曼紐二世迴廊</strong>
+<strong class="two-line-title">艾曼紐二世<br/>迴廊</strong>
 <small>Galleria Vittorio Emanuele II</small>
 </span>
 <span class="series-arrow">→</span>
