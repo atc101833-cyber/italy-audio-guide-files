@@ -1390,15 +1390,16 @@
 
 
 /* =========================
-   V15：最終定案離線介面
-   視覺完全使用原始定案圖片
+   V17：核准版離線介面
+   整體縮小，功能透明覆蓋
 ========================= */
 
-.offline-panel.offline-final-panel {
+.offline-panel.offline-approved-panel {
   position: relative;
-  width: 100%;
-  aspect-ratio: 1015 / 1164;
-  margin: 26px 0 14px !important;
+  width: 92%;
+  max-width: 440px;
+  aspect-ratio: 1038 / 1182;
+  margin: 24px auto 16px !important;
   padding: 0 !important;
   overflow: hidden !important;
   border: 0 !important;
@@ -1408,13 +1409,13 @@
   isolation: isolate;
 }
 
-.offline-panel.offline-final-panel::before,
-.offline-panel.offline-final-panel::after {
+.offline-panel.offline-approved-panel::before,
+.offline-panel.offline-approved-panel::after {
   content: none !important;
   display: none !important;
 }
 
-.offline-final-image {
+.offline-approved-image {
   position: absolute;
   inset: 0;
   z-index: 0;
@@ -1428,9 +1429,8 @@
   -webkit-user-drag: none;
 }
 
-/* 透明功能區，只負責點擊，不重畫設計。 */
-.offline-hotspot,
-.offline-clear-all-hotspot {
+.offline-approved-hotspot,
+.offline-approved-clear-all {
   position: absolute;
   z-index: 3;
   display: block;
@@ -1445,24 +1445,24 @@
   cursor: pointer;
 }
 
-.offline-hotspot {
-  width: 10.5%;
+.offline-approved-hotspot {
+  width: 10.2%;
   aspect-ratio: 1 / 1;
   border-radius: 50%;
 }
 
-.offline-hotspot:active {
+.offline-approved-hotspot:active {
   background: rgba(232, 217, 175, 0.12);
-  box-shadow: inset 0 0 0 2px rgba(232, 217, 175, 0.62);
+  box-shadow: inset 0 0 0 2px rgba(232, 217, 175, 0.58);
 }
 
-.offline-hotspot:disabled,
-.offline-clear-all-hotspot:disabled {
+.offline-approved-hotspot:disabled,
+.offline-approved-clear-all:disabled {
   opacity: 0.55;
 }
 
-/* 下載完成後才顯示小勾勾，平常完全不改變原圖。 */
-.offline-hotspot.is-downloaded::after {
+/* 已下載才顯示小勾勾，不改動原本設計 */
+.offline-approved-hotspot.is-downloaded::after {
   content: "✓";
   position: absolute;
   right: -4%;
@@ -1475,48 +1475,45 @@
   background: #eadfbe;
   color: #063521;
   font-family: Arial, sans-serif;
-  font-size: clamp(10px, 3vw, 15px);
+  font-size: clamp(9px, 2.8vw, 14px);
   font-weight: 800;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.30);
 }
 
-/* 按鈕位置依原始 1015 × 1164 圖片校準。 */
-.download-milan    { left: 68.3%; top: 38.2%; }
-.clear-milan       { left: 80.4%; top: 38.2%; }
+/* 依裁切後圖面精準校準 */
+.download-milan    { left: 67.5%; top: 29.8%; }
+.clear-milan       { left: 80.5%; top: 29.8%; }
 
-.download-venice   { left: 68.3%; top: 49.9%; }
-.clear-venice      { left: 80.4%; top: 49.9%; }
+.download-venice   { left: 67.5%; top: 43.1%; }
+.clear-venice      { left: 80.5%; top: 43.1%; }
 
-.download-florence { left: 68.3%; top: 61.5%; }
-.clear-florence    { left: 80.4%; top: 61.5%; }
+.download-florence { left: 67.5%; top: 56.2%; }
+.clear-florence    { left: 80.5%; top: 56.2%; }
 
-.download-rome     { left: 68.3%; top: 72.7%; }
-.clear-rome        { left: 80.4%; top: 72.7%; }
+.download-rome     { left: 67.5%; top: 68.6%; }
+.clear-rome        { left: 80.5%; top: 68.6%; }
 
-.offline-clear-all-hotspot {
-  left: 10.1%;
-  top: 81.9%;
-  width: 79.6%;
-  height: 10.8%;
-  border-radius: 15px;
+.offline-approved-clear-all {
+  left: 8.5%;
+  top: 78.8%;
+  width: 81.3%;
+  height: 12.0%;
+  border-radius: 16px;
 }
 
-.offline-clear-all-hotspot:active {
-  background: rgba(118, 31, 27, 0.08);
-  box-shadow: inset 0 0 0 2px rgba(118, 31, 27, 0.22);
+.offline-approved-clear-all:active {
+  background: rgba(117, 28, 22, 0.08);
+  box-shadow: inset 0 0 0 2px rgba(117, 28, 22, 0.20);
 }
 
-/*
-  初始狀態直接顯示圖片內原本的文字，因此外觀完全一致。
-  只有下載中、已下載或錯誤時，才顯示真實狀態覆蓋層。
-*/
-.offline-live-status {
+/* 初始狀態沿用圖片內文字；有下載或操作時才顯示真實狀態 */
+.offline-approved-status {
   position: absolute;
   z-index: 2;
   left: 15%;
   right: 15%;
-  bottom: 1.7%;
-  min-height: 7.3%;
+  bottom: 1.8%;
+  min-height: 6.8%;
   display: none;
   flex-direction: column;
   align-items: center;
@@ -1528,26 +1525,23 @@
   pointer-events: none;
 }
 
-.offline-live-status.show {
+.offline-approved-status.show {
   display: flex;
 }
 
-.offline-live-status .offline-status {
-  margin: 0 0 4px !important;
+.offline-approved-status .offline-status {
+  margin: 0 0 3px !important;
   color: #e8d9af;
-  font-family: "PingFang TC", "Noto Serif TC", serif;
-  font-size: clamp(11px, 3vw, 15px);
+  font-size: clamp(10px, 2.8vw, 14px);
   font-weight: 500;
-  line-height: 1.35;
-  letter-spacing: 0.05em;
+  line-height: 1.3;
 }
 
-.offline-live-status .offline-storage {
+.offline-approved-status .offline-storage {
   margin: 0 !important;
   color: rgba(232, 217, 175, 0.90);
-  font-family: "PingFang TC", "Noto Serif TC", serif;
-  font-size: clamp(9px, 2.5vw, 13px) !important;
-  line-height: 1.35;
+  font-size: clamp(8px, 2.3vw, 12px) !important;
+  line-height: 1.3;
   opacity: 1 !important;
 }
 
@@ -1622,57 +1616,57 @@
 
 
 
-<section class="offline-panel offline-final-panel" aria-label="離線使用">
+<section class="offline-panel offline-approved-panel" aria-label="離線使用">
   <img
-    class="offline-final-image"
-    src="offline-final-design.jpg"
+    class="offline-approved-image"
+    src="offline-final-panel-v18.png"
     alt="離線使用：米蘭、威尼斯、佛羅倫斯、羅馬的下載與清除功能"
     decoding="async"
     loading="lazy"
   >
 
-  <button class="offline-hotspot download-milan"
+  <button class="offline-approved-hotspot download-milan"
           type="button"
           data-offline-download="milan"
           aria-label="下載米蘭離線內容"></button>
-  <button class="offline-hotspot clear-milan"
+  <button class="offline-approved-hotspot clear-milan"
           type="button"
           data-offline-clear="milan"
           aria-label="清除米蘭離線內容"></button>
 
-  <button class="offline-hotspot download-venice"
+  <button class="offline-approved-hotspot download-venice"
           type="button"
           data-offline-download="venice"
           aria-label="下載威尼斯離線內容"></button>
-  <button class="offline-hotspot clear-venice"
+  <button class="offline-approved-hotspot clear-venice"
           type="button"
           data-offline-clear="venice"
           aria-label="清除威尼斯離線內容"></button>
 
-  <button class="offline-hotspot download-florence"
+  <button class="offline-approved-hotspot download-florence"
           type="button"
           data-offline-download="florence"
           aria-label="下載佛羅倫斯離線內容"></button>
-  <button class="offline-hotspot clear-florence"
+  <button class="offline-approved-hotspot clear-florence"
           type="button"
           data-offline-clear="florence"
           aria-label="清除佛羅倫斯離線內容"></button>
 
-  <button class="offline-hotspot download-rome"
+  <button class="offline-approved-hotspot download-rome"
           type="button"
           data-offline-download="rome"
           aria-label="下載羅馬離線內容"></button>
-  <button class="offline-hotspot clear-rome"
+  <button class="offline-approved-hotspot clear-rome"
           type="button"
           data-offline-clear="rome"
           aria-label="清除羅馬離線內容"></button>
 
-  <button class="offline-clear-all-hotspot"
+  <button class="offline-approved-clear-all"
           type="button"
           id="clearAllOffline"
           aria-label="清除全部離線城市"></button>
 
-  <div class="offline-live-status" aria-live="polite">
+  <div class="offline-approved-status" aria-live="polite">
     <p id="offlineStatus" class="offline-status">正在檢查離線內容…</p>
     <p id="offlineStorage" class="offline-storage">正在計算離線城市容量…</p>
   </div>
@@ -3136,7 +3130,7 @@
   const downloadButtons = document.querySelectorAll("[data-offline-download]");
   const clearButtons = document.querySelectorAll("[data-offline-clear]");
   const clearAllButton = document.getElementById("clearAllOffline");
-  const statusOverlay = document.querySelector(".offline-live-status");
+  const statusOverlay = document.querySelector(".offline-approved-status");
 
   const cityNames = {
     milan: "米蘭",

@@ -1,24 +1,29 @@
-gogo 最終定案 V15
+gogo 最終核准版 V18｜背景顏色微調
 
-這版採用「整張原始定案圖片」：
-- 不拆圖
-- 不重新排版
-- 不重畫文字
-- 不重新壓縮圖片
-- 不改顏色、比例、字體或間距
+這版只修改：
+- 離線使用面板的深綠底，調整為更接近 App 背景的綠色。
+- 參考背景主色約為 RGB (25, 61, 37)。
 
-透明按鈕覆蓋在原圖的雲朵、垃圾桶和石板位置上，
-因此外觀保持原圖，功能仍可使用。
+完全保留：
+- 面板尺寸與排版
+- 文字與字體
+- 紅色邊框
+- 城市圖案
+- 4 個下載功能
+- 4 個清除功能
+- 清除全部
+- 下載狀態與容量顯示
+- 其他頁面與播放器
 
-放進 GitHub repository 根目錄：
+請放進 GitHub repository 根目錄：
 1. index.html
 2. service-worker.js
-3. offline-final-design.jpg
+3. offline-final-panel-v18.png
 
 原本圖片與 MP3 不要刪除。
 
 Summary：
-Lock final offline design exactly
+Match offline panel background to app
 
 Commit to main → Push origin。
 更新後完全關閉 Safari／桌面 App，再連網重新開啟。
