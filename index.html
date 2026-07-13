@@ -2281,6 +2281,134 @@
   line-height: 1.55;
 }
 
+.itinerary-lock {
+  margin: 18px 0 0;
+  padding: 34px 24px 38px;
+  border: 1px solid rgba(248, 214, 82, 0.58);
+  border-radius: 22px;
+  background: rgba(3, 48, 31, 0.94);
+  color: #f4ead5;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.16);
+}
+
+.itinerary-lock[hidden],
+.itinerary-content[hidden] {
+  display: none !important;
+}
+
+.itinerary-lock h1 {
+  margin: 0;
+  color: #f7e7b6;
+  font-size: clamp(30px, 8.5vw, 38px);
+  line-height: 1.2;
+}
+
+.itinerary-lock-lead {
+  margin: 12px 0 24px;
+  color: rgba(247, 231, 182, 0.86);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.itinerary-unlock-form label:not(.itinerary-remember-option) {
+  display: block;
+  margin-bottom: 8px;
+  color: #f4ead5;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.itinerary-unlock-form input[type="password"] {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 14px;
+  border: 1px solid rgba(248, 214, 82, 0.65);
+  border-radius: 12px;
+  outline: none;
+  background: rgba(1, 33, 21, 0.72);
+  color: #f7e7b6;
+  font-family: Arial, sans-serif;
+  font-size: 20px;
+  letter-spacing: 0.18em;
+}
+
+.itinerary-unlock-form input[type="password"]:focus {
+  border-color: #f8d652;
+  box-shadow: 0 0 0 3px rgba(248, 214, 82, 0.13);
+}
+
+.itinerary-remember-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 14px 0;
+  color: rgba(247, 231, 182, 0.9);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.itinerary-remember-option input {
+  width: 18px;
+  height: 18px;
+  accent-color: #f8d652;
+}
+
+.itinerary-unlock-button,
+.itinerary-forget-button {
+  min-height: 42px;
+  padding: 9px 16px;
+  border: 1px solid rgba(248, 214, 82, 0.76);
+  border-radius: 999px;
+  background: rgba(248, 214, 82, 0.1);
+  color: #f8d652;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.itinerary-unlock-button {
+  width: 100%;
+}
+
+.itinerary-unlock-button:disabled {
+  cursor: wait;
+  opacity: 0.62;
+}
+
+.itinerary-unlock-message {
+  min-height: 18px;
+  margin: 12px 0 0;
+  color: rgba(247, 231, 182, 0.74);
+  font-size: 11px;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.itinerary-unlock-message.is-error {
+  color: #ffb5a7;
+}
+
+.itinerary-security-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 0 0 18px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(248, 214, 82, 0.08);
+  color: rgba(247, 231, 182, 0.85);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.itinerary-forget-button {
+  flex: 0 0 auto;
+  min-height: 32px;
+  padding: 5px 10px;
+  font-size: 10px;
+}
+
 </style>
 
 <link rel="manifest" href="manifest.json">
@@ -2433,133 +2561,19 @@
 <button class="detail-back-button" onclick="closePage('itineraryPage')" type="button">
         ← 返回城市目錄
       </button>
-<div class="detail-content itinerary-content">
-<p class="detail-small-title">2026 ITALY TRIP</p>
-<h1>義大利行程</h1>
-<p class="itinerary-lead">7/24–8/1｜米蘭、威尼斯、佛羅倫斯、羅馬。點選地點下方的按鈕，可直接開啟 Google Maps 規劃路線。</p>
-<nav class="itinerary-jumps" aria-label="行程快速分類">
-<a href="#itineraryDays">每日行程</a>
-<a href="#itineraryHotels">住宿</a>
-<a href="#itineraryFood">餐廳</a>
-</nav>
-
-<h2 class="itinerary-section-title" id="itineraryDays">每日行程</h2>
-
-<details class="itinerary-day" open>
-<summary>7/24–7/25｜抵達米蘭、前往威尼斯</summary>
-<div class="itinerary-day-body">
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">21:05</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">航班</span>桃園 TPE → 香港 HKG → 米蘭 MXP</p><p class="itinerary-item-note">CX479、CX233，預計 7/25 08:00 抵達米蘭。</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Milan+Malpensa+Airport" target="_blank" rel="noopener noreferrer">Google Maps 導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">11:00</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">交通</span>Milano Centrale 中央車站</p><p class="itinerary-item-note">先寄存行李，再前往米蘭市中心。</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Milano+Centrale" target="_blank" rel="noopener noreferrer">Google Maps 導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">11:30</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">景點</span>米蘭大教堂</p><p class="itinerary-item-note">Duomo di Milano，行程包含電梯登頂。</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Duomo+di+Milano" target="_blank" rel="noopener noreferrer">Google Maps 導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">下午</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">景點</span>艾曼紐二世迴廊</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Galleria+Vittorio+Emanuele+II+Milano" target="_blank" rel="noopener noreferrer">Google Maps 導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">午餐</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">餐廳</span>Spontini</p><p class="itinerary-item-note">米蘭披薩，依當天所在位置選擇分店。</p><a class="itinerary-map-link" href="https://www.google.com/maps/search/?api=1&amp;query=Spontini+Milano" target="_blank" rel="noopener noreferrer">查看附近分店</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">18:35</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">火車</span>Milano Centrale → Venezia Santa Lucia</p><p class="itinerary-item-note">預計 21:03 抵達威尼斯。</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Venezia+Santa+Lucia" target="_blank" rel="noopener noreferrer">車站導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">晚上</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">住宿</span>Hotel Da Bruno</p><p class="itinerary-item-note">威尼斯島內，靠近聖馬可廣場。</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Hotel+Da+Bruno+Venice" target="_blank" rel="noopener noreferrer">Google Maps 導航</a></div></div></div>
+<div class="itinerary-lock" id="itineraryLock">
+<p class="detail-small-title">PRIVATE ITINERARY</p>
+<h1>行程已鎖定</h1>
+<p class="itinerary-lock-lead">請輸入行程的數字密碼。</p>
+<form class="itinerary-unlock-form" id="itineraryUnlockForm">
+<label for="itineraryPassword">行程密碼</label>
+<input id="itineraryPassword" name="itineraryPassword" type="password" inputmode="numeric" pattern="[0-9]*" autocomplete="current-password" maxlength="16" required>
+<label class="itinerary-remember-option"><input id="rememberItineraryDevice" type="checkbox" checked> 記住這台手機</label>
+<button class="itinerary-unlock-button" type="submit">解鎖行程</button>
+<p class="itinerary-unlock-message" id="itineraryUnlockMessage" aria-live="polite">正在檢查已記住的裝置…</p>
+</form>
 </div>
-</details>
-
-<details class="itinerary-day">
-<summary>7/26｜威尼斯主島</summary>
-<div class="itinerary-day-body">
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">上午</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">景點</span>聖馬可廣場、鐘樓與嘆息橋</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Piazza+San+Marco+Venezia" target="_blank" rel="noopener noreferrer">聖馬可廣場導航</a><br><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Ponte+dei+Sospiri+Venezia" target="_blank" rel="noopener noreferrer">嘆息橋導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">中午</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">景點</span>里亞托橋與里亞托市場</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Rialto+Bridge+Venice" target="_blank" rel="noopener noreferrer">里亞托橋導航</a><br><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Rialto+Market+Venice" target="_blank" rel="noopener noreferrer">市場導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">午餐</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">餐廳</span>Ristorante Cuore Veneziano</p><p class="itinerary-item-note">墨魚麵、海鮮麵。</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Ristorante+Cuore+Veneziano" target="_blank" rel="noopener noreferrer">Google Maps 導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">小吃</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">餐廳</span>Arcicchetti Bakaro</p><p class="itinerary-item-note">Cicchetti 威尼斯小吃。</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Arcicchetti+Bakaro+Venezia" target="_blank" rel="noopener noreferrer">Google Maps 導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">下午</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">散步</span>卡納雷吉歐區與聖母榮耀聖殿</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Cannaregio+Venice" target="_blank" rel="noopener noreferrer">卡納雷吉歐導航</a><br><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Basilica+di+Santa+Maria+Gloriosa+dei+Frari" target="_blank" rel="noopener noreferrer">聖殿導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">16–18</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">體驗</span>貢多拉</p><p class="itinerary-item-note">PDF 建議由 Calle S. Zorzi 1176/A 附近碼頭搭乘。</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Calle+S.+Zorzi+1176%2FA+Venezia" target="_blank" rel="noopener noreferrer">碼頭附近導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">晚餐</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">已安排</span>1000 Gourmet Venezia</p><p class="itinerary-item-note">PDF 記錄預約時間 18:00。</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=1000+Gourmet+Venezia" target="_blank" rel="noopener noreferrer">Google Maps 導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">備選</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">餐酒館</span>Vino Vero</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Vino+Vero+Venice" target="_blank" rel="noopener noreferrer">Google Maps 導航</a></div></div></div>
-</div>
-</details>
-
-<details class="itinerary-day">
-<summary>7/27｜威尼斯 → 佛羅倫斯</summary>
-<div class="itinerary-day-body">
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">06–07</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">景點</span>學院橋日出</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Ponte+dell%27Accademia+Venezia" target="_blank" rel="noopener noreferrer">Google Maps 導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">上午</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">甜點</span>I Tre Mercanti</p><p class="itinerary-item-note">提拉米蘇。</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=I+Tre+Mercanti+Venezia" target="_blank" rel="noopener noreferrer">Google Maps 導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">備選</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">景點</span>朱代卡島 Giudecca</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Giudecca+Venice" target="_blank" rel="noopener noreferrer">Google Maps 導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">早午餐</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">餐廳</span>Ai 133</p><a class="itinerary-map-link" href="https://www.google.com/maps/search/?api=1&amp;query=Ai+133+Venezia" target="_blank" rel="noopener noreferrer">Google Maps 搜尋</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">14:26</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">火車</span>Venezia S. Lucia → Firenze S. M. Novella</p><p class="itinerary-item-note">Frecciarossa 9425，預計 16:39 抵達。</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Firenze+Santa+Maria+Novella" target="_blank" rel="noopener noreferrer">車站導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">入住</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">住宿</span>BYPILLOW Goldoni</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=BYPILLOW+Goldoni+Florence" target="_blank" rel="noopener noreferrer">Google Maps 導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">18:00</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">晚餐</span>Osteria Vecchio Vicolo</p><p class="itinerary-item-note">龍蝦義大利麵；PDF 註記週二休息。</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Osteria+Vecchio+Vicolo+Firenze" target="_blank" rel="noopener noreferrer">Google Maps 導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">晚上</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">景點</span>米開朗基羅廣場</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Piazzale+Michelangelo+Firenze" target="_blank" rel="noopener noreferrer">Google Maps 導航</a></div></div></div>
-</div>
-</details>
-
-<details class="itinerary-day">
-<summary>7/28｜佛羅倫斯</summary>
-<div class="itinerary-day-body">
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">09:15</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">景點</span>佛羅倫斯學院美術館</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Galleria+dell%27Accademia+Firenze" target="_blank" rel="noopener noreferrer">Google Maps 導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">上午</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">景點</span>聖母百花大教堂</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Cathedral+of+Santa+Maria+del+Fiore" target="_blank" rel="noopener noreferrer">Google Maps 導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">中午</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">美食</span>佛羅倫斯中央市場</p><p class="itinerary-item-note">Bambi Trippa e Lampredotto、L’Porchettaio、Il Tartufo、Pizza al Padellino、Gelateria del Mercato。</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Mercato+Centrale+Firenze" target="_blank" rel="noopener noreferrer">市場導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">下午茶</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">甜點</span>Vivoli Gelateria</p><p class="itinerary-item-note">Affogato。</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Vivoli+Gelateria+Firenze" target="_blank" rel="noopener noreferrer">Google Maps 導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">下午</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">散步</span>共和廣場、領主廣場</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Piazza+della+Repubblica+Firenze" target="_blank" rel="noopener noreferrer">共和廣場導航</a><br><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Piazza+della+Signoria+Firenze" target="_blank" rel="noopener noreferrer">領主廣場導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">16:30</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">景點</span>烏菲茲美術館</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Uffizi+Gallery+Florence" target="_blank" rel="noopener noreferrer">Google Maps 導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">19:00</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">晚餐</span>Trattoria Antico Fattore</p><p class="itinerary-item-note">T 骨牛排，PDF 註記提前預訂。</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Trattoria+Antico+Fattore+Firenze" target="_blank" rel="noopener noreferrer">Google Maps 導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">晚上</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">散步</span>聖三一橋、恩寵橋、老橋</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Ponte+Vecchio+Firenze" target="_blank" rel="noopener noreferrer">老橋導航</a></div></div></div>
-</div>
-</details>
-
-<details class="itinerary-day">
-<summary>7/29｜佛羅倫斯 → 羅馬</summary>
-<div class="itinerary-day-body">
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">上午</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">散步</span>佛羅倫斯 City Walk</p><p class="itinerary-item-note">以歷史市中心與百花大教堂周邊為主。</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Historic+Centre+of+Florence" target="_blank" rel="noopener noreferrer">Google Maps 導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">12:00</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">午餐</span>Il Ricettario</p><p class="itinerary-item-note">PDF 原拼字已校正。</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Il+Ricettario+Via+Lambertesca+22R+Firenze" target="_blank" rel="noopener noreferrer">Google Maps 導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">16:10</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">火車</span>Firenze Campo di Marte → Roma Termini</p><p class="itinerary-item-note">Frecciarossa 9543，預計 17:49 抵達。</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Roma+Termini" target="_blank" rel="noopener noreferrer">車站導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">入住</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">住宿</span>Colonna Luxury Suites</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Colonna+Luxury+Suites+Rome" target="_blank" rel="noopener noreferrer">Google Maps 導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">晚餐</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">餐廳</span>Romanè</p><p class="itinerary-item-note">Rigatone Carbonara、Zighini Imperiale 等。</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Romane+Restaurant+Rome" target="_blank" rel="noopener noreferrer">Google Maps 導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">晚上</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">散步</span>Ponte Umberto I</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Ponte+Umberto+I+Roma" target="_blank" rel="noopener noreferrer">Google Maps 導航</a></div></div></div>
-</div>
-</details>
-
-<details class="itinerary-day">
-<summary>7/30｜羅馬市中心與梵蒂岡</summary>
-<div class="itinerary-day-body">
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">10:00</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">景點</span>萬神殿</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Pantheon+Rome" target="_blank" rel="noopener noreferrer">Google Maps 導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">午餐</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">備選</span>Mariuccia、All’Antico Vinaio</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Mariuccia+Campo+de+Fiori+Rome" target="_blank" rel="noopener noreferrer">Mariuccia 導航</a><br><a class="itinerary-map-link" href="https://www.google.com/maps/search/?api=1&amp;query=All%27Antico+Vinaio+Rome" target="_blank" rel="noopener noreferrer">All’Antico Vinaio 分店</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">咖啡</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">備選</span>Tazza D’Oro、Sant’Eustachio Il Caffè</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Tazza+D%27Oro+Rome" target="_blank" rel="noopener noreferrer">Tazza D’Oro 導航</a><br><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Sant%27Eustachio+Il+Caffe+Rome" target="_blank" rel="noopener noreferrer">Sant’Eustachio 導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">16:00</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">景點</span>梵蒂岡與聖彼得大教堂</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Vatican+Museums" target="_blank" rel="noopener noreferrer">梵蒂岡博物館導航</a><br><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=St+Peter%27s+Basilica" target="_blank" rel="noopener noreferrer">聖彼得大教堂導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">晚餐</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">餐廳</span>Papa Rex</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Papa+Rex+Ristorante+Rome" target="_blank" rel="noopener noreferrer">Google Maps 導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">晚上</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">景點</span>西班牙廣場與特萊維噴泉</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Spanish+Steps+Rome" target="_blank" rel="noopener noreferrer">西班牙階梯導航</a><br><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Trevi+Fountain" target="_blank" rel="noopener noreferrer">特萊維噴泉導航</a></div></div></div>
-</div>
-</details>
-
-<details class="itinerary-day">
-<summary>7/31｜古羅馬與城市散步</summary>
-<div class="itinerary-day-body">
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">07:30</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">景點</span>羅馬競技場</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Colosseum+Rome" target="_blank" rel="noopener noreferrer">Google Maps 導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">上午</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">景點</span>古羅馬廣場與帕拉提諾山</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Roman+Forum" target="_blank" rel="noopener noreferrer">古羅馬廣場導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">下午</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">散步</span>Trastevere 街區</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Trastevere+Rome" target="_blank" rel="noopener noreferrer">Google Maps 導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">傍晚</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">景點</span>維托里亞諾</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Altare+della+Patria+Rome" target="_blank" rel="noopener noreferrer">Google Maps 導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">晚餐</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">餐廳</span>Matricianella</p><p class="itinerary-item-note">Via del Leone 4，傳統羅馬料理。</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Matricianella+Via+del+Leone+4+Rome" target="_blank" rel="noopener noreferrer">Google Maps 導航</a></div></div></div>
-</div>
-</details>
-
-<details class="itinerary-day">
-<summary>8/1｜羅馬返程</summary>
-<div class="itinerary-day-body">
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">09:30</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">交通</span>前往羅馬 FCO 機場</p><p class="itinerary-item-note">可搭 Shuttle Bus 或計程車。</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Rome+Fiumicino+Airport" target="_blank" rel="noopener noreferrer">機場導航</a></div></div></div>
-<div class="itinerary-item"><div class="itinerary-item-head"><span class="itinerary-time">13:00</span><div class="itinerary-item-main"><p class="itinerary-item-title"><span class="itinerary-tag">航班</span>羅馬 FCO → 香港 HKG → 桃園 TPE</p><p class="itinerary-item-note">CX292、CX488，預計隔日 09:50 抵達桃園。</p></div></div></div>
-</div>
-</details>
-
-<h2 class="itinerary-section-title" id="itineraryHotels">住宿快速查看</h2>
-<div class="itinerary-quick-grid">
-<article class="itinerary-quick-card"><h3>7/25–7/27｜Hotel Da Bruno</h3><p>威尼斯島內，靠近聖馬可廣場。</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Hotel+Da+Bruno+Venice" target="_blank" rel="noopener noreferrer">Google Maps 導航</a></article>
-<article class="itinerary-quick-card"><h3>7/27–7/29｜BYPILLOW Goldoni</h3><p>佛羅倫斯。</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=BYPILLOW+Goldoni+Florence" target="_blank" rel="noopener noreferrer">Google Maps 導航</a></article>
-<article class="itinerary-quick-card"><h3>7/29–8/1｜Colonna Luxury Suites</h3><p>羅馬 Prati 區。</p><a class="itinerary-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Colonna+Luxury+Suites+Rome" target="_blank" rel="noopener noreferrer">Google Maps 導航</a></article>
-</div>
-
-<h2 class="itinerary-section-title" id="itineraryFood">餐廳快速查看</h2>
-<div class="itinerary-quick-grid">
-<article class="itinerary-quick-card"><h3>米蘭</h3><p>Spontini</p><a class="itinerary-map-link" href="https://www.google.com/maps/search/?api=1&amp;query=Spontini+Milano" target="_blank" rel="noopener noreferrer">查看分店</a></article>
-<article class="itinerary-quick-card"><h3>威尼斯</h3><p>Ristorante Cuore Veneziano、Arcicchetti Bakaro、1000 Gourmet Venezia、Vino Vero、I Tre Mercanti、Ai 133</p><a class="itinerary-map-link" href="#itineraryDays">回每日行程選擇</a></article>
-<article class="itinerary-quick-card"><h3>佛羅倫斯</h3><p>Osteria Vecchio Vicolo、中央市場、Vivoli Gelateria、Trattoria Antico Fattore、Il Ricettario</p><a class="itinerary-map-link" href="#itineraryDays">回每日行程選擇</a></article>
-<article class="itinerary-quick-card"><h3>羅馬</h3><p>Romanè、Mariuccia、All’Antico Vinaio、Tazza D’Oro、Sant’Eustachio、Papa Rex、Matricianella</p><a class="itinerary-map-link" href="#itineraryDays">回每日行程選擇</a></article>
-</div>
-
-<p class="itinerary-privacy-note">隱私保護：此頁只收錄公開場所與公開旅館資訊，不包含同行者姓名、Airbnb 私人地址、訂房編號、聯絡資料或其他私人資訊。Google Maps 導航需要網路連線。</p>
-</div>
+<div class="detail-content itinerary-content" id="itineraryUnlockedContent" hidden></div>
 </section>
 <section class="milan-page" id="milanPage">
 <button class="milan-back-button" onclick="closePage('milanPage')" type="button">
@@ -3619,6 +3633,7 @@
 </div>
 </section>
 </main>
+<script src="itinerary-data.js"></script>
 <script>
     function loadImagesInPage(page) {
       if (!page) return;
@@ -3997,10 +4012,255 @@
       });
     }
 
+    const ITINERARY_KEY_DB = "italy-guide-private-itinerary";
+    const ITINERARY_KEY_STORE = "device-keys";
+    const ITINERARY_KEY_ID = "remembered-itinerary-key";
+
+    function base64ToBytes(value) {
+      const binary = window.atob(value);
+      const bytes = new Uint8Array(binary.length);
+
+      for (let index = 0; index < binary.length; index++) {
+        bytes[index] = binary.charCodeAt(index);
+      }
+
+      return bytes;
+    }
+
+    function openItineraryKeyDatabase() {
+      return new Promise(function (resolve, reject) {
+        const request = indexedDB.open(ITINERARY_KEY_DB, 1);
+
+        request.onupgradeneeded = function () {
+          const database = request.result;
+          if (!database.objectStoreNames.contains(ITINERARY_KEY_STORE)) {
+            database.createObjectStore(ITINERARY_KEY_STORE);
+          }
+        };
+
+        request.onsuccess = function () {
+          resolve(request.result);
+        };
+
+        request.onerror = function () {
+          reject(request.error || new Error("無法開啟裝置金鑰儲存空間"));
+        };
+      });
+    }
+
+    async function getRememberedItineraryKey() {
+      const database = await openItineraryKeyDatabase();
+
+      return new Promise(function (resolve, reject) {
+        const transaction = database.transaction(ITINERARY_KEY_STORE, "readonly");
+        const request = transaction.objectStore(ITINERARY_KEY_STORE).get(ITINERARY_KEY_ID);
+
+        request.onsuccess = function () {
+          database.close();
+          resolve(request.result || null);
+        };
+
+        request.onerror = function () {
+          database.close();
+          reject(request.error || new Error("無法讀取裝置金鑰"));
+        };
+      });
+    }
+
+    async function rememberItineraryKey(key) {
+      const database = await openItineraryKeyDatabase();
+
+      return new Promise(function (resolve, reject) {
+        const transaction = database.transaction(ITINERARY_KEY_STORE, "readwrite");
+        transaction.objectStore(ITINERARY_KEY_STORE).put(key, ITINERARY_KEY_ID);
+
+        transaction.oncomplete = function () {
+          database.close();
+          resolve();
+        };
+
+        transaction.onerror = function () {
+          database.close();
+          reject(transaction.error || new Error("無法記住這台手機"));
+        };
+      });
+    }
+
+    async function forgetItineraryKey() {
+      const database = await openItineraryKeyDatabase();
+
+      return new Promise(function (resolve, reject) {
+        const transaction = database.transaction(ITINERARY_KEY_STORE, "readwrite");
+        transaction.objectStore(ITINERARY_KEY_STORE).delete(ITINERARY_KEY_ID);
+
+        transaction.oncomplete = function () {
+          database.close();
+          resolve();
+        };
+
+        transaction.onerror = function () {
+          database.close();
+          reject(transaction.error || new Error("無法移除裝置金鑰"));
+        };
+      });
+    }
+
+    async function deriveItineraryKey(password) {
+      const encrypted = window.ENCRYPTED_ITINERARY;
+      const material = await crypto.subtle.importKey(
+        "raw",
+        new TextEncoder().encode(password),
+        "PBKDF2",
+        false,
+        ["deriveKey"]
+      );
+
+      return crypto.subtle.deriveKey(
+        {
+          name: "PBKDF2",
+          salt: base64ToBytes(encrypted.salt),
+          iterations: encrypted.iterations,
+          hash: "SHA-256"
+        },
+        material,
+        {
+          name: "AES-GCM",
+          length: 256
+        },
+        false,
+        ["decrypt"]
+      );
+    }
+
+    async function decryptItinerary(key) {
+      const encrypted = window.ENCRYPTED_ITINERARY;
+      const plaintext = await crypto.subtle.decrypt(
+        {
+          name: "AES-GCM",
+          iv: base64ToBytes(encrypted.iv),
+          tagLength: 128
+        },
+        key,
+        base64ToBytes(encrypted.ciphertext)
+      );
+
+      return new TextDecoder().decode(plaintext);
+    }
+
+    function showUnlockedItinerary(html, remembered) {
+      const lock = document.getElementById("itineraryLock");
+      const content = document.getElementById("itineraryUnlockedContent");
+      const message = remembered
+        ? "這台手機已記住行程，下次可直接開啟。"
+        : "這次已解鎖，關閉網站後會再次上鎖。";
+
+      if (!lock || !content) return;
+
+      content.innerHTML =
+        '<div class="itinerary-security-bar"><span>' +
+        message +
+        '</span><button class="itinerary-forget-button" id="forgetItineraryDevice" type="button">' +
+        (remembered ? "忘記這台手機" : "立即鎖定") +
+        "</button></div>" +
+        html;
+
+      lock.hidden = true;
+      content.hidden = false;
+
+      const forgetButton = document.getElementById("forgetItineraryDevice");
+      if (forgetButton) {
+        forgetButton.addEventListener("click", async function () {
+          forgetButton.disabled = true;
+
+          try {
+            await forgetItineraryKey();
+          } catch (error) {}
+
+          content.innerHTML = "";
+          content.hidden = true;
+          lock.hidden = false;
+
+          const passwordInput = document.getElementById("itineraryPassword");
+          const unlockMessage = document.getElementById("itineraryUnlockMessage");
+          if (passwordInput) passwordInput.value = "";
+          if (unlockMessage) {
+            unlockMessage.textContent = "已鎖定，請重新輸入密碼。";
+            unlockMessage.classList.remove("is-error");
+          }
+        });
+      }
+    }
+
+    async function setupItineraryProtection() {
+      const form = document.getElementById("itineraryUnlockForm");
+      const passwordInput = document.getElementById("itineraryPassword");
+      const rememberInput = document.getElementById("rememberItineraryDevice");
+      const message = document.getElementById("itineraryUnlockMessage");
+      const submitButton = form && form.querySelector("button[type='submit']");
+
+      if (!form || !passwordInput || !message) return;
+
+      if (!window.crypto || !window.crypto.subtle || !window.ENCRYPTED_ITINERARY) {
+        message.textContent = "此瀏覽器無法使用加密行程，請改用最新版 Safari 或 Chrome。";
+        message.classList.add("is-error");
+        return;
+      }
+
+      try {
+        const rememberedKey = await getRememberedItineraryKey();
+        if (rememberedKey) {
+          const html = await decryptItinerary(rememberedKey);
+          showUnlockedItinerary(html, true);
+          return;
+        }
+      } catch (error) {
+        try {
+          await forgetItineraryKey();
+        } catch (forgetError) {}
+      }
+
+      message.textContent = "請輸入行程密碼。";
+
+      form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        message.textContent = "正在解鎖行程…";
+        message.classList.remove("is-error");
+        if (submitButton) submitButton.disabled = true;
+
+        try {
+          const key = await deriveItineraryKey(passwordInput.value);
+          const html = await decryptItinerary(key);
+          let remembered = Boolean(rememberInput && rememberInput.checked);
+
+          if (remembered) {
+            try {
+              await rememberItineraryKey(key);
+            } catch (error) {
+              remembered = false;
+            }
+          } else {
+            try {
+              await forgetItineraryKey();
+            } catch (error) {}
+          }
+
+          passwordInput.value = "";
+          showUnlockedItinerary(html, remembered);
+        } catch (error) {
+          message.textContent = "密碼不正確，請再試一次。";
+          message.classList.add("is-error");
+          passwordInput.select();
+        } finally {
+          if (submitButton) submitButton.disabled = false;
+        }
+      });
+    }
+
     document.addEventListener("DOMContentLoaded", function () {
       buildReferencePlayers();
       setupSwipeBack();
       setupCoverSwipeOpen();
+      setupItineraryProtection();
     });
 
   </script>
