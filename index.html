@@ -2409,6 +2409,209 @@
   font-size: 10px;
 }
 
+/* 圖片瀏覽：保留原本書本質感，加入手機友善的放大與左右滑動 */
+.detail-gesture-tip {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: -8px 0 24px;
+  padding: 10px 12px;
+  border: 1px solid rgba(247, 231, 182, 0.2);
+  border-radius: 12px;
+  background: rgba(248, 214, 82, 0.07);
+  color: rgba(247, 231, 182, 0.82);
+  font-family: Arial, "PingFang TC", sans-serif;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.detail-gesture-tip::before {
+  content: "↔";
+  flex: 0 0 auto;
+  color: #f8d652;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.gallery-enabled {
+  cursor: zoom-in;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  border: 1px solid rgba(247, 231, 182, 0.22);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.gallery-enabled:active {
+  transform: scale(0.985);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.16);
+}
+
+.gallery-enabled:focus-visible,
+.image-viewer button:focus-visible,
+.detail-back-button:focus-visible,
+.city-card:focus-visible,
+.series-card:focus-visible,
+.itinerary-entry:focus-visible {
+  outline: 3px solid rgba(248, 214, 82, 0.9);
+  outline-offset: 3px;
+}
+
+.image-viewer[hidden] {
+  display: none !important;
+}
+
+.image-viewer {
+  position: absolute;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr) 52px;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px 4px;
+  padding: calc(14px + env(safe-area-inset-top)) 10px
+    calc(16px + env(safe-area-inset-bottom));
+  background:
+    radial-gradient(circle at 50% 36%, rgba(25, 89, 61, 0.58), transparent 48%),
+    rgba(1, 28, 18, 0.97);
+  color: #f7e7b6;
+  touch-action: none;
+}
+
+.image-viewer-close,
+.image-viewer-nav {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  border: 1px solid rgba(247, 231, 182, 0.42);
+  border-radius: 50%;
+  background: rgba(3, 48, 31, 0.78);
+  color: #f7e7b6;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.image-viewer-close {
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: end;
+  font-family: Arial, sans-serif;
+  font-size: 25px;
+  line-height: 1;
+}
+
+.image-viewer-nav {
+  grid-row: 2;
+  z-index: 2;
+  align-self: center;
+  font-family: Georgia, serif;
+  font-size: 34px;
+  line-height: 1;
+}
+
+.image-viewer-prev {
+  grid-column: 1;
+}
+
+.image-viewer-next {
+  grid-column: 3;
+}
+
+.image-viewer-nav[hidden] {
+  display: none;
+}
+
+.image-viewer-figure {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  min-width: 0;
+  margin: 0;
+  text-align: center;
+}
+
+.image-viewer-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 220px;
+  touch-action: none;
+}
+
+.image-viewer-image {
+  display: block;
+  max-width: 100%;
+  max-height: calc(100svh - 210px);
+  margin: 0 auto;
+  object-fit: contain;
+  border: 1px solid rgba(247, 231, 182, 0.24);
+  border-radius: 18px;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.4);
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+}
+
+.image-viewer-image.is-changing-left {
+  opacity: 0.2;
+  transform: translateX(-18px) scale(0.985);
+}
+
+.image-viewer-image.is-changing-right {
+  opacity: 0.2;
+  transform: translateX(18px) scale(0.985);
+}
+
+.image-viewer-caption {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 10px;
+  min-height: 42px;
+  margin-top: 14px;
+  padding: 0 48px;
+  color: #f4ead5;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.image-viewer-counter {
+  flex: 0 0 auto;
+  color: #f8d652;
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+}
+
+.image-viewer-help {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  margin: 0;
+  color: rgba(247, 231, 182, 0.68);
+  font-family: Arial, "PingFang TC", sans-serif;
+  font-size: 11px;
+  text-align: center;
+}
+
+.detail-page.image-viewer-open {
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery-enabled,
+  .image-viewer-image {
+    transition: none !important;
+  }
+}
+
 </style>
 
 <link rel="manifest" href="manifest.json">
@@ -3632,6 +3835,21 @@
 <img alt="西斯汀禮拜堂與聖彼得大教堂內部" class="exterior-image" data-src="rome-vatican-03.jpg" decoding="async" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="/>
 </div>
 </section>
+<div class="image-viewer" id="imageViewer" role="dialog" aria-modal="true" aria-label="圖片瀏覽器" hidden>
+<button class="image-viewer-close" id="imageViewerClose" type="button" aria-label="關閉圖片">×</button>
+<button class="image-viewer-nav image-viewer-prev" id="imageViewerPrev" type="button" aria-label="上一張圖片">‹</button>
+<figure class="image-viewer-figure" id="imageViewerFigure">
+<div class="image-viewer-stage">
+<img class="image-viewer-image" id="imageViewerImage" alt=""/>
+</div>
+<figcaption class="image-viewer-caption">
+<span id="imageViewerCaption"></span>
+<span class="image-viewer-counter" id="imageViewerCounter" aria-live="polite"></span>
+</figcaption>
+</figure>
+<button class="image-viewer-nav image-viewer-next" id="imageViewerNext" type="button" aria-label="下一張圖片">›</button>
+<p class="image-viewer-help" id="imageViewerHelp">左右滑動切換圖片 · 點右上角關閉</p>
+</div>
 </main>
 <script src="itinerary-data.js"></script>
 <script>
@@ -3662,6 +3880,7 @@
       if (!page) return;
 
       loadImagesInPage(page);
+      prepareImageGallery(page);
 
       const audios = Array.from(page.querySelectorAll("audio"));
 
@@ -3740,11 +3959,269 @@
         return;
       }
 
+      if (activeImageViewerPage === page) {
+        closeImageViewer();
+      }
+
       page.querySelectorAll("audio").forEach(function (audio) {
         audio.pause();
       });
 
       page.classList.remove("show");
+    }
+
+    let imageViewerItems = [];
+    let imageViewerIndex = 0;
+    let activeImageViewerPage = null;
+    let imageViewerReturnFocus = null;
+
+    function renderImageViewer(direction) {
+      const viewerImage = document.getElementById("imageViewerImage");
+      const caption = document.getElementById("imageViewerCaption");
+      const counter = document.getElementById("imageViewerCounter");
+      const previousButton = document.getElementById("imageViewerPrev");
+      const nextButton = document.getElementById("imageViewerNext");
+      const help = document.getElementById("imageViewerHelp");
+      const item = imageViewerItems[imageViewerIndex];
+
+      if (!viewerImage || !caption || !counter || !item) return;
+
+      const changingClass = direction < 0
+        ? "is-changing-right"
+        : "is-changing-left";
+
+      viewerImage.classList.remove(
+        "is-changing-left",
+        "is-changing-right"
+      );
+
+      if (direction) {
+        viewerImage.classList.add(changingClass);
+      }
+
+      window.requestAnimationFrame(function () {
+        viewerImage.src = item.src;
+        viewerImage.alt = item.alt;
+        caption.textContent = item.alt;
+        counter.textContent =
+          String(imageViewerIndex + 1) + " / " + String(imageViewerItems.length);
+
+        window.requestAnimationFrame(function () {
+          viewerImage.classList.remove(
+            "is-changing-left",
+            "is-changing-right"
+          );
+        });
+      });
+
+      const hasMultipleImages = imageViewerItems.length > 1;
+      if (previousButton) previousButton.hidden = !hasMultipleImages;
+      if (nextButton) nextButton.hidden = !hasMultipleImages;
+      if (help) {
+        help.textContent = hasMultipleImages
+          ? "左右滑動切換圖片 · 點右上角關閉"
+          : "點右上角關閉圖片";
+      }
+    }
+
+    function moveImageViewer(step) {
+      if (imageViewerItems.length < 2) return;
+
+      imageViewerIndex =
+        (imageViewerIndex + step + imageViewerItems.length) %
+        imageViewerItems.length;
+
+      renderImageViewer(step);
+    }
+
+    function openImageViewer(page, index, returnFocus) {
+      const viewer = document.getElementById("imageViewer");
+      const closeButton = document.getElementById("imageViewerClose");
+      const images = Array.from(
+        page.querySelectorAll(".history-image, .exterior-image")
+      );
+
+      if (!viewer || !images.length) return;
+
+      imageViewerItems = images.map(function (image) {
+        return {
+          src: image.currentSrc || image.src,
+          alt: image.alt || "景點圖片"
+        };
+      });
+      imageViewerIndex =
+        (index + imageViewerItems.length) % imageViewerItems.length;
+      activeImageViewerPage = page;
+      imageViewerReturnFocus = returnFocus || null;
+
+      page.classList.add("image-viewer-open");
+      viewer.hidden = false;
+      renderImageViewer(0);
+
+      if (closeButton) closeButton.focus();
+    }
+
+    function closeImageViewer() {
+      const viewer = document.getElementById("imageViewer");
+
+      if (!viewer || viewer.hidden) return;
+
+      viewer.hidden = true;
+      if (activeImageViewerPage) {
+        activeImageViewerPage.classList.remove("image-viewer-open");
+      }
+
+      if (
+        imageViewerReturnFocus &&
+        document.documentElement.contains(imageViewerReturnFocus)
+      ) {
+        imageViewerReturnFocus.focus();
+      }
+
+      imageViewerItems = [];
+      imageViewerIndex = 0;
+      activeImageViewerPage = null;
+      imageViewerReturnFocus = null;
+    }
+
+    function prepareImageGallery(page) {
+      const content = page.querySelector(".detail-content");
+      const images = Array.from(
+        page.querySelectorAll(".history-image, .exterior-image")
+      );
+
+      if (!content || !images.length) return;
+
+      if (!content.querySelector(".detail-gesture-tip")) {
+        const tip = document.createElement("p");
+        const englishTitle = content.querySelector(".detail-english");
+
+        tip.className = "detail-gesture-tip";
+        tip.setAttribute("role", "note");
+        tip.textContent = images.length > 1
+          ? "點圖片可放大，共 " + images.length + " 張；在圖片上左右滑可切換。"
+          : "點一下圖片，可全螢幕查看。";
+
+        if (englishTitle) {
+          englishTitle.insertAdjacentElement("afterend", tip);
+        } else {
+          content.insertBefore(tip, content.firstChild);
+        }
+      }
+
+      images.forEach(function (image, index) {
+        if (image.dataset.galleryReady === "true") return;
+
+        let pointerStartX = 0;
+        let pointerStartY = 0;
+        let suppressClick = false;
+
+        image.dataset.galleryReady = "true";
+        image.classList.add("gallery-enabled");
+        image.tabIndex = 0;
+        image.setAttribute("role", "button");
+        image.setAttribute("aria-label", "開啟圖片：" + (image.alt || "景點圖片"));
+        image.draggable = false;
+
+        image.addEventListener("pointerdown", function (event) {
+          pointerStartX = event.clientX;
+          pointerStartY = event.clientY;
+          suppressClick = false;
+        });
+
+        image.addEventListener("pointerup", function (event) {
+          const deltaX = event.clientX - pointerStartX;
+          const deltaY = event.clientY - pointerStartY;
+
+          if (
+            Math.abs(deltaX) >= 44 &&
+            Math.abs(deltaX) > Math.abs(deltaY) * 1.15
+          ) {
+            event.preventDefault();
+            suppressClick = true;
+            const targetIndex = index + (deltaX < 0 ? 1 : -1);
+            openImageViewer(page, targetIndex, image);
+          }
+        });
+
+        image.addEventListener("click", function () {
+          if (suppressClick) {
+            suppressClick = false;
+            return;
+          }
+
+          openImageViewer(page, index, image);
+        });
+
+        image.addEventListener("keydown", function (event) {
+          if (event.key !== "Enter" && event.key !== " ") return;
+          event.preventDefault();
+          openImageViewer(page, index, image);
+        });
+      });
+    }
+
+    function setupImageViewer() {
+      const viewer = document.getElementById("imageViewer");
+      const figure = document.getElementById("imageViewerFigure");
+      const closeButton = document.getElementById("imageViewerClose");
+      const previousButton = document.getElementById("imageViewerPrev");
+      const nextButton = document.getElementById("imageViewerNext");
+
+      if (!viewer || !figure) return;
+
+      let pointerStartX = 0;
+      let pointerStartY = 0;
+
+      figure.addEventListener("pointerdown", function (event) {
+        pointerStartX = event.clientX;
+        pointerStartY = event.clientY;
+      });
+
+      figure.addEventListener("pointerup", function (event) {
+        const deltaX = event.clientX - pointerStartX;
+        const deltaY = event.clientY - pointerStartY;
+
+        if (
+          Math.abs(deltaX) >= 44 &&
+          Math.abs(deltaX) > Math.abs(deltaY) * 1.15
+        ) {
+          moveImageViewer(deltaX < 0 ? 1 : -1);
+        }
+      });
+
+      if (closeButton) {
+        closeButton.addEventListener("click", closeImageViewer);
+      }
+      if (previousButton) {
+        previousButton.addEventListener("click", function () {
+          moveImageViewer(-1);
+        });
+      }
+      if (nextButton) {
+        nextButton.addEventListener("click", function () {
+          moveImageViewer(1);
+        });
+      }
+
+      viewer.addEventListener("click", function (event) {
+        if (event.target === viewer) closeImageViewer();
+      });
+
+      document.addEventListener("keydown", function (event) {
+        if (viewer.hidden) return;
+
+        if (event.key === "Escape") {
+          event.preventDefault();
+          closeImageViewer();
+        } else if (event.key === "ArrowLeft") {
+          event.preventDefault();
+          moveImageViewer(-1);
+        } else if (event.key === "ArrowRight") {
+          event.preventDefault();
+          moveImageViewer(1);
+        }
+      });
     }
 
     function setupSwipeBack() {
@@ -3759,7 +4236,9 @@
 
         page.addEventListener("touchstart", function (event) {
           const target = event.target;
-          canSwipe = !target.closest("input, button, audio");
+          canSwipe = !target.closest(
+            "input, button, audio, [data-gallery-ready='true'], .image-viewer"
+          );
           if (!canSwipe || !event.touches[0]) return;
           startX = event.touches[0].clientX;
           startY = event.touches[0].clientY;
@@ -4258,6 +4737,7 @@
 
     document.addEventListener("DOMContentLoaded", function () {
       buildReferencePlayers();
+      setupImageViewer();
       setupSwipeBack();
       setupCoverSwipeOpen();
       setupItineraryProtection();
